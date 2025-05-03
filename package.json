@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "format": "prettier --write --ignore-unknown .",
+    "stylelint": "npx stylelint ./src/**/*.{css,scss}",
     "test": "vitest"
   },
   "dependencies": {
@@ -31,6 +32,9 @@
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
+    "stylelint": "^16.19.1",
+    "stylelint-config-clean-order": "^7.0.0",
+    "stylelint-config-standard": "^38.0.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1",
