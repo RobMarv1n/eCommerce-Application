@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky",
+    "format": "prettier --write --ignore-unknown ."
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -24,6 +26,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-unicorn": "^59.0.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
