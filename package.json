@@ -11,7 +11,9 @@
     "prepare": "husky",
     "format": "prettier --write --ignore-unknown .",
     "stylelint": "npx stylelint ./src/**/*.{css,scss}",
-    "test": "vitest"
+    "test": "vitest",
+    "git": "git add . && git commit -m",
+    "amend": "git add . && git commit --amend --no-edit"
   },
   "dependencies": {
     "react": "^19.0.0",
