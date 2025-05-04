@@ -18,7 +18,7 @@ _Describe the big picture of your changes here_
 
 #### ☑️ Self Check before Merge
 
-⚠️ Please check all items below before review. ⚠️
+⚠️  Please check all items below before review.  ⚠️
 
 - [ ] Database migration is added or not needed
 - [ ] Documentation is updated/provided or not needed
