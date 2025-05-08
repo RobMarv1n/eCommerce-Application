@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { RouterConstants } from '../../types';
 
 export function ErrorPage() {
   const navigate = useNavigate();
@@ -6,7 +7,9 @@ export function ErrorPage() {
   return (
     <>
       <h1>Error 404</h1>
-      <button onClick={() => navigate(-1)}>Back to Home</button>
+      <button onClick={() => navigate(RouterConstants.HOME)}>
+        Back to Home
+      </button>
     </>
   );
 }
