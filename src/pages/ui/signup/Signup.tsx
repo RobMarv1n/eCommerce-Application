@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { RouterConstants } from '../../../types';
+import { ROUTES } from '../../../types';
 
 export function Signup() {
   const navigate = useNavigate();
@@ -7,10 +7,8 @@ export function Signup() {
   return (
     <>
       <h1>Sign up</h1>
-      <button onClick={() => navigate(RouterConstants.HOME)}>
-        Create Account
-      </button>
-      <Link to={RouterConstants.SIGN_IN}>Sign in</Link>
+      <button onClick={() => navigate(ROUTES.HOME)}>Create Account</button>
+      <Link to={ROUTES.LOGIN}>Sign in</Link>
     </>
   );
 }

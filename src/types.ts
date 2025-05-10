@@ -1,5 +1,5 @@
-export enum RouterConstants {
+export enum ROUTES {
   HOME = '/',
-  SIGN_IN = '/signin',
+  LOGIN = '/login',
   SIGN_UP = '/signup',
 }
