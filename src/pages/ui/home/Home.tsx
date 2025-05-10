@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { RouterConstants } from '../../types';
+import { RouterConstants } from '../../../types';
 
 export function Home() {
   return (

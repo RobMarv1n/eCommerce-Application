@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { RouterConstants } from '../../types';
+import { RouterConstants } from '../../../types';
 
 export function ErrorPage() {
   const navigate = useNavigate();

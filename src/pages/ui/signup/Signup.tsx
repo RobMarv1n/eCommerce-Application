@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { RouterConstants } from '../../types';
+import { RouterConstants } from '../../../types';
 
 export function Signup() {
   const navigate = useNavigate();
