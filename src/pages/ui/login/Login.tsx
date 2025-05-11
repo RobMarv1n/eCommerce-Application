@@ -8,21 +8,25 @@ import './login.css';
 export function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formState, setFormState] = useState({ email: '', password: '' });
+  const { email, password } = formState;
 
-  const [isValidEmail, setIsValidEmail] = useState(true);
-  const [isValidPassword, setIsValidPassword] = useState(true);
+  const [isValidForm, setIsValidForm] = useState({
+    isValidEmail: true,
+    isValidPassword: true,
+  });
+  const { isValidEmail, isValidPassword } = isValidForm;
 
-  const [isValidForm, setIsValidForm] = useState(false);
+  const [loginButtonState, setLoginButtonState] = useState(false);
 
   const emailValidationHandler = (event: ON_INPUT_EVENT | ON_CHANGE_EVENT) => {
     const currentValue = event.currentTarget.value;
-    setEmail(currentValue);
+    setFormState({ ...formState, email: currentValue });
 
     const isValidValue =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(currentValue);
-    setIsValidEmail(isValidValue);
+
+    setIsValidForm({ ...isValidForm, isValidEmail: isValidValue });
     toggleLoginButtonStatus(isValidValue, isValidPassword);
   };
 
@@ -30,7 +34,7 @@ export function Login() {
     event: ON_INPUT_EVENT | ON_CHANGE_EVENT
   ) => {
     const currentValue = event.currentTarget.value;
-    setPassword(currentValue);
+    setFormState({ ...formState, password: currentValue });
 
     const minPasswordLength = currentValue.length > 8;
     const maxPasswordLength = currentValue.length < 25;
@@ -49,10 +53,10 @@ export function Login() {
       hasOneSpecialChar
     ) {
       toggleLoginButtonStatus(isValidEmail, true);
-      setIsValidPassword(true);
+      setIsValidForm({ ...isValidForm, isValidPassword: true });
     } else {
       toggleLoginButtonStatus(isValidEmail, false);
-      setIsValidPassword(false);
+      setIsValidForm({ ...isValidForm, isValidPassword: false });
     }
   };
 
@@ -61,9 +65,9 @@ export function Login() {
     passwordValidation: boolean
   ) => {
     if (emailValidation && passwordValidation && email && password) {
-      setIsValidForm(true);
+      setLoginButtonState(true);
     } else {
-      setIsValidForm(false);
+      setLoginButtonState(false);
     }
   };
 
@@ -88,7 +92,7 @@ export function Login() {
       <button
         type="submit"
         onClick={() => navigate(ROUTES.HOME)}
-        disabled={!isValidForm}
+        disabled={!loginButtonState}
       >
         Login
       </button>
