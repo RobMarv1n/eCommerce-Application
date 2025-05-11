@@ -1,6 +1,7 @@
 import { InputProperties } from '../../types';
 
 export function EmailInput(inputProperties: InputProperties) {
+  const { value, isValid, onChange, onInput } = inputProperties;
   return (
     <>
       <input
@@ -8,12 +9,12 @@ export function EmailInput(inputProperties: InputProperties) {
         className="email-input"
         placeholder="Email"
         id="email-input"
-        value={inputProperties.value}
-        onChange={inputProperties.onChange}
-        onInput={inputProperties.onInput}
+        value={value}
+        onChange={onChange}
+        onInput={onInput}
         required
       />
-      {!inputProperties.isValid && (
+      {!isValid && (
         <div className="validation-error">
           Expected format: user@example.com
         </div>

@@ -1,6 +1,7 @@
 import { InputProperties } from '../../types';
 
 export function PasswordInput(inputProperties: InputProperties) {
+  const { value, isValid, onChange, onInput } = inputProperties;
   return (
     <>
       <input
@@ -8,11 +9,12 @@ export function PasswordInput(inputProperties: InputProperties) {
         className="password-input"
         placeholder="Password"
         id="password-input"
-        value={inputProperties.value}
-        onChange={inputProperties.onChange}
-        onInput={inputProperties.onInput}
+        value={value}
+        onChange={onChange}
+        onInput={onInput}
+        required
       />
-      {!inputProperties.isValid && (
+      {!isValid && (
         <div className="validation-error">
           The password must be longer than 5 characters and less than 25
           characters and contain at least one uppercase Latin letter, one
