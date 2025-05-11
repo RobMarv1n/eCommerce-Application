@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../types';
+import { ROUTES } from '../../types';
 
 export function Signup() {
   const navigate = useNavigate();

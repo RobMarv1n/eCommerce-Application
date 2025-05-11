@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ON_CHANGE_EVENT, ON_INPUT_EVENT, ROUTES } from '../../../types';
-import { EmailInput } from '../../../widgets/ui/EmailInput';
-import { PasswordInput } from '../../../widgets/ui/PasswordInput';
+import { ON_CHANGE_EVENT, ON_INPUT_EVENT, ROUTES } from '../../types';
+import { EmailInput } from '../../widgets/ui/EmailInput';
+import { PasswordInput } from '../../widgets/ui/PasswordInput';
 import './login.css';
 
 export function Login() {

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ErrorPage } from '../pages/ui/error-page/ErrorPage';
-import { Home } from '../pages/ui/home/Home';
-import { Login } from '../pages/ui/login/Login';
-import { Signup } from '../pages/ui/signup/Signup';
+import { ErrorPage } from '../pages/error-page/ErrorPage';
+import { Home } from '../pages/home/Home';
+import { Login } from '../pages/login/Login';
+import { Signup } from '../pages/signup/Signup';
 import { ROUTES } from '../types';
 
 export function Router() {

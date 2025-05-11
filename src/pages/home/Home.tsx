@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../../types';
+import { ROUTES } from '../../types';
 
 export function Home() {
   return (
