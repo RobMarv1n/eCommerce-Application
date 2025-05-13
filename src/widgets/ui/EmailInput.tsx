@@ -5,7 +5,7 @@ export function EmailInput(inputProperties: InputProperties) {
   return (
     <>
       <input
-        type="email"
+        type="text"
         className="email-input"
         placeholder="Email"
         id="email-input"
@@ -16,7 +16,8 @@ export function EmailInput(inputProperties: InputProperties) {
       />
       {!isValid && (
         <div className="validation-error">
-          Expected format: user@example.com
+          Expected format: user@example.com. Spaces are not allowed at the
+          beginning and end of the line.
         </div>
       )}
     </>

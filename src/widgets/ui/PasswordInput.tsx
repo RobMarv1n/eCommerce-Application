@@ -16,9 +16,10 @@ export function PasswordInput(inputProperties: InputProperties) {
       />
       {!isValid && (
         <div className="validation-error">
-          The password must be longer than 5 characters and less than 25
+          The password must be longer than 8 characters and less than 25
           characters and contain at least one uppercase Latin letter, one
-          lowercase letter, one digit and one special character.
+          lowercase letter, one digit and one special character. Spaces are not
+          allowed at the beginning and end of the line.
         </div>
       )}
     </>
