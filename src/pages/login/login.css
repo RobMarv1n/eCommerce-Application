@@ -1,0 +1,31 @@
+.login-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-input-container {
+  position: relative;
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-eye-icon {
+  cursor: pointer;
+  position: absolute;
+  right: -22px;
+}

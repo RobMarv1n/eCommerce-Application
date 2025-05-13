@@ -1,5 +1,15 @@
-export enum RouterConstants {
+export enum ROUTES {
   HOME = '/',
-  SIGN_IN = '/signin',
+  LOGIN = '/login',
   SIGN_UP = '/signup',
 }
+
+export type ON_INPUT_EVENT = React.FormEvent<HTMLInputElement>;
+export type ON_CHANGE_EVENT = React.ChangeEvent<HTMLInputElement>;
+
+export type InputProperties = {
+  value?: string;
+  isValid?: boolean;
+  onInput?: (event: ON_INPUT_EVENT) => void;
+  onChange?: (event: ON_CHANGE_EVENT) => void;
+};
