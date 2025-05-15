@@ -1,3 +1,2 @@
-export { WishlistIcon } from './WishListIcon';
-export { CartIcon } from './CartIcon';
-export { ProfileIcon } from './ProfileIcon';
+export { IconFactory } from './IconFactory';
+export type { IconName, IconFactoryProperties } from './IconFactory';

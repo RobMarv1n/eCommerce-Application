@@ -1,11 +1,7 @@
-import { Link, NavLink } from 'react-router-dom';
-import {
-  CartIcon,
-  ProfileIcon,
-  WishlistIcon,
-} from '../../../../shared/ui/Icon';
-import { Logo } from '../../../../shared/ui/Logo';
+import { NavLink, Link } from 'react-router-dom';
 import { ROUTES } from '../../../../types';
+import { Logo } from '../../../../shared/ui/Logo';
+import { IconFactory } from '../../../../shared/ui/Icon';
 import styles from './Header.module.css';
 
 const navLinks = [
@@ -19,23 +15,23 @@ const navLinks = [
 const iconLinks = [
   {
     path: ROUTES.WISHLIST,
-    label: 'Wishlist',
-    icon: <WishlistIcon />,
+    label: 'My wishlist',
+    icon: 'wishlist',
     disabled: true,
   },
   {
     path: ROUTES.CART,
-    label: 'Cart',
-    icon: <CartIcon />,
+    label: 'My cart',
+    icon: 'cart',
     disabled: true,
   },
   {
     path: ROUTES.PROFILE,
-    label: 'Profile',
-    icon: <ProfileIcon />,
+    label: 'My profile',
+    icon: 'profile',
     disabled: true,
   },
-];
+] as const;
 
 export function Header() {
   return (
@@ -74,7 +70,7 @@ export function Header() {
                   }
                   aria-label={label}
                 >
-                  {icon}
+                  <IconFactory name={icon} />
                 </Link>
               </li>
             ))}
