@@ -71,3 +71,9 @@ img {
   margin: 0 auto;
   padding: 0 10px;
 }
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+}

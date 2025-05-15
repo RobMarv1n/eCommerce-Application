@@ -12,8 +12,6 @@ const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
   { path: ROUTES.SIGN_UP, label: 'Register' },
   { path: ROUTES.HOME, label: 'Home' },
-  { path: ROUTES.CATALOG, label: 'Catalog' },
-  { path: ROUTES.ABOUT, label: 'About Us' },
 ];
 
 export function Header() {
@@ -37,22 +35,50 @@ export function Header() {
                 </NavLink>
               </li>
             ))}
+            <li className={styles.navItem}>
+              <NavLink
+                to={'/catalog'}
+                className={`${styles.navLink} disabled-link`}
+              >
+                Catalog
+              </NavLink>
+            </li>
+            <li className={styles.navItem}>
+              <NavLink
+                to={'/about'}
+                className={`${styles.navLink} disabled-link`}
+              >
+                About Us
+              </NavLink>
+            </li>
           </ul>
         </nav>
         <div className={styles.icons}>
           <ul className={styles.iconsList}>
             <li>
-              <Link to="" className={styles.iconsLink} aria-label="wishlist">
+              <Link
+                to=""
+                className={`${styles.iconsLink} disabled-link`}
+                aria-label="wishlist"
+              >
                 <WishlistIcon />
               </Link>
             </li>
             <li>
-              <Link to="" className={styles.iconsLink} aria-label="cart">
+              <Link
+                to=""
+                className={`${styles.iconsLink} disabled-link`}
+                aria-label="cart"
+              >
                 <CartIcon />
               </Link>
             </li>
             <li>
-              <Link to="" className={styles.iconsLink} aria-label="profile">
+              <Link
+                to=""
+                className={`${styles.iconsLink} disabled-link`}
+                aria-label="profile"
+              >
                 <ProfileIcon />
               </Link>
             </li>
