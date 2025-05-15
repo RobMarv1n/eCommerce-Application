@@ -12,6 +12,29 @@ const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
   { path: ROUTES.SIGN_UP, label: 'Register' },
   { path: ROUTES.HOME, label: 'Home' },
+  { path: ROUTES.CATALOG, label: 'Catalog', disabled: true },
+  { path: ROUTES.ABOUT, label: 'About Us', disabled: true },
+];
+
+const iconLinks = [
+  {
+    path: ROUTES.WISHLIST,
+    label: 'Wishlist',
+    icon: <WishlistIcon />,
+    disabled: true,
+  },
+  {
+    path: ROUTES.CART,
+    label: 'Cart',
+    icon: <CartIcon />,
+    disabled: true,
+  },
+  {
+    path: ROUTES.PROFILE,
+    label: 'Profile',
+    icon: <ProfileIcon />,
+    disabled: true,
+  },
 ];
 
 export function Header() {
@@ -21,67 +44,40 @@ export function Header() {
         <Logo />
         <nav className={styles.nav}>
           <ul className={styles.navList}>
-            {navLinks.map(({ path, label }) => (
+            {navLinks.map(({ path, label, disabled }) => (
               <li key={path} className={styles.navItem}>
                 <NavLink
                   to={path}
-                  className={({ isActive }) =>
-                    isActive
+                  className={({ isActive }) => {
+                    const baseClass = isActive
                       ? `${styles.navLink} ${styles.isActive}`
-                      : styles.navLink
-                  }
+                      : styles.navLink;
+                    return disabled ? `${baseClass} disabled-link` : baseClass;
+                  }}
                 >
                   {label}
                 </NavLink>
               </li>
             ))}
-            <li className={styles.navItem}>
-              <NavLink
-                to={'/catalog'}
-                className={`${styles.navLink} disabled-link`}
-              >
-                Catalog
-              </NavLink>
-            </li>
-            <li className={styles.navItem}>
-              <NavLink
-                to={'/about'}
-                className={`${styles.navLink} disabled-link`}
-              >
-                About Us
-              </NavLink>
-            </li>
           </ul>
         </nav>
         <div className={styles.icons}>
           <ul className={styles.iconsList}>
-            <li>
-              <Link
-                to=""
-                className={`${styles.iconsLink} disabled-link`}
-                aria-label="wishlist"
-              >
-                <WishlistIcon />
-              </Link>
-            </li>
-            <li>
-              <Link
-                to=""
-                className={`${styles.iconsLink} disabled-link`}
-                aria-label="cart"
-              >
-                <CartIcon />
-              </Link>
-            </li>
-            <li>
-              <Link
-                to=""
-                className={`${styles.iconsLink} disabled-link`}
-                aria-label="profile"
-              >
-                <ProfileIcon />
-              </Link>
-            </li>
+            {iconLinks.map(({ path, label, icon, disabled }) => (
+              <li key={label}>
+                <Link
+                  to={path}
+                  className={
+                    disabled
+                      ? `${styles.iconsLink} disabled-link`
+                      : styles.iconsLink
+                  }
+                  aria-label={label}
+                >
+                  {icon}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
