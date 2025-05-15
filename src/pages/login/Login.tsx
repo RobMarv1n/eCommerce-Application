@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useFormValidation } from '../../Shared/validation/useFomValidation';
+import { useFormValidation } from '../../shared/validation/useFomValidation';
 import { ROUTES } from '../../types';
 import { EmailInput } from '../../widgets/ui/EmailInput';
 import { PasswordInput } from '../../widgets/ui/PasswordInput';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ON_CHANGE_EVENT, ON_INPUT_EVENT } from '../../types';
-import { emailValidation } from './emailValidation';
-import { validationPassword } from './passwordValidation';
+import { emailValidation } from './emailValidation.ts';
+import { validationPassword } from './passwordValidation.ts';
 
 export function useFormValidation() {
   const [formState, setFormState] = useState({ email: '', password: '' });
