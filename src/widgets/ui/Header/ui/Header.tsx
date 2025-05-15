@@ -1,11 +1,11 @@
-import { NavLink, Link } from 'react-router-dom';
-import { ROUTES } from '../../../../types';
-import { Logo } from '../../../../shared/ui/Logo';
+import { Link, NavLink } from 'react-router-dom';
 import {
-  WishlistIcon,
   CartIcon,
   ProfileIcon,
+  WishlistIcon,
 } from '../../../../shared/ui/Icon';
+import { Logo } from '../../../../shared/ui/Logo';
+import { ROUTES } from '../../../../types';
 import styles from './Header.module.css';
 
 const navLinks = [
