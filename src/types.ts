@@ -2,6 +2,11 @@ export enum ROUTES {
   HOME = '/',
   LOGIN = '/login',
   SIGN_UP = '/signup',
+  CATALOG = '/catalog',
+  ABOUT = '/about',
+  WISHLIST = '/wishlist',
+  CART = '/cart',
+  PROFILE = '/profile',
 }
 
 export type ON_INPUT_EVENT = React.FormEvent<HTMLInputElement>;

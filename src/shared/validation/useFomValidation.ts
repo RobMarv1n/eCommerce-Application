@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ON_CHANGE_EVENT, ON_INPUT_EVENT } from '../../types';
+import { ON_CHANGE_EVENT, ON_INPUT_EVENT } from '../../types.ts';
 import { emailValidation } from './emailValidation';
 import { validationPassword } from './passwordValidation';
 
