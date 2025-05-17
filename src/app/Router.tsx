@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ErrorPage } from '../pages/error-page/ErrorPage';
 import { Home } from '../pages/home/Home';
 import { Login } from '../pages/login/Login';
-import { Registration } from '../pages/registration/Registration';
+import { Registration } from '../pages/registration/ui/Registration';
 import { ROUTES } from '../types';
 
 export function Router() {

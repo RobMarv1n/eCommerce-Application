@@ -1,24 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../types';
+import { ROUTES } from '../../../types';
+import { RegistrationFormData } from '../model/types';
 import './registration.css';
-
-type RegistrationFormData = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  address: RegistrationAddress;
-  country: string;
-};
-
-type RegistrationAddress = {
-  street: string;
-  city: string;
-  zipCode: string;
-  country: string;
-};
 
 export function Registration() {
   const navigate = useNavigate();
