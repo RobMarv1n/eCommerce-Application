@@ -1,7 +1,15 @@
+import { Country } from 'postal-code-validator';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../types';
+import { reactHookFormDefaultValues } from '../lib/reactHookFormDefaultValues';
 import { RegistrationFormData } from '../model/types';
+import { ageValidation } from '../model/validation/ageValidation';
+import { isRegistrationButtonDisabled } from '../model/validation/isRegistrationButtonDisabled';
+import { validationEmail } from '../model/validation/validationEmail';
+import { validationName } from '../model/validation/validationName';
+import { validationPassword } from '../model/validation/validationPassword';
+import { validationZipCode } from '../model/validation/validationZipCode';
 import './registration.css';
 
 export function Registration() {
@@ -10,22 +18,19 @@ export function Registration() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     reset,
     getValues,
     getFieldState,
   } = useForm<RegistrationFormData>({
     mode: 'onChange',
+    defaultValues: reactHookFormDefaultValues,
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
-    console.log(data.email);
-
+    console.log(data);
     reset();
   };
-
-  console.log(getValues('email'));
-  console.log(getFieldState('email'));
 
   return (
     <>
@@ -36,17 +41,7 @@ export function Registration() {
           placeholder="Email"
           {...register('email', {
             required: true,
-            validate: {
-              validationEmail: (value) => {
-                if (!(value === value.trim())) {
-                  return 'Email must not contain trailing spaces';
-                } else if (
-                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
-                ) {
-                  return 'Expected format: user@example.com';
-                }
-              },
-            },
+            validate: validationEmail,
           })}
         />
         {errors?.email && (
@@ -66,21 +61,7 @@ export function Registration() {
               value: 25,
               message: 'Maximum length should be 25 characters',
             },
-            validate: {
-              validationPassword: (value) => {
-                if (!(value === value.trim())) {
-                  return 'Password must not contain trailing spaces';
-                } else if (!/[a-z]/.test(value)) {
-                  return 'Password must contain at least one lowercase letter';
-                } else if (!/[A-Z]/.test(value)) {
-                  return 'Password must contain at least one capital letter';
-                } else if (!/\d/.test(value)) {
-                  return 'Password must contain at least one digit';
-                } else if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(value)) {
-                  return 'Password must contain at least one special character';
-                }
-              },
-            },
+            validate: validationPassword,
           })}
         />
         {errors?.password && (
@@ -89,41 +70,90 @@ export function Registration() {
 
         <div className="registration-field personal-details">
           <h2>Personal Details</h2>
+
           <input
             type="text"
             placeholder="First name"
-            {...register('firstName', { required: true })}
+            {...register('firstName', {
+              required: true,
+              minLength: {
+                value: 1,
+                message: 'Minimum length should be 1 character',
+              },
+              validate: validationName,
+            })}
           />
+          {errors?.firstName && (
+            <div style={{ color: 'red' }}>{errors.firstName.message}</div>
+          )}
+
           <input
             type="text"
             placeholder="Last name"
-            {...register('lastName', { required: true })}
+            {...register('lastName', {
+              required: true,
+              minLength: {
+                value: 1,
+                message: 'Minimum length should be 1 character',
+              },
+              validate: validationName,
+            })}
           />
+          {errors?.lastName && (
+            <div style={{ color: 'red' }}>{errors.lastName.message}</div>
+          )}
+
           <input
             type="date"
             placeholder="Date of birth"
-            {...register('birthDate', { required: false })}
+            {...register('birthDate', {
+              required: false,
+              validate: ageValidation,
+            })}
           />
+          {errors?.birthDate && (
+            <div style={{ color: 'red' }}>{errors.birthDate.message}</div>
+          )}
         </div>
 
         <div className="registration-field shipping-address">
           <h2>Shipping Address</h2>
+
           <input
             type="text"
             placeholder="Street"
-            {...register('address.street', { required: false })}
+            {...register('shippingAddress.street', { required: false })}
           />
+
           <input
             type="text"
             placeholder="City"
-            {...register('address.city', { required: false })}
+            {...register('shippingAddress.city', { required: false })}
           />
-          <select {...register('address.country', { required: false })} />
+
+          <select {...register('shippingAddress.country', { required: false })}>
+            {Object.values(Country).map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             placeholder="Zip code"
-            {...register('address.zipCode', { required: false })}
+            {...register('shippingAddress.zipCode', {
+              required: false,
+              validate: (value) =>
+                validationZipCode(value, getValues('shippingAddress.country')),
+            })}
           />
+          {errors?.shippingAddress?.zipCode && (
+            <div style={{ color: 'red' }}>
+              {errors.shippingAddress.zipCode.message}
+            </div>
+          )}
+
           <div className="address-checkbox-container">
             <input type="checkbox" id="useAsDefault" />
             <label htmlFor="useAsDefault">Use as default for shipping</label>
@@ -138,22 +168,42 @@ export function Registration() {
 
         <div className="registration-field billing-address">
           <h2>Billing Address</h2>
+
           <input
             type="text"
             placeholder="Street"
-            {...register('address.street', { required: false })}
+            {...register('billingAddress.street', { required: false })}
           />
+
           <input
             type="text"
             placeholder="City"
-            {...register('address.city', { required: false })}
+            {...register('billingAddress.city', { required: false })}
           />
-          <select {...register('address.country', { required: false })} />
+
+          <select {...register('billingAddress.country', { required: false })}>
+            {Object.values(Country).map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             placeholder="Zip code"
-            {...register('address.zipCode', { required: false })}
+            {...register('billingAddress.zipCode', {
+              required: false,
+              validate: (value) =>
+                validationZipCode(value, getValues('billingAddress.country')),
+            })}
           />
+          {errors?.billingAddress?.zipCode && (
+            <div style={{ color: 'red' }}>
+              {errors.billingAddress.zipCode.message}
+            </div>
+          )}
+
           <div className="address-checkbox-container">
             <input type="checkbox" id="useAsDefaultForBilling" />
             <label htmlFor="useAsDefaultForBilling">
@@ -164,8 +214,11 @@ export function Registration() {
 
         <button
           type="submit"
+          disabled={isRegistrationButtonDisabled(
+            getFieldState('email'),
+            getFieldState('password')
+          )}
           onClick={() => navigate(ROUTES.HOME)}
-          disabled={!isValid}
         >
           Create Account
         </button>
