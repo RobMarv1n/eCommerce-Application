@@ -49,7 +49,7 @@ export function Login() {
       </form>
       <p className="form-question">
         Don't have account?{' '}
-        <Link to={ROUTES.SIGN_UP} className="form-link">
+        <Link to={ROUTES.REGISTRATION} className="form-link">
           Register
         </Link>
       </p>

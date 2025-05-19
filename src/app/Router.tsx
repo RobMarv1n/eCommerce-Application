@@ -3,7 +3,7 @@ import { Layout } from './layouts/Layout';
 import { ErrorPage } from '../pages/error-page/ErrorPage';
 import { Home } from '../pages/home/Home';
 import { Login } from '../pages/login/Login';
-import { Signup } from '../pages/signup/Signup';
+import { Registration } from '../pages/registration/ui/Registration';
 import { ROUTES } from '../types';
 
 export function Router() {
@@ -13,7 +13,7 @@ export function Router() {
         <Route element={<Layout />}>
           <Route path={ROUTES.HOME} element={<Home />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.SIGN_UP} element={<Signup />} />
+          <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
