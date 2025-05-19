@@ -7,8 +7,8 @@ export type RegistrationFormData = {
   firstName: string;
   lastName: string;
   birthDate: string;
-  shippingAddress: RegistrationAddress;
-  billingAddress: RegistrationAddress;
+  shippingAddress: RegistrationShippingAddress;
+  billingAddress: RegistrationBillingAddress;
 };
 
 export type RegistrationAddress = {
@@ -16,6 +16,15 @@ export type RegistrationAddress = {
   city: string;
   zipCode: string;
   country: Country;
+};
+
+export type RegistrationShippingAddress = RegistrationAddress & {
+  useAsDefaultForShipping: boolean;
+  useShippingAsBilling: boolean;
+};
+
+export type RegistrationBillingAddress = RegistrationAddress & {
+  useAsDefaultForBilling: boolean;
 };
 
 export type RegistrationFieldState = {

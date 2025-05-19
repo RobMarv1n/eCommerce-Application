@@ -11,11 +11,14 @@ export const reactHookFormDefaultValues = {
     city: '',
     zipCode: '',
     country: Country.Russia,
+    useAsDefaultForShipping: false,
+    useShippingAsBilling: false,
   },
   billingAddress: {
     street: '',
     city: '',
     zipCode: '',
     country: Country.Russia,
+    useAsDefaultForBilling: false,
   },
 };
