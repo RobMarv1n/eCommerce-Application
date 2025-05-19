@@ -1,12 +1,12 @@
-import { NavLink, Link } from 'react-router-dom';
-import { ROUTES } from '../../../../types';
-import { Logo } from '../../../../shared/ui/Logo';
+import { Link, NavLink } from 'react-router-dom';
 import { IconFactory } from '../../../../shared/ui/Icon';
+import { Logo } from '../../../../shared/ui/Logo';
+import { ROUTES } from '../../../../types';
 import styles from './Header.module.css';
 
 const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
-  { path: ROUTES.SIGN_UP, label: 'Register' },
+  { path: ROUTES.REGISTRATION, label: 'Register' },
   { path: ROUTES.HOME, label: 'Home' },
   { path: ROUTES.CATALOG, label: 'Catalog', disabled: true },
   { path: ROUTES.ABOUT, label: 'About Us', disabled: true },

@@ -43,7 +43,7 @@ export function Login() {
         Login
       </button>
       <div>
-        Don't have account? <Link to={ROUTES.SIGN_UP}>Register</Link>
+        Don't have account? <Link to={ROUTES.REGISTRATION}>Register</Link>
       </div>
     </div>
   );

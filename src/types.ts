@@ -1,7 +1,7 @@
 export enum ROUTES {
   HOME = '/',
   LOGIN = '/login',
-  SIGN_UP = '/signup',
+  REGISTRATION = '/registration',
   CATALOG = '/catalog',
   ABOUT = '/about',
   WISHLIST = '/wishlist',
