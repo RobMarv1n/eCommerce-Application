@@ -25,7 +25,9 @@ export function Login() {
       <h1 className="title">Login</h1>
       <form className="form">
         <div className="form-group">
-          <label htmlFor="email-input">Email</label>
+          <label className="form-label" htmlFor="email-input">
+            Email
+          </label>
           <EmailInput
             isValid={isValidEmail}
             onInput={emailValidationHandler}
@@ -33,7 +35,9 @@ export function Login() {
           />
         </div>
         <div className="form-group password-input-container">
-          <label htmlFor="password-input">Password</label>
+          <label className="form-label" htmlFor="password-input">
+            Password
+          </label>
           <PasswordInput
             isValid={isValidPassword}
             onInput={passwordValidationHandler}

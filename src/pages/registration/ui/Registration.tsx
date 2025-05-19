@@ -10,8 +10,10 @@ import { validationEmail } from '../model/validation/validationEmail';
 import { validationName } from '../model/validation/validationName';
 import { validationPassword } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
-import './registration.css';
+import { Button } from '../../../shared/ui/Button';
 import { client } from '../../../utils/clientApi/ClientApi';
+import './registration.css';
+import '../../../shared/styles/forms.css';
 
 export function Registration() {
   const navigate = useNavigate();
@@ -40,129 +42,199 @@ export function Registration() {
   };
 
   return (
-    <>
-      <h1>Create Account</h1>
-      <form className="registration-form" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="text"
-          placeholder="Email"
-          autoComplete="email"
-          {...register('email', {
-            required: true,
-            validate: validationEmail,
-          })}
-        />
-        {errors?.email && (
-          <div style={{ color: 'red' }}>{errors.email.message}</div>
-        )}
+    <section className="register">
+      <h1 className="title">Create Account</h1>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="registration-field">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email-input">
+              Email
+            </label>
+            <input
+              className="form-input"
+              type="email"
+              id="email-input"
+              placeholder="dianne.russell@gmail.com"
+              autoComplete="email"
+              {...register('email', {
+                required: true,
+                validate: validationEmail,
+              })}
+            />
+            {errors?.email && (
+              <div className="validation-error">{errors.email.message}</div>
+            )}
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          autoComplete="new-password"
-          {...register('password', {
-            required: true,
-            minLength: {
-              value: 8,
-              message: 'Minimum length should be 8 characters',
-            },
-            maxLength: {
-              value: 25,
-              message: 'Maximum length should be 25 characters',
-            },
-            validate: validationPassword,
-          })}
-        />
-        {errors?.password && (
-          <div style={{ color: 'red' }}>{errors.password.message}</div>
-        )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="password-input">
+              Password
+            </label>
+            <input
+              className="form-input"
+              type="password"
+              id="password-inputt"
+              placeholder="Password"
+              autoComplete="new-password"
+              {...register('password', {
+                required: true,
+                minLength: {
+                  value: 8,
+                  message: 'Minimum length should be 8 characters',
+                },
+                maxLength: {
+                  value: 25,
+                  message: 'Maximum length should be 25 characters',
+                },
+                validate: validationPassword,
+              })}
+            />
+            {errors?.password && (
+              <div className="validation-error">{errors.password.message}</div>
+            )}
+          </div>
+        </div>
 
         <div className="registration-field personal-details">
-          <h2>Personal Details</h2>
+          <h2 className="form-title">Personal Details</h2>
 
-          <input
-            type="text"
-            placeholder="First name"
-            {...register('firstName', {
-              required: false,
-              minLength: {
-                value: 1,
-                message: 'Minimum length should be 1 character',
-              },
-              validate: (value) => value === '' || validationName(value),
-            })}
-          />
-          {errors?.firstName && (
-            <div style={{ color: 'red' }}>{errors.firstName.message}</div>
-          )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name-input">
+              First name
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="first-name-input"
+              placeholder="Dianne"
+              {...register('firstName', {
+                required: false,
+                minLength: {
+                  value: 1,
+                  message: 'Minimum length should be 1 character',
+                },
+                validate: (value) => value === '' || validationName(value),
+              })}
+            />
+            {errors?.firstName && (
+              <div className="validation-error">{errors.firstName.message}</div>
+            )}
+          </div>
 
-          <input
-            type="text"
-            placeholder="Last name"
-            {...register('lastName', {
-              required: false,
-              minLength: {
-                value: 1,
-                message: 'Minimum length should be 1 character',
-              },
-              validate: (value) => value === '' || validationName(value),
-            })}
-          />
-          {errors?.lastName && (
-            <div style={{ color: 'red' }}>{errors.lastName.message}</div>
-          )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="last-name-input">
+              Last name
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="last-name-input"
+              placeholder="Russell"
+              {...register('lastName', {
+                required: false,
+                minLength: {
+                  value: 1,
+                  message: 'Minimum length should be 1 character',
+                },
+                validate: (value) => value === '' || validationName(value),
+              })}
+            />
+            {errors?.lastName && (
+              <div className="validation-error">{errors.lastName.message}</div>
+            )}
+          </div>
 
-          <input
-            type="date"
-            placeholder="Date of birth"
-            {...register('birthDate', {
-              required: false,
-              validate: (value) => value === '' || ageValidation(value),
-            })}
-          />
-          {errors?.birthDate && (
-            <div style={{ color: 'red' }}>{errors.birthDate.message}</div>
-          )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="date-input">
+              Date of birth
+            </label>
+            <input
+              className="form-input"
+              type="date"
+              id="date-input"
+              placeholder="dd.mm.yyyy"
+              {...register('birthDate', {
+                required: false,
+                validate: (value) => value === '' || ageValidation(value),
+              })}
+            />
+            {errors?.birthDate && (
+              <div className="validation-error">{errors.birthDate.message}</div>
+            )}
+          </div>
         </div>
 
         <div className="registration-field shipping-address">
-          <h2>Shipping Address</h2>
+          <h2 className="form-title">Shipping Address</h2>
 
-          <input
-            type="text"
-            placeholder="Street"
-            {...register('shippingAddress.street', { required: false })}
-          />
+          <div className="form-group">
+            <label className="form-label" htmlFor="address-input">
+              Address
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="address-input"
+              placeholder="9978 Witham St "
+              {...register('shippingAddress.street', { required: false })}
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="City"
-            {...register('shippingAddress.city', { required: false })}
-          />
+          <div className="form-group">
+            <label className="form-label" htmlFor="city-input">
+              City
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="city-input"
+              placeholder="Dallas"
+              {...register('shippingAddress.city', { required: false })}
+            />
+          </div>
 
-          <select {...register('shippingAddress.country', { required: false })}>
-            {Object.values(Country).map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label className="form-label" htmlFor="country-input">
+              Country
+            </label>
+            <select
+              id="country-input"
+              className="form-input"
+              {...register('shippingAddress.country', { required: false })}
+            >
+              {Object.values(Country).map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Zip code"
-            {...register('shippingAddress.zipCode', {
-              required: false,
-              validate: (value) =>
-                value === '' ||
-                validationZipCode(value, getValues('shippingAddress.country')),
-            })}
-          />
-          {errors?.shippingAddress?.zipCode && (
-            <div style={{ color: 'red' }}>
-              {errors.shippingAddress.zipCode.message}
-            </div>
-          )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="zip-code-input">
+              Zip Code
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="zip-code-input"
+              placeholder="20033"
+              {...register('shippingAddress.zipCode', {
+                required: false,
+                validate: (value) =>
+                  value === '' ||
+                  validationZipCode(
+                    value,
+                    getValues('shippingAddress.country')
+                  ),
+              })}
+            />
+            {errors?.shippingAddress?.zipCode && (
+              <div className="validation-error">
+                {errors.shippingAddress.zipCode.message}
+              </div>
+            )}
+          </div>
 
           <div className="address-checkbox-container">
             <input type="checkbox" id="useAsDefault" />
@@ -177,43 +249,73 @@ export function Registration() {
         </div>
 
         <div className="registration-field billing-address">
-          <h2>Billing Address</h2>
+          <h2 className="form-title">Billing Address</h2>
 
-          <input
-            type="text"
-            placeholder="Street"
-            {...register('billingAddress.street', { required: false })}
-          />
+          <div className="form-group">
+            <label className="form-label" htmlFor="address-billing-input">
+              Address
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="address-billing-input"
+              placeholder="9978 Witham St "
+              {...register('billingAddress.street', { required: false })}
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="City"
-            {...register('billingAddress.city', { required: false })}
-          />
+          <div className="form-group">
+            <label className="form-label" htmlFor="city-billing-input">
+              City
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="city-billing-input"
+              placeholder="City"
+              {...register('billingAddress.city', { required: false })}
+            />
+          </div>
 
-          <select {...register('billingAddress.country', { required: false })}>
-            {Object.values(Country).map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label className="form-label" htmlFor="country-billing-input">
+              Country
+            </label>
+            <select
+              className="form-input"
+              id="country-billing-input"
+              {...register('billingAddress.country', { required: false })}
+            >
+              {Object.values(Country).map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Zip code"
-            {...register('billingAddress.zipCode', {
-              required: false,
-              validate: (value) =>
-                value === '' ||
-                validationZipCode(value, getValues('billingAddress.country')),
-            })}
-          />
-          {errors?.billingAddress?.zipCode && (
-            <div style={{ color: 'red' }}>
-              {errors.billingAddress.zipCode.message}
-            </div>
-          )}
+          <div className="form-group">
+            <label className="form-label" htmlFor="zip-code-billing-input">
+              Zip Code
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="zip-code-billing-input"
+              placeholder="20033"
+              {...register('billingAddress.zipCode', {
+                required: false,
+                validate: (value) =>
+                  value === '' ||
+                  validationZipCode(value, getValues('billingAddress.country')),
+              })}
+            />
+            {errors?.billingAddress?.zipCode && (
+              <div className="validation-error">
+                {errors.billingAddress.zipCode.message}
+              </div>
+            )}
+          </div>
 
           <div className="address-checkbox-container">
             <input type="checkbox" id="useAsDefaultForBilling" />
@@ -223,18 +325,24 @@ export function Registration() {
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isRegistrationButtonDisabled(
             getFieldState('email'),
             getFieldState('password')
           )}
+          onClick={() => navigate(ROUTES.HOME)}
         >
           Create Account
-        </button>
+        </Button>
       </form>
 
-      <Link to={ROUTES.LOGIN}>Login</Link>
-    </>
+      <p className="form-question">
+        Already have account?{' '}
+        <Link to={ROUTES.LOGIN} className="form-link">
+          Login
+        </Link>
+      </p>
+    </section>
   );
 }
