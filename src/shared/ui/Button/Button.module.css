@@ -1,0 +1,32 @@
+.button {
+  cursor: pointer;
+
+  height: 45px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 43px;
+
+  font-weight: 600;
+  line-height: 120%;
+  color: var(--color-main);
+
+  background: var(--color-primary);
+
+  transition: all ease 0.5s;
+}
+
+.button:disabled {
+  cursor: default;
+  background-color: var(--color-green-1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(:disabled) {
+    transform: scale(0.98);
+    background-color: var(--color-hard-primary);
+  }
+
+  .button:active:not(:disabled) {
+    background-color: var(--color-soft-primary);
+  }
+}

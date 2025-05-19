@@ -99,3 +99,9 @@ img {
   cursor: default;
   opacity: 0.5;
 }
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-gray-9);
+}
