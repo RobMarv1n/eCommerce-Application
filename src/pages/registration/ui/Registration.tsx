@@ -11,6 +11,7 @@ import { validationName } from '../model/validation/validationName';
 import { validationPassword } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
 import { Button } from '../../../shared/ui/Button';
+import { client } from '../../../utils/clientApi/ClientApi';
 import './registration.css';
 import '../../../shared/styles/forms.css';
 
@@ -30,8 +31,13 @@ export function Registration() {
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
-    console.log(data);
-    navigate(ROUTES.HOME);
+    client
+      .signUp(data)
+      .then(() => {
+        console.log('New user successfully sign up');
+        navigate(ROUTES.HOME);
+      })
+      .catch(() => console.log('A user with this email is already registered'));
     reset();
   };
 
