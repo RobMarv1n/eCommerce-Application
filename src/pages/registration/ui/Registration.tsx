@@ -39,6 +39,7 @@ export function Registration() {
         <input
           type="text"
           placeholder="Email"
+          autoComplete="email"
           {...register('email', {
             required: true,
             validate: validationEmail,
@@ -51,6 +52,7 @@ export function Registration() {
         <input
           type="password"
           placeholder="Password"
+          autoComplete="new-password"
           {...register('password', {
             required: true,
             minLength: {
