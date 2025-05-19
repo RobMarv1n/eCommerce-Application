@@ -7,28 +7,26 @@ export function PasswordInput(inputProperties: InputProperties) {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <>
-      <div className="password-input-container">
-        <input
-          type={showPassword ? 'text' : 'password'}
-          className="password-input"
-          placeholder="Password"
-          id="password-input"
-          value={value}
-          onChange={onChange}
-          onInput={onInput}
-          required
-        />
-        <IoMdEye
-          className="password-eye-icon eye-icon"
-          onClick={() => setShowPassword(true)}
-          style={{ display: showPassword ? 'none' : 'block' }}
-        />
-        <IoMdEyeOff
-          style={{ display: showPassword ? 'block' : 'none' }}
-          className="password-eye-icon eye-off-icon"
-          onClick={() => setShowPassword(false)}
-        />
-      </div>
+      <input
+        type={showPassword ? 'text' : 'password'}
+        className="form-input form-input-icon"
+        placeholder="Password"
+        id="password-input"
+        value={value}
+        onChange={onChange}
+        onInput={onInput}
+        required
+      />
+      <IoMdEye
+        className="password-eye-icon eye-icon"
+        onClick={() => setShowPassword(true)}
+        style={{ display: showPassword ? 'none' : 'block' }}
+      />
+      <IoMdEyeOff
+        style={{ display: showPassword ? 'block' : 'none' }}
+        className="password-eye-icon eye-off-icon"
+        onClick={() => setShowPassword(false)}
+      />
       {!isValid && (
         <div className="validation-error">
           The password must be longer than 8 characters and less than 25

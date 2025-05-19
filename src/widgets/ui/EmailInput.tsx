@@ -5,8 +5,8 @@ export function EmailInput(inputProperties: InputProperties) {
   return (
     <>
       <input
-        type="text"
-        className="email-input"
+        type="email"
+        className="form-input"
         placeholder="Email"
         id="email-input"
         value={value}

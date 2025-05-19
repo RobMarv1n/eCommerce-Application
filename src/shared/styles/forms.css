@@ -1,0 +1,54 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-input {
+  height: 49px;
+  padding: 14px 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+
+  font-size: 16px;
+  line-height: 130%;
+  color: var(--color-gray-4);
+}
+
+.form-input-icon {
+  padding-right: 35px;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-eye-icon {
+  cursor: pointer;
+
+  position: absolute;
+  top: 35px;
+  right: 10px;
+
+  font-size: 20px;
+}
+
+.form-question {
+  line-height: 150%;
+}
+
+.form-link {
+  font-weight: 500;
+  color: var(--color-gray-9);
+}
+
+.validation-error {
+  color: var(--color-danger);
+}
