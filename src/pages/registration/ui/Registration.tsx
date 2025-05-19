@@ -29,6 +29,7 @@ export function Registration() {
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
     console.log(data);
+    navigate(ROUTES.HOME);
     reset();
   };
 
@@ -77,12 +78,12 @@ export function Registration() {
             type="text"
             placeholder="First name"
             {...register('firstName', {
-              required: true,
+              required: false,
               minLength: {
                 value: 1,
                 message: 'Minimum length should be 1 character',
               },
-              validate: validationName,
+              validate: (value) => value === '' || validationName(value),
             })}
           />
           {errors?.firstName && (
@@ -93,12 +94,12 @@ export function Registration() {
             type="text"
             placeholder="Last name"
             {...register('lastName', {
-              required: true,
+              required: false,
               minLength: {
                 value: 1,
                 message: 'Minimum length should be 1 character',
               },
-              validate: validationName,
+              validate: (value) => value === '' || validationName(value),
             })}
           />
           {errors?.lastName && (
@@ -110,7 +111,7 @@ export function Registration() {
             placeholder="Date of birth"
             {...register('birthDate', {
               required: false,
-              validate: ageValidation,
+              validate: (value) => value === '' || ageValidation(value),
             })}
           />
           {errors?.birthDate && (
@@ -147,6 +148,7 @@ export function Registration() {
             {...register('shippingAddress.zipCode', {
               required: false,
               validate: (value) =>
+                value === '' ||
                 validationZipCode(value, getValues('shippingAddress.country')),
             })}
           />
@@ -197,6 +199,7 @@ export function Registration() {
             {...register('billingAddress.zipCode', {
               required: false,
               validate: (value) =>
+                value === '' ||
                 validationZipCode(value, getValues('billingAddress.country')),
             })}
           />
@@ -220,7 +223,6 @@ export function Registration() {
             getFieldState('email'),
             getFieldState('password')
           )}
-          onClick={() => navigate(ROUTES.HOME)}
         >
           Create Account
         </button>
