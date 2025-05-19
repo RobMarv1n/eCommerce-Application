@@ -6,6 +6,7 @@ import { PasswordInput } from '../../widgets/ui/PasswordInput';
 import { Button } from '../../shared/ui/Button';
 import './login.css';
 import '../../shared/styles/forms.css';
+import { client } from '../../utils/clientApi/ClientApi';
 
 export function Login() {
   const navigate = useNavigate();
@@ -40,8 +41,18 @@ export function Login() {
           />
         </div>
         <Button
-          type="submit"
-          onClick={() => navigate(ROUTES.HOME)}
+          // type="submit"
+          onClick={() =>
+            client
+              .login({ email, password })
+              .then(() => {
+                console.log('The user has successfully logged in.');
+                navigate(ROUTES.HOME);
+              })
+              .catch(() => {
+                console.log('Invalid email or password');
+              })
+          }
           disabled={!loginButtonState}
         >
           Login
