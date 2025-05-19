@@ -15,7 +15,7 @@
   box-shadow: 0 0 56px 0 rgb(0 38 3 / 8%);
 }
 
-@media (width <= 400px) {
+@media (width <= 500px) {
   .login {
     padding: 30px 20px;
   }
