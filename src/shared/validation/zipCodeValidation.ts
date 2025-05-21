@@ -5,7 +5,7 @@ import {
   isValidPostalCode,
 } from 'postal-code-validator';
 
-export function validationZipCode(value: string, country: Country) {
+export function zipCodeValidation(value: string, country: Country) {
   if (!countryHasPostalCodeSystem(country)) {
     return 'Postal code is not available for selected country';
   } else if (!isValidPostalCode(value)) {
