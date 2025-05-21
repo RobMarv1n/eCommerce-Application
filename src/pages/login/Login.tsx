@@ -7,10 +7,15 @@ import { Button } from '../../shared/ui/Button';
 import './login.css';
 import '../../shared/styles/forms.css';
 import { client } from '../../utils/clientApi/ClientApi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Login() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (client.isLogin) navigate(ROUTES.HOME);
+  });
+
   const {
     formState,
     isValidForm,
@@ -21,6 +26,8 @@ export function Login() {
   const { email, password } = formState;
   const { isValidEmail, isValidPassword } = isValidForm;
   const [showError, setShowError] = useState(false);
+
+  if (client.isLogin) return <></>;
 
   return (
     <section className="login">
