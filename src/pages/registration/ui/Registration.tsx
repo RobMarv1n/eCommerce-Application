@@ -1,4 +1,5 @@
 import { Country } from 'postal-code-validator';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../../shared/styles/forms.css';
@@ -7,7 +8,7 @@ import { ROUTES } from '../../../types';
 import { client } from '../../../utils/clientApi/ClientApi';
 import { RegistrationPasswordInput } from '../../../widgets/ui/inputs/RegistrationPasswordInput';
 import { TextInput } from '../../../widgets/ui/inputs/TextInput';
-import { reactHookFormDefaultValues } from '../lib/reactHookFormDefaultValues';
+import { RegistrationFormDefaultValues } from '../lib/RegistrationFormDefaultValues';
 import { RegistrationFormData } from '../model/types';
 import { ageValidation } from '../model/validation/ageValidation';
 import { isRegistrationButtonDisabled } from '../model/validation/isRegistrationButtonDisabled';
@@ -16,7 +17,6 @@ import { validationName } from '../model/validation/validationName';
 import { passwordValidationRules } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
 import './registration.css';
-import { useEffect, useState } from 'react';
 
 export function Registration() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export function Registration() {
     control,
   } = useForm<RegistrationFormData>({
     mode: 'onChange',
-    defaultValues: reactHookFormDefaultValues,
+    defaultValues: RegistrationFormDefaultValues,
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {

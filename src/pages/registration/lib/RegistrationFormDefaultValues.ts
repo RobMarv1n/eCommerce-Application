@@ -1,6 +1,6 @@
 import { Country } from 'postal-code-validator';
 
-export const reactHookFormDefaultValues = {
+export const RegistrationFormDefaultValues = {
   email: '',
   password: '',
   firstName: '',
