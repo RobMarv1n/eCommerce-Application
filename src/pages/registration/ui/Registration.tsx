@@ -16,9 +16,13 @@ import { validationName } from '../model/validation/validationName';
 import { passwordValidationRules } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
 import './registration.css';
+import { useState } from 'react';
 
 export function Registration() {
   const navigate = useNavigate();
+
+  const [showError, setShowError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -36,10 +40,9 @@ export function Registration() {
     client
       .signUp(data)
       .then(() => {
-        console.log('New user successfully sign up');
         navigate(ROUTES.HOME);
       })
-      .catch(() => console.log('A user with this email is already registered'));
+      .catch(() => setShowError(true));
     reset();
   };
 
@@ -298,13 +301,18 @@ export function Registration() {
           </div>
         </div>
 
+        {showError && (
+          <p className="validation-error">
+            A user with this email is already registered
+          </p>
+        )}
+
         <Button
           type="submit"
           disabled={isRegistrationButtonDisabled(
             getFieldState('email'),
             getFieldState('password')
           )}
-          onClick={() => navigate(ROUTES.HOME)}
         >
           Create Account
         </Button>

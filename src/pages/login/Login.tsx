@@ -7,6 +7,7 @@ import { Button } from '../../shared/ui/Button';
 import './login.css';
 import '../../shared/styles/forms.css';
 import { client } from '../../utils/clientApi/ClientApi';
+import { useState } from 'react';
 
 export function Login() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export function Login() {
   } = useFormValidation();
   const { email, password } = formState;
   const { isValidEmail, isValidPassword } = isValidForm;
+  const [showError, setShowError] = useState(false);
 
   return (
     <section className="login">
@@ -44,17 +46,19 @@ export function Login() {
             value={password}
           />
         </div>
+        {showError && (
+          <p className="validation-error">Invalid email or password</p>
+        )}
         <Button
           // type="submit"
           onClick={() =>
             client
               .login({ email, password })
               .then(() => {
-                console.log('The user has successfully logged in.');
                 navigate(ROUTES.HOME);
               })
               .catch(() => {
-                console.log('Invalid email or password');
+                setShowError(true);
               })
           }
           disabled={!loginButtonState}

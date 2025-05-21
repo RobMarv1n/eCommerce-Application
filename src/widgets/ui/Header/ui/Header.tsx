@@ -1,8 +1,11 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { IconFactory } from '../../../../shared/ui/Icon';
 import { Logo } from '../../../../shared/ui/Logo';
 import { ROUTES } from '../../../../types';
 import styles from './Header.module.css';
+import { client } from '../../../../utils/clientApi/ClientApi';
+import { useEffect, useState } from 'react';
+import { LogOutButton } from '../../../../shared/ui/LogOutButton';
 
 const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
@@ -34,6 +37,19 @@ const iconLinks = [
 ] as const;
 
 export function Header() {
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(client.isLogin);
+
+  useEffect(() => {
+    setIsAuthenticated(client.isLogin);
+  }, [client.isLogin]);
+
+  const handleLogout = () => {
+    client.logout();
+    setIsAuthenticated(false);
+    navigate(ROUTES.HOME);
+  };
+
   return (
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
@@ -74,6 +90,11 @@ export function Header() {
                 </Link>
               </li>
             ))}
+            {isAuthenticated && (
+              <li className={styles.iconsLink}>
+                <LogOutButton onClick={handleLogout} />
+              </li>
+            )}
           </ul>
         </div>
       </div>
