@@ -1,19 +1,21 @@
 import { Country } from 'postal-code-validator';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import '../../../shared/styles/forms.css';
+import { Button } from '../../../shared/ui/Button';
 import { ROUTES } from '../../../types';
+import { client } from '../../../utils/clientApi/ClientApi';
+import { RegistrationPasswordInput } from '../../../widgets/ui/inputs/RegistrationPasswordInput';
+import { TextInput } from '../../../widgets/ui/inputs/TextInput';
 import { reactHookFormDefaultValues } from '../lib/reactHookFormDefaultValues';
 import { RegistrationFormData } from '../model/types';
 import { ageValidation } from '../model/validation/ageValidation';
 import { isRegistrationButtonDisabled } from '../model/validation/isRegistrationButtonDisabled';
-import { validationEmail } from '../model/validation/validationEmail';
+import { emailValidationRules } from '../model/validation/validationEmail';
 import { validationName } from '../model/validation/validationName';
-import { validationPassword } from '../model/validation/validationPassword';
+import { passwordValidationRules } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
-import { Button } from '../../../shared/ui/Button';
-import { client } from '../../../utils/clientApi/ClientApi';
 import './registration.css';
-import '../../../shared/styles/forms.css';
 import { useState } from 'react';
 
 export function Registration() {
@@ -28,6 +30,7 @@ export function Registration() {
     reset,
     getValues,
     getFieldState,
+    control,
   } = useForm<RegistrationFormData>({
     mode: 'onChange',
     defaultValues: reactHookFormDefaultValues,
@@ -49,51 +52,22 @@ export function Registration() {
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="registration-field">
           <div className="form-group">
-            <label className="form-label" htmlFor="email-input">
-              Email
-            </label>
-            <input
-              className="form-input"
-              type="email"
+            <TextInput
+              label="Email"
               id="email-input"
-              placeholder="dianne.russell@gmail.com"
-              autoComplete="email"
-              {...register('email', {
-                required: true,
-                validate: validationEmail,
-              })}
+              register={register}
+              name="email"
+              errors={errors}
+              rules={emailValidationRules}
             />
-            {errors?.email && (
-              <div className="validation-error">{errors.email.message}</div>
-            )}
           </div>
 
-          <div className="form-group">
-            <label className="form-label" htmlFor="password-input">
-              Password
-            </label>
-            <input
-              className="form-input"
-              type="password"
-              id="password-inputt"
-              placeholder="Password"
-              autoComplete="new-password"
-              {...register('password', {
-                required: true,
-                minLength: {
-                  value: 8,
-                  message: 'Minimum length should be 8 characters',
-                },
-                maxLength: {
-                  value: 25,
-                  message: 'Maximum length should be 25 characters',
-                },
-                validate: validationPassword,
-              })}
+          <div className="form-group password-input-container">
+            <RegistrationPasswordInput
+              control={control}
+              name="password"
+              rules={passwordValidationRules}
             />
-            {errors?.password && (
-              <div className="validation-error">{errors.password.message}</div>
-            )}
           </div>
         </div>
 
@@ -343,7 +317,6 @@ export function Registration() {
           Create Account
         </Button>
       </form>
-
       <p className="form-question">
         Already have account?{' '}
         <Link to={ROUTES.LOGIN} className="form-link">

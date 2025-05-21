@@ -5,3 +5,8 @@ export function validationEmail(value: string) {
     return 'Expected format: user@example.com';
   }
 }
+
+export const emailValidationRules = {
+  required: true,
+  validate: validationEmail,
+};
