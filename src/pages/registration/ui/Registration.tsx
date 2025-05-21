@@ -16,10 +16,14 @@ import { validationName } from '../model/validation/validationName';
 import { passwordValidationRules } from '../model/validation/validationPassword';
 import { validationZipCode } from '../model/validation/validationZipCode';
 import './registration.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Registration() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (client.isLogin) navigate(ROUTES.HOME);
+  });
 
   const [showError, setShowError] = useState(false);
 
@@ -45,6 +49,8 @@ export function Registration() {
       .catch(() => setShowError(true));
     reset();
   };
+
+  if (client.isLogin) return <></>;
 
   return (
     <section className="register">
