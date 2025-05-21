@@ -1,0 +1,16 @@
+.logoutButton {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: none;
+}
+
+.logoutButton svg:hover {
+  fill: var(--color-green-5);
+  transition: all ease 0.7s;
+}
