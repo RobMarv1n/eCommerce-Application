@@ -46,7 +46,9 @@ export function Login() {
             value={password}
           />
         </div>
-        {showError && <p>Invalid email or password</p>}
+        {showError && (
+          <p className="validation-error">Invalid email or password</p>
+        )}
         <Button
           // type="submit"
           onClick={() =>
