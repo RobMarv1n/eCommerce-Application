@@ -14,9 +14,12 @@ import { Button } from '../../../shared/ui/Button';
 import { client } from '../../../utils/clientApi/ClientApi';
 import './registration.css';
 import '../../../shared/styles/forms.css';
+import { useState } from 'react';
 
 export function Registration() {
   const navigate = useNavigate();
+
+  const [showError, setShowError] = useState(false);
 
   const {
     register,
@@ -34,10 +37,9 @@ export function Registration() {
     client
       .signUp(data)
       .then(() => {
-        console.log('New user successfully sign up');
         navigate(ROUTES.HOME);
       })
-      .catch(() => console.log('A user with this email is already registered'));
+      .catch(() => setShowError(true));
     reset();
   };
 
@@ -325,13 +327,14 @@ export function Registration() {
           </div>
         </div>
 
+        {showError && <p>A user with this email is already registered</p>}
+
         <Button
           type="submit"
           disabled={isRegistrationButtonDisabled(
             getFieldState('email'),
             getFieldState('password')
           )}
-          onClick={() => navigate(ROUTES.HOME)}
         >
           Create Account
         </Button>
