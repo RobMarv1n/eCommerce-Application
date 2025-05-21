@@ -327,7 +327,11 @@ export function Registration() {
           </div>
         </div>
 
-        {showError && <p>A user with this email is already registered</p>}
+        {showError && (
+          <p className="validation-error">
+            A user with this email is already registered
+          </p>
+        )}
 
         <Button
           type="submit"
