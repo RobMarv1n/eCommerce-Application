@@ -14,6 +14,7 @@ export function FormInput<T extends FieldValues>(
     rules,
     register,
     errors,
+    autocomplete = 'email',
   } = properties;
   const errorMessage = errors?.[name]?.message;
 
@@ -29,6 +30,7 @@ export function FormInput<T extends FieldValues>(
         name={name}
         placeholder={placeholder}
         id={id}
+        autoComplete={autocomplete}
       />
       {errorMessage && (
         <div className="validation-error">{errorMessage.toString()}</div>
