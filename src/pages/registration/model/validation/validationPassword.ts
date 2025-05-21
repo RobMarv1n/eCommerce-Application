@@ -1,4 +1,8 @@
-export function validationPassword(value: string) {
+export function validationPassword(value: string | unknown) {
+  if (typeof value !== 'string') {
+    return;
+  }
+
   if (!(value === value.trim())) {
     return 'Password must not contain trailing spaces';
   } else if (!/[a-z]/.test(value)) {
@@ -11,3 +15,16 @@ export function validationPassword(value: string) {
     return 'Password must contain at least one special character';
   }
 }
+
+export const passwordValidationRules = {
+  required: true,
+  minLength: {
+    value: 8,
+    message: 'Minimum length should be 8 characters',
+  },
+  maxLength: {
+    value: 25,
+    message: 'Maximum length should be 25 characters',
+  },
+  validate: validationPassword,
+};
