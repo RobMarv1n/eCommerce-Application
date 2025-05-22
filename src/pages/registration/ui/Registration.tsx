@@ -196,11 +196,19 @@ export function Registration() {
           </div>
 
           <div className="address-checkbox-container">
-            <input type="checkbox" id="useAsDefault" />
+            <input
+              {...register('shippingAddress.useAsDefaultForShipping')}
+              type="checkbox"
+              id="useAsDefault"
+            />
             <label htmlFor="useAsDefault">Use as default for shipping</label>
           </div>
           <div className="address-checkbox-container">
-            <input type="checkbox" id="useShippingForBilling" />
+            <input
+              {...register('shippingAddress.useShippingAsBilling')}
+              type="checkbox"
+              id="useShippingForBilling"
+            />
             <label htmlFor="useShippingForBilling">
               Using shipping address as billing
             </label>
@@ -277,7 +285,11 @@ export function Registration() {
           </div>
 
           <div className="address-checkbox-container">
-            <input type="checkbox" id="useAsDefaultForBilling" />
+            <input
+              {...register('billingAddress.useAsDefaultForBilling')}
+              type="checkbox"
+              id="useAsDefaultForBilling"
+            />
             <label htmlFor="useAsDefaultForBilling">
               Use as default for billing
             </label>
