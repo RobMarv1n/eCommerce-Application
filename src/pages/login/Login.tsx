@@ -1,13 +1,16 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useFormValidation } from '../../shared/validation/useFomValidation';
-import { ROUTES } from '../../types';
-import { EmailInput } from '../../widgets/ui/EmailInput';
-import { PasswordInput } from '../../widgets/ui/PasswordInput';
-import { Button } from '../../shared/ui/Button';
-import './login.css';
-import '../../shared/styles/forms.css';
-import { client } from '../../utils/clientApi/ClientApi';
 import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '../../shared/ui/Button';
+import { emailValidationRules } from '../../shared/validation/emailValidation';
+import { passwordValidationRules } from '../../shared/validation/passwordValidation';
+import { ROUTES } from '../../types';
+import { client } from '../../utils/clientApi/ClientApi';
+import { FormInput } from '../../widgets/ui/inputs/FormInput';
+import { FormPasswordInput } from '../../widgets/ui/inputs/FormPasswordInput';
+import { RegistrationFormDefaultValues } from '../registration/lib/RegistrationFormDefaultValues';
+import './login.css';
+import { LoginFormData } from './model/types';
 
 export function Login() {
   const navigate = useNavigate();
@@ -16,60 +19,65 @@ export function Login() {
     if (client.isLogin) navigate(ROUTES.HOME);
   });
 
-  const {
-    formState,
-    isValidForm,
-    loginButtonState,
-    emailValidationHandler,
-    passwordValidationHandler,
-  } = useFormValidation();
-  const { email, password } = formState;
-  const { isValidEmail, isValidPassword } = isValidForm;
   const [showError, setShowError] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+  } = useForm<LoginFormData>({
+    mode: 'onChange',
+    defaultValues: RegistrationFormDefaultValues,
+  });
+
+  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+    client
+      .login(data)
+      .then(() => {
+        navigate(ROUTES.HOME);
+      })
+      .catch(() => {
+        setShowError(true);
+      });
+    reset();
+  };
 
   if (client.isLogin) return <></>;
 
   return (
     <section className="login">
       <h1 className="title">Login</h1>
-      <form className="form">
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
-          <label className="form-label" htmlFor="email-input">
-            Email
-          </label>
-          <EmailInput
-            isValid={isValidEmail}
-            onInput={emailValidationHandler}
-            value={email}
+          <FormInput
+            className="form-input"
+            name="email"
+            label="Email"
+            id="email-input"
+            placeholder="Email"
+            register={register}
+            errors={errors}
+            rules={emailValidationRules}
           />
         </div>
         <div className="form-group password-input-container">
-          <label className="form-label" htmlFor="password-input">
-            Password
-          </label>
-          <PasswordInput
-            isValid={isValidPassword}
-            onInput={passwordValidationHandler}
-            value={password}
+          <FormPasswordInput
+            type="password"
+            name="password"
+            label="Password"
+            id="password-input"
+            placeholder="Password"
+            register={register}
+            errors={errors}
+            rules={passwordValidationRules}
+            autocomplete="current-password"
           />
         </div>
         {showError && (
           <p className="validation-error">Invalid email or password</p>
         )}
-        <Button
-          // type="submit"
-          onClick={() =>
-            client
-              .login({ email, password })
-              .then(() => {
-                navigate(ROUTES.HOME);
-              })
-              .catch(() => {
-                setShowError(true);
-              })
-          }
-          disabled={!loginButtonState}
-        >
+        <Button type="submit" disabled={!isValid}>
           Login
         </Button>
       </form>

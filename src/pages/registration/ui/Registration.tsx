@@ -4,18 +4,19 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../../shared/styles/forms.css';
 import { Button } from '../../../shared/ui/Button';
+import { emailValidationRules } from '../../../shared/validation/emailValidation';
+import { isRegistrationButtonDisabled } from '../../../shared/validation/isRegistrationButtonDisabled';
+
+import { ageValidationRules } from '../../../shared/validation/ageValidation';
+import { nameValidationRules } from '../../../shared/validation/nameValidation';
+import { passwordValidationRules } from '../../../shared/validation/passwordValidation';
+import { zipCodeValidation } from '../../../shared/validation/zipCodeValidation';
 import { ROUTES } from '../../../types';
 import { client } from '../../../utils/clientApi/ClientApi';
-import { RegistrationPasswordInput } from '../../../widgets/ui/inputs/RegistrationPasswordInput';
-import { TextInput } from '../../../widgets/ui/inputs/TextInput';
+import { FormInput } from '../../../widgets/ui/inputs/FormInput';
+import { FormPasswordInput } from '../../../widgets/ui/inputs/FormPasswordInput';
 import { RegistrationFormDefaultValues } from '../lib/RegistrationFormDefaultValues';
 import { RegistrationFormData } from '../model/types';
-import { ageValidation } from '../model/validation/ageValidation';
-import { isRegistrationButtonDisabled } from '../model/validation/isRegistrationButtonDisabled';
-import { emailValidationRules } from '../model/validation/validationEmail';
-import { validationName } from '../model/validation/validationName';
-import { passwordValidationRules } from '../model/validation/validationPassword';
-import { validationZipCode } from '../model/validation/validationZipCode';
 import './registration.css';
 
 export function Registration() {
@@ -34,7 +35,6 @@ export function Registration() {
     reset,
     getValues,
     getFieldState,
-    control,
   } = useForm<RegistrationFormData>({
     mode: 'onChange',
     defaultValues: RegistrationFormDefaultValues,
@@ -58,7 +58,7 @@ export function Registration() {
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="registration-field">
           <div className="form-group">
-            <TextInput
+            <FormInput
               label="Email"
               id="email-input"
               register={register}
@@ -69,9 +69,14 @@ export function Registration() {
           </div>
 
           <div className="form-group password-input-container">
-            <RegistrationPasswordInput
-              control={control}
+            <FormPasswordInput
+              type="password"
               name="password"
+              label="Password"
+              id="password-input"
+              placeholder="Password"
+              register={register}
+              errors={errors}
               rules={passwordValidationRules}
             />
           </div>
@@ -81,68 +86,39 @@ export function Registration() {
           <h2 className="form-title">Personal Details</h2>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="first-name-input">
-              First name
-            </label>
-            <input
-              className="form-input"
-              type="text"
+            <FormInput
+              name="firstName"
+              label="First name"
               id="first-name-input"
               placeholder="Dianne"
-              {...register('firstName', {
-                required: false,
-                minLength: {
-                  value: 1,
-                  message: 'Minimum length should be 1 character',
-                },
-                validate: (value) => value === '' || validationName(value),
-              })}
+              register={register}
+              errors={errors}
+              rules={nameValidationRules}
             />
-            {errors?.firstName && (
-              <div className="validation-error">{errors.firstName.message}</div>
-            )}
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="last-name-input">
-              Last name
-            </label>
-            <input
-              className="form-input"
-              type="text"
+            <FormInput
+              name="lastName"
+              label="Last name"
               id="last-name-input"
               placeholder="Russell"
-              {...register('lastName', {
-                required: false,
-                minLength: {
-                  value: 1,
-                  message: 'Minimum length should be 1 character',
-                },
-                validate: (value) => value === '' || validationName(value),
-              })}
+              register={register}
+              errors={errors}
+              rules={nameValidationRules}
             />
-            {errors?.lastName && (
-              <div className="validation-error">{errors.lastName.message}</div>
-            )}
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="date-input">
-              Date of birth
-            </label>
-            <input
-              className="form-input"
-              type="date"
+            <FormInput
+              name="birthDate"
+              label="Date of birth"
               id="date-input"
               placeholder="dd.mm.yyyy"
-              {...register('birthDate', {
-                required: false,
-                validate: (value) => value === '' || ageValidation(value),
-              })}
+              register={register}
+              errors={errors}
+              rules={ageValidationRules}
             />
-            {errors?.birthDate && (
-              <div className="validation-error">{errors.birthDate.message}</div>
-            )}
           </div>
         </div>
 
@@ -150,28 +126,24 @@ export function Registration() {
           <h2 className="form-title">Shipping Address</h2>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="address-input">
-              Address
-            </label>
-            <input
-              className="form-input"
-              type="text"
+            <FormInput
+              name="shippingAddress.street"
+              label="Address"
               id="address-input"
               placeholder="9978 Witham St "
-              {...register('shippingAddress.street', { required: false })}
+              register={register}
+              errors={errors}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="city-input">
-              City
-            </label>
-            <input
-              className="form-input"
-              type="text"
+            <FormInput
+              name="shippingAddress.city"
+              label="City"
               id="city-input"
               placeholder="Dallas"
-              {...register('shippingAddress.city', { required: false })}
+              register={register}
+              errors={errors}
             />
           </div>
 
@@ -205,7 +177,7 @@ export function Registration() {
                 required: false,
                 validate: (value) =>
                   value === '' ||
-                  validationZipCode(
+                  zipCodeValidation(
                     value,
                     getValues('shippingAddress.country')
                   ),
@@ -234,28 +206,26 @@ export function Registration() {
           <h2 className="form-title">Billing Address</h2>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="address-billing-input">
-              Address
-            </label>
-            <input
+            <FormInput
               className="form-input"
-              type="text"
+              name="billingAddress.street"
+              label="Address"
               id="address-billing-input"
               placeholder="9978 Witham St "
-              {...register('billingAddress.street', { required: false })}
+              register={register}
+              errors={errors}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="city-billing-input">
-              City
-            </label>
-            <input
+            <FormInput
               className="form-input"
-              type="text"
+              name="billingAddress.city"
+              label="City"
               id="city-billing-input"
               placeholder="City"
-              {...register('billingAddress.city', { required: false })}
+              register={register}
+              errors={errors}
             />
           </div>
 
@@ -289,7 +259,7 @@ export function Registration() {
                 required: false,
                 validate: (value) =>
                   value === '' ||
-                  validationZipCode(value, getValues('billingAddress.country')),
+                  zipCodeValidation(value, getValues('billingAddress.country')),
               })}
             />
             {errors?.billingAddress?.zipCode && (

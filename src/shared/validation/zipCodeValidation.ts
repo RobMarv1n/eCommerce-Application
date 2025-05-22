@@ -14,3 +14,11 @@ export function zipCodeValidation(value: string, country: Country) {
     return 'Invalid postal code for selected country';
   }
 }
+
+export const zipCodeValidationRules = {
+  required: false,
+  minLength: {
+    value: 5,
+    message: console.log('Minimum length should be 5 characters'),
+  },
+};
