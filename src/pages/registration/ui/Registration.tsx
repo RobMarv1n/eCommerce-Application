@@ -46,7 +46,12 @@ export function Registration() {
     client
       .signUp(data)
       .then(() => {
-        navigate(ROUTES.HOME);
+        client
+          .login({ email: data.email, password: data.password })
+          .then(() => {
+            client.isLogin = true;
+            navigate(ROUTES.HOME);
+          });
       })
       .catch(() => setShowError(true));
     reset();

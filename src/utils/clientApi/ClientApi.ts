@@ -1,4 +1,5 @@
 import type {
+  BaseAddress,
   ByProjectKeyRequestBuilder,
   ClientResponse,
   CustomerSignInResult,
@@ -32,7 +33,6 @@ class ClientApi {
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
-    this.isLogin = true;
     return result;
   }
 
@@ -44,31 +44,43 @@ class ClientApi {
   public async signUp(
     dto: singUpDTO
   ): Promise<ClientResponse<CustomerSignInResult>> {
+    const addresses: BaseAddress[] = [
+      {
+        country: countryCodes[dto.shippingAddress.country],
+        city: dto.shippingAddress.city,
+        streetName: dto.shippingAddress.street,
+        postalCode: dto.shippingAddress.zipCode,
+      },
+    ];
+
+    const defaultShippingAddress = dto.shippingAddress.useAsDefaultForShipping
+      ? 0
+      : undefined;
+    let defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
+      ? 0
+      : undefined;
+
+    if (!dto.shippingAddress.useShippingAsBilling) {
+      addresses.push({
+        country: countryCodes[dto.billingAddress.country],
+        city: dto.billingAddress.city,
+        streetName: dto.billingAddress.street,
+        postalCode: dto.billingAddress.zipCode,
+      });
+
+      defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
+        ? 1
+        : undefined;
+    }
+
     const body: MyCustomerDraft = {
       email: dto.email,
       password: dto.password,
       firstName: dto.firstName,
       lastName: dto.lastName,
-      defaultShippingAddress: dto.shippingAddress.useAsDefaultForShipping
-        ? 0
-        : undefined,
-      defaultBillingAddress: dto.billingAddress.useAsDefaultForBilling
-        ? 1
-        : undefined,
-      addresses: [
-        {
-          country: countryCodes[dto.shippingAddress.country],
-          city: dto.shippingAddress.city,
-          streetName: dto.shippingAddress.street,
-          postalCode: dto.shippingAddress.zipCode,
-        },
-        {
-          country: countryCodes[dto.billingAddress.country],
-          city: dto.billingAddress.city,
-          streetName: dto.billingAddress.street,
-          postalCode: dto.billingAddress.zipCode,
-        },
-      ],
+      defaultShippingAddress,
+      defaultBillingAddress,
+      addresses,
     };
 
     const result = this.apiRoot
@@ -83,7 +95,6 @@ class ClientApi {
       email: dto.email,
       password: dto.password,
     });
-    this.isLogin = true;
     return result;
   }
 }
