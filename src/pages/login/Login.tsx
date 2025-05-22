@@ -35,6 +35,7 @@ export function Login() {
     client
       .login(data)
       .then(() => {
+        client.isLogin = true;
         navigate(ROUTES.HOME);
       })
       .catch(() => {
