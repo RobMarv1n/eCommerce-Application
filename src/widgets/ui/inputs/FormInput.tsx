@@ -16,7 +16,13 @@ export function FormInput<T extends FieldValues>(
     errors,
     autocomplete = 'email',
   } = properties;
-  const errorMessage = errors?.[name]?.message;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const errorsObject = errors as Record<string, any>;
+  const [first, second] = name.split('.');
+  const errorMessage = name.includes('.')
+    ? errorsObject?.[first]?.[second]?.message
+    : errorsObject?.[name]?.message;
 
   return (
     <>
@@ -32,8 +38,9 @@ export function FormInput<T extends FieldValues>(
         id={id}
         autoComplete={autocomplete}
       />
+
       {errorMessage && (
-        <div className="validation-error">{errorMessage.toString()}</div>
+        <div className="validation-error">{errorMessage?.toString()}</div>
       )}
     </>
   );

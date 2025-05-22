@@ -8,8 +8,10 @@ import { emailValidationRules } from '../../../shared/validation/emailValidation
 import { isRegistrationButtonDisabled } from '../../../shared/validation/isRegistrationButtonDisabled';
 
 import { ageValidationRules } from '../../../shared/validation/ageValidation';
+import { cityValidationRules } from '../../../shared/validation/cityValidation';
 import { nameValidationRules } from '../../../shared/validation/nameValidation';
 import { passwordValidationRules } from '../../../shared/validation/passwordValidation';
+import { streetValidationRules } from '../../../shared/validation/streetValidation';
 import { zipCodeValidation } from '../../../shared/validation/zipCodeValidation';
 import { ROUTES } from '../../../types';
 import { client } from '../../../utils/clientApi/ClientApi';
@@ -111,6 +113,7 @@ export function Registration() {
 
           <div className="form-group">
             <FormInput
+              type="date"
               name="birthDate"
               label="Date of birth"
               id="date-input"
@@ -133,6 +136,7 @@ export function Registration() {
               placeholder="9978 Witham St "
               register={register}
               errors={errors}
+              rules={streetValidationRules}
             />
           </div>
 
@@ -144,6 +148,7 @@ export function Registration() {
               placeholder="Dallas"
               register={register}
               errors={errors}
+              rules={cityValidationRules}
             />
           </div>
 
@@ -214,6 +219,7 @@ export function Registration() {
               placeholder="9978 Witham St "
               register={register}
               errors={errors}
+              rules={streetValidationRules}
             />
           </div>
 
@@ -226,6 +232,7 @@ export function Registration() {
               placeholder="City"
               register={register}
               errors={errors}
+              rules={cityValidationRules}
             />
           </div>
 

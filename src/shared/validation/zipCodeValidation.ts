@@ -15,10 +15,9 @@ export function zipCodeValidation(value: string, country: Country) {
   }
 }
 
-export const zipCodeValidationRules = {
-  required: false,
-  minLength: {
-    value: 5,
-    message: console.log('Minimum length should be 5 characters'),
-  },
-};
+export function zipCodeValidationRules(country: Country) {
+  return {
+    required: true,
+    validate: (value: string) => zipCodeValidation(value, country),
+  };
+}
