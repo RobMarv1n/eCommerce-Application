@@ -1,4 +1,4 @@
-import { RegistrationFieldState } from '../types';
+import { RegistrationFieldState } from '../../pages/registration/model/types';
 
 export function isRegistrationButtonDisabled(
   emailFieldState: RegistrationFieldState,

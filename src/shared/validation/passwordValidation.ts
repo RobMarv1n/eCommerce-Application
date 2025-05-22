@@ -1,19 +1,30 @@
-export function validationPassword(value: string) {
-  const minPasswordLength = value.length >= 8;
-  const maxPasswordLength = value.length < 25;
-  const hasOneLowercaseLetter = /[a-z]/.test(value);
-  const hasOneCapitalLetter = /[A-Z]/.test(value);
-  const hasOneDigit = /\d/.test(value);
-  const hasOneSpecialChar = /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(value);
-  const hasNoTrailingSpaces = value === value.trim();
+export function passwordValidation(value: string | unknown) {
+  if (typeof value !== 'string') {
+    return;
+  }
 
-  return (
-    minPasswordLength &&
-    maxPasswordLength &&
-    hasOneLowercaseLetter &&
-    hasOneCapitalLetter &&
-    hasOneDigit &&
-    hasOneSpecialChar &&
-    hasNoTrailingSpaces
-  );
+  if (!(value === value.trim())) {
+    return 'Password must not contain trailing spaces';
+  } else if (!/[a-z]/.test(value)) {
+    return 'Password must contain at least one lowercase letter';
+  } else if (!/[A-Z]/.test(value)) {
+    return 'Password must contain at least one capital letter';
+  } else if (!/\d/.test(value)) {
+    return 'Password must contain at least one digit';
+  } else if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(value)) {
+    return 'Password must contain at least one special character';
+  }
 }
+
+export const passwordValidationRules = {
+  required: true,
+  minLength: {
+    value: 8,
+    message: 'Minimum length should be 8 characters',
+  },
+  maxLength: {
+    value: 25,
+    message: 'Maximum length should be 25 characters',
+  },
+  validate: passwordValidation,
+};

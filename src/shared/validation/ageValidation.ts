@@ -12,3 +12,8 @@ export const ageValidation = (value: string) => {
     return 'You must be at most 100 years old';
   }
 };
+
+export const ageValidationRules = {
+  required: false,
+  validate: (value: string) => value === '' || ageValidation(value),
+};

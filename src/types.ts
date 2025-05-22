@@ -1,3 +1,13 @@
+import {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from 'react-hook-form';
+import { LoginFormData } from './pages/login/model/types';
+
 export enum ROUTES {
   HOME = '/',
   LOGIN = '/login',
@@ -9,12 +19,17 @@ export enum ROUTES {
   PROFILE = '/profile',
 }
 
-export type ON_INPUT_EVENT = React.FormEvent<HTMLInputElement>;
-export type ON_CHANGE_EVENT = React.ChangeEvent<HTMLInputElement>;
-
-export type InputProperties = {
-  value?: string;
-  isValid?: boolean;
-  onInput?: (event: ON_INPUT_EVENT) => void;
-  onChange?: (event: ON_CHANGE_EVENT) => void;
+export type InputProperties<T extends FieldValues> = {
+  type?: string;
+  className?: string;
+  name: Path<T>;
+  label: string;
+  id: string;
+  placeholder?: string;
+  field?: ControllerRenderProps<LoginFormData>;
+  fieldState?: ControllerFieldState;
+  rules?: object;
+  register: UseFormRegister<T>;
+  errors?: FieldErrors<T>;
+  autocomplete?: string;
 };
