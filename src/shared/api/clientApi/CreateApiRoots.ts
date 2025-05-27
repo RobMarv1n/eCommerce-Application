@@ -1,6 +1,6 @@
 import {
-  type ByProjectKeyRequestBuilder,
   createApiBuilderFromCtpClient,
+  type ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
