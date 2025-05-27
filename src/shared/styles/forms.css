@@ -50,7 +50,11 @@
   top: 40px;
   right: 10px;
 
+  border: none;
+
   font-size: 20px;
+
+  background: none;
 }
 
 .form-question {
