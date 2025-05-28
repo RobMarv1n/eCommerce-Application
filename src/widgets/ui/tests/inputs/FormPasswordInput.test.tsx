@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
-import { FormPasswordInput } from '../inputs/FormPasswordInput';
+import { FormPasswordInput } from '../../inputs/FormPasswordInput';
 
 const TestForm = () => {
   const {
@@ -26,7 +26,7 @@ const TestForm = () => {
   );
 };
 
-describe('FormInput', () => {
+describe('FormPasswordInput', () => {
   test('should render FormPasswordInput field with label', () => {
     render(<TestForm />);
     expect(screen.getByLabelText('Test input')).toBeInTheDocument();

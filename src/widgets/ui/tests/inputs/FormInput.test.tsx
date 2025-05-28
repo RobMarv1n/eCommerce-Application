@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
-import { FormInput } from '../inputs/FormInput';
+import { FormInput } from '../../inputs/FormInput';
 
 describe('FormInput', () => {
   const TestForm = () => {
