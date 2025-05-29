@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { client } from '../../shared/api/clientApi/ClientApi';
 import { Button } from '../../shared/ui/Button';
 import { emailValidationRules } from '../../shared/validation/emailValidation';
 import { passwordValidationRules } from '../../shared/validation/passwordValidation';
 import { ROUTES } from '../../types';
-import { client } from '../../utils/clientApi/ClientApi';
 import { FormInput } from '../../widgets/ui/inputs/FormInput';
 import { FormPasswordInput } from '../../widgets/ui/inputs/FormPasswordInput';
 import { RegistrationFormDefaultValues } from '../registration/lib/RegistrationFormDefaultValues';

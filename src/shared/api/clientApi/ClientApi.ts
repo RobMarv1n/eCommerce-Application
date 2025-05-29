@@ -5,12 +5,12 @@ import type {
   CustomerSignInResult,
   MyCustomerDraft,
 } from '@commercetools/platform-sdk';
+import { countryCodes } from './CountryCodes';
 import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
 import type { loginDTO, singUpDTO } from './types';
-import { countryCodes } from './CountryCodes';
 
 class ClientApi {
   public isLogin: boolean;

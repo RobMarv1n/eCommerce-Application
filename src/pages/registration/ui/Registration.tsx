@@ -7,6 +7,7 @@ import { Button } from '../../../shared/ui/Button';
 import { emailValidationRules } from '../../../shared/validation/emailValidation';
 import { isRegistrationButtonDisabled } from '../../../shared/validation/isRegistrationButtonDisabled';
 
+import { client } from '../../../shared/api/clientApi/ClientApi';
 import { ageValidationRules } from '../../../shared/validation/ageValidation';
 import { cityValidationRules } from '../../../shared/validation/cityValidation';
 import { nameValidationRules } from '../../../shared/validation/nameValidation';
@@ -14,7 +15,6 @@ import { passwordValidationRules } from '../../../shared/validation/passwordVali
 import { streetValidationRules } from '../../../shared/validation/streetValidation';
 import { zipCodeValidation } from '../../../shared/validation/zipCodeValidation';
 import { ROUTES } from '../../../types';
-import { client } from '../../../utils/clientApi/ClientApi';
 import { FormInput } from '../../../widgets/ui/inputs/FormInput';
 import { FormPasswordInput } from '../../../widgets/ui/inputs/FormPasswordInput';
 import { RegistrationFormDefaultValues } from '../lib/RegistrationFormDefaultValues';

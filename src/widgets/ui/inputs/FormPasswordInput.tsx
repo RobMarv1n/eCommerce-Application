@@ -34,16 +34,24 @@ export function FormPasswordInput<T extends FieldValues>(
         id={id}
         autoComplete={autocomplete}
       />
-      <IoMdEye
-        className="password-eye-icon eye-icon"
-        onClick={() => setShowPassword(true)}
-        style={{ display: showPassword ? 'none' : 'block' }}
-      />
-      <IoMdEyeOff
-        style={{ display: showPassword ? 'block' : 'none' }}
-        className="password-eye-icon eye-off-icon"
-        onClick={() => setShowPassword(false)}
-      />
+      <button
+        className="password-eye-icon"
+        type="button"
+        aria-label="Show password"
+        onClick={(event) => {
+          event.preventDefault();
+          setShowPassword(!showPassword);
+        }}
+      >
+        <IoMdEye
+          className="eye-icon"
+          style={{ display: showPassword ? 'none' : 'block' }}
+        />
+        <IoMdEyeOff
+          style={{ display: showPassword ? 'block' : 'none' }}
+          className="eye-off-icon"
+        />
+      </button>
       {errorMessage && (
         <div className="validation-error">{errorMessage.toString()}</div>
       )}

@@ -1,11 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { IconFactory } from '../../../../shared/ui/Icon';
 import { Logo } from '../../../../shared/ui/Logo';
+import { LogOutButton } from '../../../../shared/ui/LogOutButton';
 import { ROUTES } from '../../../../types';
 import styles from './Header.module.css';
-import { client } from '../../../../utils/clientApi/ClientApi';
-import { useEffect, useState } from 'react';
-import { LogOutButton } from '../../../../shared/ui/LogOutButton';
 
 const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },

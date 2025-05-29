@@ -1,4 +1,4 @@
-import { RegistrationFormData } from '../../pages/registration/model/types';
+import { RegistrationFormData } from '../../../pages/registration/model/types';
 
 export type singUpDTO = RegistrationFormData;
 
