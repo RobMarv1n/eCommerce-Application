@@ -12,19 +12,18 @@ import {
 } from './CreateApiRoots';
 import type { Category, loginDTO, ProductData, singUpDTO } from './types';
 import { parseProduct } from './parseProduct';
+import { emptyProduct } from './constants';
 
 class ClientApi {
   public isLogin: boolean;
   private apiRoot: ByProjectKeyRequestBuilder;
   private currentCategoryId: string;
-  private currentProductId: string;
   private categories: Category[];
 
   constructor() {
     this.isLogin = false;
     this.apiRoot = CreateAnonymousApiRoot();
     this.currentCategoryId = '';
-    this.currentProductId = '';
     this.categories = [];
   }
 
@@ -112,7 +111,6 @@ class ClientApi {
         id: s.id,
         name: s.name['en-US'],
       }));
-      // this.currentCategoryId = this.categories[0].id;
       return this.categories;
     } catch {
       return [];
@@ -121,10 +119,6 @@ class ClientApi {
 
   public setCurrentCategoryId(id: string): void {
     this.currentCategoryId = id;
-  }
-
-  public setCurrentProductId(id: string): void {
-    this.currentProductId = id;
   }
 
   public getCategoryName(id: string): string {
@@ -157,26 +151,18 @@ class ClientApi {
     }
   }
 
-  public async getCurrentProduct(): Promise<ProductData> {
+  public async getProduct(id: string | undefined): Promise<ProductData> {
     try {
+      if (id === undefined) return emptyProduct;
       const response = await this.apiRoot
         .products()
-        .withId({ ID: this.currentProductId })
+        .withId({ ID: id })
         .get()
         .execute();
       const result = response.body;
       return parseProduct(result);
     } catch {
-      return {
-        id: '',
-        title: '',
-        images: [],
-        descriptionShort: '',
-        descriptionFull: '',
-        price: 0,
-        discountedPrice: 0,
-        categoryName: '',
-      };
+      return emptyProduct;
     }
   }
 }

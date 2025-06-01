@@ -45,13 +45,9 @@ function parseAttributes(attributes: Attribute[] | undefined): AttributesData {
   };
   if (attributes) {
     const object: { [index: string]: string } = {};
-    // for (const item of attributes) {
-    //   if (item.name in result) result[item.name] = item.value;
-    // }
     for (const item of attributes) {
       object[item.name] = item.value;
     }
-    // console.log('object', object);
     result.title = object['title'] || '';
     result.descriptionShort = object['description_short'] || '';
     result.descriptionFull = object['description_full'] || '';
