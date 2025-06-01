@@ -6,7 +6,7 @@ import { Login } from '../pages/login/Login';
 import { Registration } from '../pages/registration/ui/Registration';
 import { ROUTES } from '../types';
 import { Catalog } from '../pages/catalog/ui/Catalog';
-// import { Product } from '../pages/product/Product';
+import { Product } from '../pages/product';
 
 export function Router() {
   return (
@@ -17,7 +17,7 @@ export function Router() {
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path={ROUTES.CATALOG} element={<Catalog />} />
-          {/* <Route path={ROUTES.PRODUCT} element={<Product />} /> */}
+          <Route path={ROUTES.PRODUCT} element={<Product />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
