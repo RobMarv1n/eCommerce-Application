@@ -10,15 +10,19 @@ import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
-import type { loginDTO, singUpDTO } from './types';
+import type { Category, loginDTO, singUpDTO } from './types';
 
 class ClientApi {
   public isLogin: boolean;
   private apiRoot: ByProjectKeyRequestBuilder;
+  private currentCategoryId: string;
+  private categories: Category[];
 
   constructor() {
     this.isLogin = false;
     this.apiRoot = CreateAnonymousApiRoot();
+    this.currentCategoryId = '';
+    this.categories = [];
   }
 
   public async login(
@@ -96,6 +100,24 @@ class ClientApi {
       password: dto.password,
     });
     return result;
+  }
+
+  public async getCategories(): Promise<Category[]> {
+    try {
+      const response = await this.apiRoot.categories().get().execute();
+      this.categories = response.body.results.map((s) => ({
+        id: s.id,
+        name: s.name['en-US'],
+      }));
+      // this.currentCategoryId = this.categories[0].id;
+      return this.categories;
+    } catch {
+      return [];
+    }
+  }
+
+  public setCurrentCategoryId(id: string): void {
+    this.currentCategoryId = id;
   }
 }
 

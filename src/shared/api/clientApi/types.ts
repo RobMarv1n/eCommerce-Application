@@ -6,3 +6,8 @@ export type loginDTO = {
   email: string;
   password: string;
 };
+
+export type Category = {
+  id: string;
+  name: string;
+};
