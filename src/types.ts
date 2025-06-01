@@ -25,6 +25,8 @@ export type InputProperties<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   id: string;
+  readonly?: boolean;
+  value?: string;
   placeholder?: string;
   field?: ControllerRenderProps<LoginFormData>;
   fieldState?: ControllerFieldState;
@@ -32,4 +34,5 @@ export type InputProperties<T extends FieldValues> = {
   register: UseFormRegister<T>;
   errors?: FieldErrors<T>;
   autocomplete?: string;
+  disabled?: boolean;
 };
