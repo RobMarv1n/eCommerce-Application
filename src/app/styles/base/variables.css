@@ -3,8 +3,10 @@
   --color-primary: #00b207;
   --color-soft-primary: #84d187;
   --color-hard-primary: #2c742f;
+  --color-hard-primary-transparent: rgb(44 116 47 / 10%);
   --color-warning: #ff8a00;
   --color-danger: #ea4b48;
+  --color-danger-transparent: rgb(234 75 72 / 20%);
   --color-primary-bg: #edf2ee;
   --color-secondary-bg: #f2f2f2;
 
