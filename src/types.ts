@@ -17,6 +17,7 @@ export enum ROUTES {
   WISHLIST = '/wishlist',
   CART = '/cart',
   PROFILE = '/profile',
+  PRODUCT = '/catalog/:id',
 }
 
 export type InputProperties<T extends FieldValues> = {

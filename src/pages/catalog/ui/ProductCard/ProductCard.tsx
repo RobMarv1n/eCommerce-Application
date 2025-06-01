@@ -1,4 +1,4 @@
-import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { useNavigate } from 'react-router-dom';
 import { ProductData } from '../../../../shared/api/clientApi/types';
 import './ProductCard.css';
 
@@ -7,16 +7,16 @@ type Properties = {
 };
 
 export function ProductCard({ product }: Properties) {
+  const navigation = useNavigate();
+
   const { id, title, images, descriptionShort, price, discountedPrice } =
     product;
 
   return (
     <div
       className="product-card"
-      onClick={async () => {
-        client.setCurrentProductId(id);
-        const productData = await client.getCurrentProduct();
-        console.log(productData);
+      onClick={() => {
+        navigation(`/catalog/${id}`);
       }}
     >
       <img className="product-image" src={images[0]} alt="" />
