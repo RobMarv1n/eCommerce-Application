@@ -8,7 +8,7 @@ import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
 import { AccountSettingsData } from '../../types/types';
 
 export function AccountSettings() {
-  const DefaultAccountValues = {
+  const DefaultAccountValues: AccountSettingsData = {
     firstName: 'Dianne',
     lastName: 'Russell',
     email: 'user@example.com',
