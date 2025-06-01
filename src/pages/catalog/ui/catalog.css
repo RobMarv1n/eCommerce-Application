@@ -1,0 +1,8 @@
+.catalog {
+  display: flex;
+  gap: 2rem;
+
+  width: 100%;
+  max-width: 1440px;
+  margin-bottom: auto;
+}

@@ -148,7 +148,6 @@ class ClientApi {
         )
         .execute();
       const results = response.body.results;
-      console.log(results);
       const products: ProductData[] = results.map((result) =>
         parseProduct(result)
       );
@@ -166,7 +165,6 @@ class ClientApi {
         .get()
         .execute();
       const result = response.body;
-      console.log(response);
       return parseProduct(result);
     } catch {
       return {

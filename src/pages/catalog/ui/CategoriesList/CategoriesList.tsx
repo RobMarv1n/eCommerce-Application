@@ -13,7 +13,7 @@ export function CategoriesList({ categories, onClick }: Properties) {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectValue(event.target.value);
-    client.setCurrentCategoryId(selectValue);
+    client.setCurrentCategoryId(event.target.value);
     onClick();
   };
 

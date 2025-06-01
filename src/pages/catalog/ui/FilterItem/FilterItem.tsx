@@ -11,7 +11,7 @@ export function FilterItem({ title, children }: Properties) {
   const [hide, setHide] = useState(false);
 
   const styleItem = 'filter-item' + (hide ? ' filter-item-hide' : '');
-  const styleVector = hide ? 'vector-rotate' : undefined;
+  const styleVector = 'vector' + (hide ? ' vector-rotate' : '');
 
   return (
     <div className={styleItem}>
