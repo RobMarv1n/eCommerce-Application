@@ -15,20 +15,21 @@ export function AccountAddresses() {
     },
 
     billingAddress: {
-      street: '',
-      city: '',
+      street: 'Lenina 1',
+      city: 'Rostov',
       country: Country.Russia,
-      zipCode: '',
+      zipCode: '12345',
     },
   };
 
   const getAddresses: AccountAddressesData[] = [DefaultAddresses];
 
   const [addresses, setAddresses] = useState(getAddresses);
+  // const [isDefaultForBilling, setIsDefaultForBilling] = useState(false);
 
   const addAddressesHandler = () => {
     console.log(addresses);
-    setAddresses([...addresses, DefaultAddresses]);
+    setAddresses([DefaultAddresses, ...addresses]);
   };
 
   return (
@@ -39,6 +40,11 @@ export function AccountAddresses() {
             className="account-addresses"
             key={address.shippingAddress.street + Number(Math.random())}
           >
+            {/* <Button
+              onClick={() => setIsDefaultForBilling(!isDefaultForBilling)}
+            >
+              {isDefaultForBilling ? 'default' : 'make default'}
+            </Button> */}
             <ShippingAddress
               street={address.shippingAddress.street}
               city={address.shippingAddress.city}
