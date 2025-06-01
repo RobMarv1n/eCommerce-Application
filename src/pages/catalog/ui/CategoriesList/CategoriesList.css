@@ -1,0 +1,14 @@
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.category-item label {
+  width: 100%;
+}
