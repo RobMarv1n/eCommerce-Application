@@ -9,6 +9,7 @@ export function PasswordChange() {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<PasswordChangeData>({
     mode: 'onChange',
   });
@@ -18,25 +19,31 @@ export function PasswordChange() {
     console.log(data);
   };
 
+  const currentMockPassword = '123456Aa-';
+
   return (
     <form className="change-password" onSubmit={handleSubmit(onSubmit)}>
       <div className="registration-field">
         <h2>Change Password</h2>
 
-        <div className="form-group">
+        <div className="form-group password-input-container">
           <FormPasswordInput
             type="password"
             name="currentPassword"
-            label="New password"
+            label="Current password"
             id="current-password-input"
             placeholder="Password"
             register={register}
             errors={errors}
-            rules={passwordValidationRules}
+            rules={{
+              required: 'This field is required',
+              validate: (value: string) =>
+                value === currentMockPassword || 'Passwords do not match',
+            }}
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group password-input-container">
           <FormPasswordInput
             type="password"
             name="newPassword"
@@ -49,7 +56,7 @@ export function PasswordChange() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group password-input-container">
           <FormPasswordInput
             type="password"
             name="confirmPassword"
@@ -58,7 +65,11 @@ export function PasswordChange() {
             placeholder="Password"
             register={register}
             errors={errors}
-            rules={passwordValidationRules}
+            rules={{
+              required: 'This field is required',
+              validate: (value: string) =>
+                value === getValues('newPassword') || 'Passwords do not match',
+            }}
           />
         </div>
 
