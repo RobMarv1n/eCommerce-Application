@@ -27,9 +27,7 @@ export type AccountShippingAddressData = {
   country: Country;
 };
 
-export type AccountAddressesData = [
-  {
-    shippingAddress: AccountShippingAddressData;
-    billingAddress: AccountBillingAddressData;
-  },
-];
+export type AccountAddressesData = {
+  shippingAddress: AccountShippingAddressData;
+  billingAddress: AccountBillingAddressData;
+};

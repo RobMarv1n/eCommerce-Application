@@ -1,34 +1,43 @@
 import { Country } from 'postal-code-validator';
+import { useState } from 'react';
 import { Button } from '../../../../shared/ui/Button';
 import { AccountAddressesData } from '../../types/types';
 import { BillingAddress } from './BillingAddress';
 import { ShippingAddress } from './ShippingAddress';
 
 export function AccountAddresses() {
-  const DefaultAddresses: AccountAddressesData = [
-    {
-      shippingAddress: {
-        street: '',
-        city: '',
-        country: Country.Russia,
-        zipCode: '',
-      },
-
-      billingAddress: {
-        street: '',
-        city: '',
-        country: Country.Russia,
-        zipCode: '',
-      },
+  const DefaultAddresses = {
+    shippingAddress: {
+      street: '',
+      city: '',
+      country: Country.Russia,
+      zipCode: '',
     },
-  ];
+
+    billingAddress: {
+      street: '',
+      city: '',
+      country: Country.Russia,
+      zipCode: '',
+    },
+  };
+
+  const getAddresses: AccountAddressesData[] = [DefaultAddresses];
+
+  const [addresses, setAddresses] = useState(getAddresses);
+
+  const addAddressesHandler = () => {
+    console.log(addresses);
+    setAddresses([...addresses, DefaultAddresses]);
+  };
+
   return (
     <>
-      {DefaultAddresses.map((address) => {
+      {addresses.map((address) => {
         return (
           <div
             className="account-addresses"
-            key={address.shippingAddress.street}
+            key={address.shippingAddress.street + Number(Math.random())}
           >
             <ShippingAddress
               street={address.shippingAddress.street}
@@ -46,7 +55,9 @@ export function AccountAddresses() {
         );
       })}
 
-      <Button type="button">+</Button>
+      <Button type="button" onClick={addAddressesHandler}>
+        +
+      </Button>
     </>
   );
 }
