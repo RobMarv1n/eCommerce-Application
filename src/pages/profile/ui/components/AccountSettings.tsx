@@ -31,6 +31,16 @@ export function AccountSettings() {
     console.log(data);
   };
 
+  const toggleEditable = () => {
+    const hasNotErrors = Object.keys(errors).length === 0;
+
+    if (!isEditable) {
+      setIsEditable(true);
+    } else if (isEditable && hasNotErrors) {
+      setIsEditable(false);
+    }
+  };
+
   return (
     <form className="account-settings" onSubmit={handleSubmit(onSubmit)}>
       <div className="registration-field">
@@ -41,7 +51,6 @@ export function AccountSettings() {
             label="Email"
             id="email-input"
             register={register}
-            value={DefaultAccountValues.email}
             errors={errors}
             rules={emailValidationRules}
             disabled={!isEditable}
@@ -53,7 +62,6 @@ export function AccountSettings() {
             name="firstName"
             label="First name"
             id="first-name-input"
-            value={DefaultAccountValues.firstName}
             placeholder="Dianne"
             register={register}
             errors={errors}
@@ -67,7 +75,6 @@ export function AccountSettings() {
             name="lastName"
             label="Last name"
             id="last-name-input"
-            value={DefaultAccountValues.lastName}
             placeholder="Russell"
             register={register}
             errors={errors}
@@ -82,7 +89,6 @@ export function AccountSettings() {
             name="birthDate"
             label="Date of birth"
             id="date-input"
-            value={DefaultAccountValues.birthDate}
             placeholder="dd.mm.yyyy"
             register={register}
             errors={errors}
@@ -93,7 +99,7 @@ export function AccountSettings() {
 
         <Button
           type={isEditable ? 'button' : 'submit'}
-          onClick={() => setIsEditable(!isEditable)}
+          onClick={toggleEditable}
         >
           {isEditable ? 'Save Changes' : 'Edit'}
         </Button>
