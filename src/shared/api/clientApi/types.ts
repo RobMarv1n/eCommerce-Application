@@ -29,3 +29,14 @@ export type AttributesData = {
   descriptionShort: string;
   descriptionFull: string;
 };
+
+export type Subcategory = {
+  id: string;
+  name: string;
+};
+
+export type MainCategory = {
+  id: string;
+  name: string;
+  subCategory: Subcategory[];
+};

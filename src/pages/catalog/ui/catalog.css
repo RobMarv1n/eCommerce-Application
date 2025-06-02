@@ -6,3 +6,15 @@
   max-width: 1440px;
   margin-bottom: auto;
 }
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.products-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
