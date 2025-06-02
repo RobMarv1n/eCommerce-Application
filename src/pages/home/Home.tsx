@@ -7,6 +7,7 @@ export function Home() {
       <h1>Home</h1>
       <Link to={ROUTES.LOGIN}>Sign in</Link>
       <Link to={ROUTES.REGISTRATION}>Sign up</Link>
+      <Link to={ROUTES.PROFILE}>Profile</Link>
     </>
   );
 }

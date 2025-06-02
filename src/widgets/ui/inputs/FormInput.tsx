@@ -10,11 +10,14 @@ export function FormInput<T extends FieldValues>(
     name,
     label,
     id,
+    value,
+    readonly,
     placeholder,
     rules,
     register,
     errors,
     autocomplete = 'email',
+    disabled,
   } = properties;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,9 +37,12 @@ export function FormInput<T extends FieldValues>(
         className={className}
         type={type}
         name={name}
-        placeholder={placeholder}
         id={id}
+        value={value}
+        readOnly={readonly}
+        placeholder={placeholder}
         autoComplete={autocomplete}
+        disabled={disabled}
       />
 
       {errorMessage && (
