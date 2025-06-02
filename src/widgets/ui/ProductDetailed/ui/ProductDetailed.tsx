@@ -33,7 +33,7 @@ export function ProductDetailed({ product }: ProductDetailedProperties) {
         </Modal>
       )}
 
-      <div>
+      <div className={styles.detailed}>
         <h1 className={styles.productTitle}>{product.title}</h1>
         <div className={styles.priceWrapper}>
           <span className={styles.discountedPrice}>

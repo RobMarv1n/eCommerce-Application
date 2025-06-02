@@ -8,6 +8,10 @@
   height: clamp(280px, 50vw, 556px);
 }
 
+.detailed {
+  flex: 1;
+}
+
 .productTitle {
   margin-bottom: 24px;
 
