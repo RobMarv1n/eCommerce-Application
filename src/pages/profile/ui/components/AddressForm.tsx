@@ -6,7 +6,10 @@ import { cityValidationRules } from '../../../../shared/validation/cityValidatio
 import { streetValidationRules } from '../../../../shared/validation/streetValidation';
 import { zipCodeValidationRules } from '../../../../shared/validation/zipCodeValidation';
 import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
-import { AccountBillingAddressData } from '../../types/types';
+import {
+  AccountBillingAddressData,
+  AccountShippingAddressData,
+} from '../../types/types';
 
 const DefaultAddressData = {
   street: '',
@@ -15,24 +18,30 @@ const DefaultAddressData = {
   zipCode: '',
 };
 
-export function AddressForm(properties: AccountBillingAddressData) {
+export function AddressForm(
+  properties: AccountBillingAddressData | AccountShippingAddressData
+) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isSubmitted },
     getValues,
-  } = useForm<AccountBillingAddressData>({
+    setValue,
+  } = useForm<AccountBillingAddressData | AccountShippingAddressData>({
     mode: 'onChange',
     defaultValues: DefaultAddressData,
     values: properties,
   });
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  const onSubmit: SubmitHandler<AccountBillingAddressData> = (data) => {
+  const onSubmit: SubmitHandler<
+    AccountBillingAddressData | AccountShippingAddressData
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+  > = (data) => {
     console.log(data);
   };
 
   const [isEditable, setIsEditable] = useState(false);
+  const [isDefaultAddress, setIsDefaultAddress] = useState(false);
 
   const toggleEditable = () => {
     const hasNotErrors = Object.keys(errors).length === 0;
@@ -44,8 +53,27 @@ export function AddressForm(properties: AccountBillingAddressData) {
     }
   };
 
+  const setDefaultAddressHandler = () => {
+    if ('defaultForBilling' in properties && isValid) {
+      setValue('defaultForBilling', true);
+    }
+    if ('defaultForShipping' in properties && isValid) {
+      setValue('defaultForShipping', true);
+    }
+    if (isValid) {
+      setIsDefaultAddress(true);
+    }
+  };
+
   return (
     <form className="address-form" onSubmit={handleSubmit(onSubmit)}>
+      <Button
+        type="submit"
+        disabled={isEditable || (isSubmitted && isDefaultAddress)}
+        onClick={setDefaultAddressHandler}
+      >
+        {isDefaultAddress ? 'default' : 'make default'}
+      </Button>
       <div className="registration-field">
         <div className="form-group">
           <FormInput
