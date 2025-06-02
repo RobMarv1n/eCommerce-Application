@@ -1,46 +1,40 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
-import { Category } from '../../../../shared/api/clientApi/types';
+import { Category, MainCategory } from '../../../../shared/api/clientApi/types';
 import './CategoriesList.css';
+import { emptyCategory } from '../../../../shared/api/clientApi/constants';
 
 type Properties = {
   categories: Category[];
-  onClick: () => void;
+  onClick: (category: MainCategory) => void;
 };
 
 export function CategoriesList({ categories, onClick }: Properties) {
-  const [selectValue, setSelectValue] = useState('');
+  if (!categories[0]) return <></>;
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectValue(event.target.value);
-    client.setCurrentCategoryId(event.target.value);
-    onClick();
-  };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [selectValue, setSelectValue] = useState(categories[0].id);
 
   return (
     <div className="categories">
-      <div className="category-item">
-        <input
-          id="all"
-          type="radio"
-          name="category"
-          value=""
-          checked={selectValue === ''}
-          onChange={handleChange}
-        />
-        <label htmlFor="all">All</label>
-      </div>
-      {categories.map((s) => (
-        <div key={s.id} className="category-item">
+      {categories.map((category) => (
+        <div key={category.id} className="category-item">
           <input
-            id={s.id}
             type="radio"
             name="category"
-            value={s.id}
-            checked={selectValue === s.id}
-            onChange={handleChange}
+            id={category.id}
+            value={category.id}
+            checked={selectValue === category.id}
+            onChange={(event) => {
+              setSelectValue(event.target.value);
+              client.currentCategoryId = event.target.value;
+              const currentCategory = client.categories.find(
+                (item) => item.id === category.id
+              );
+              onClick(currentCategory || emptyCategory);
+            }}
           />
-          <label htmlFor={s.id}>{s.name}</label>
+          <label htmlFor={category.id}>{category.name}</label>
         </div>
       ))}
     </div>

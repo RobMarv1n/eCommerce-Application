@@ -1,0 +1,8 @@
+.category-name:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.category-name-no-active {
+  pointer-events: none;
+}

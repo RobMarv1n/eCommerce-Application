@@ -10,15 +10,16 @@ import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
-import type { Category, loginDTO, ProductData, singUpDTO } from './types';
+import type { loginDTO, MainCategory, ProductData, singUpDTO } from './types';
 import { parseProduct } from './parseProduct';
 import { emptyProduct } from './constants';
+import { parseCategories } from './parseCategories';
 
 class ClientApi {
   public isLogin: boolean;
+  public categories: MainCategory[];
+  public currentCategoryId: string;
   private apiRoot: ByProjectKeyRequestBuilder;
-  private currentCategoryId: string;
-  private categories: Category[];
 
   constructor() {
     this.isLogin = false;
@@ -104,23 +105,6 @@ class ClientApi {
     return result;
   }
 
-  public async getCategories(): Promise<Category[]> {
-    try {
-      const response = await this.apiRoot.categories().get().execute();
-      this.categories = response.body.results.map((s) => ({
-        id: s.id,
-        name: s.name['en-US'],
-      }));
-      return this.categories;
-    } catch {
-      return [];
-    }
-  }
-
-  public setCurrentCategoryId(id: string): void {
-    this.currentCategoryId = id;
-  }
-
   public getCategoryName(id: string): string {
     const category = this.categories.find((item) => item.id === id);
     if (category) return category.name;
@@ -163,6 +147,16 @@ class ClientApi {
       return parseProduct(result);
     } catch {
       return emptyProduct;
+    }
+  }
+
+  public async getMainCategories(): Promise<void> {
+    try {
+      const response = await this.apiRoot.categories().get().execute();
+      this.categories = parseCategories(response.body.results);
+      this.currentCategoryId = this.categories[0].id;
+    } catch {
+      this.categories = [];
     }
   }
 }
