@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Modal } from '../../../../shared/ui/Modal';
 import { ProductData } from '../../../../shared/api/clientApi/types';
 import { Button } from '../../../../shared/ui/Button';
 import { CartIcon } from '../../../../shared/ui/Icon/CartIcon';
@@ -10,12 +12,28 @@ interface ProductDetailedProperties {
 }
 
 export function ProductDetailed({ product }: ProductDetailedProperties) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.slider}>
-        <SwiperSlider images={product.images} />
+        <SwiperSlider
+          images={product.images}
+          onImageClick={(index) => {
+            setActiveIndex(index);
+            setModalOpen(true);
+          }}
+        />
       </div>
-      <div className={styles.details}>
+
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <SwiperSlider images={product.images} startIndex={activeIndex} />
+        </Modal>
+      )}
+
+      <div>
         <h1 className={styles.productTitle}>{product.title}</h1>
         <div className={styles.priceWrapper}>
           <span className={styles.discountedPrice}>
