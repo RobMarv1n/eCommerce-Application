@@ -11,7 +11,7 @@ const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
   { path: ROUTES.REGISTRATION, label: 'Register' },
   { path: ROUTES.HOME, label: 'Home' },
-  { path: ROUTES.CATALOG, label: 'Catalog', disabled: true },
+  { path: ROUTES.CATALOG, label: 'Catalog' },
   { path: ROUTES.ABOUT, label: 'About Us', disabled: true },
 ];
 

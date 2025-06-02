@@ -6,6 +6,8 @@ import { Profile } from '../pages/profile/ui/Profile';
 import { Registration } from '../pages/registration/ui/Registration';
 import { ROUTES } from '../types';
 import { Layout } from './layouts/Layout';
+import { Catalog } from '../pages/catalog/ui/Catalog';
+
 
 export function Router() {
   return (
@@ -16,6 +18,8 @@ export function Router() {
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path={ROUTES.PROFILE} element={<Profile />} />
+          <Route path={ROUTES.CATALOG} element={<Catalog />} />
+          {/* <Route path={ROUTES.PRODUCT} element={<Product />} /> */}
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
