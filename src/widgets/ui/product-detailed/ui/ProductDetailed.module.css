@@ -4,15 +4,14 @@
 }
 
 .slider {
-  width: 648px;
-  height: 556px;
-  background-color: var(--color-primary-bg);
+  width: clamp(280px, 50vw, 556px);
+  height: clamp(280px, 50vw, 556px);
 }
 
 .productTitle {
   margin-bottom: 24px;
 
-  font-size: 36px;
+  font-size: clamp(20px, 5vw, 36px);
   font-weight: 600;
   line-height: 120%;
   color: var(--color-gray-9);
@@ -136,4 +135,11 @@
   border-radius: 43px;
 
   background-color: var(--color-hard-primary-transparent);
+}
+
+@media (width <= 767px) {
+  .wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
 }

@@ -2,6 +2,7 @@ import { ProductData } from '../../../../shared/api/clientApi/types';
 import { Button } from '../../../../shared/ui/Button';
 import { CartIcon } from '../../../../shared/ui/Icon/CartIcon';
 import { WishlistIcon } from '../../../../shared/ui/Icon/WishlistIcon';
+import { SwiperSlider } from './swiper-slider/SwiperSlider';
 import styles from './ProductDetailed.module.css';
 
 interface ProductDetailedProperties {
@@ -11,8 +12,10 @@ interface ProductDetailedProperties {
 export function ProductDetailed({ product }: ProductDetailedProperties) {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.slider}></div>
-      <div>
+      <div className={styles.slider}>
+        <SwiperSlider images={product.images} />
+      </div>
+      <div className={styles.details}>
         <h1 className={styles.productTitle}>{product.title}</h1>
         <div className={styles.priceWrapper}>
           <span className={styles.discountedPrice}>
