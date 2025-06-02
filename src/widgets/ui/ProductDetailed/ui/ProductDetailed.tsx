@@ -4,7 +4,7 @@ import { ProductData } from '../../../../shared/api/clientApi/types';
 import { Button } from '../../../../shared/ui/Button';
 import { CartIcon } from '../../../../shared/ui/Icon/CartIcon';
 import { WishlistIcon } from '../../../../shared/ui/Icon/WishlistIcon';
-import { SwiperSlider } from './swiper-slider/SwiperSlider';
+import { SwiperSlider } from '../../../../shared/ui/SwiperSlider/SwiperSlider';
 import styles from './ProductDetailed.module.css';
 
 interface ProductDetailedProperties {

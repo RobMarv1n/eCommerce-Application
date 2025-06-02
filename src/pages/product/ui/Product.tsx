@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { client } from '../../../shared/api/clientApi/ClientApi';
 import { ProductData } from '../../../shared/api/clientApi/types';
 import { emptyProduct } from '../../../shared/api/clientApi/constants';
-import { ProductDetailed } from '../../../widgets/ui/product-detailed';
+import { ProductDetailed } from '../../../widgets/ui/ProductDetailed';
 import styles from './Product.module.css';
 
 export function Product() {
