@@ -13,18 +13,18 @@ export type PasswordChangeData = {
   confirmPassword: string;
 };
 
-export type AccountBillingAddressData = {
+type AccountAddressFormData = {
   street: string;
   city: string;
   zipCode: string;
   country: Country;
 };
+export type AccountBillingAddressData = AccountAddressFormData & {
+  defaultForBilling: boolean;
+};
 
-export type AccountShippingAddressData = {
-  street: string;
-  city: string;
-  zipCode: string;
-  country: Country;
+export type AccountShippingAddressData = AccountAddressFormData & {
+  defaultForShipping: boolean;
 };
 
 export type AccountAddressesData = {
