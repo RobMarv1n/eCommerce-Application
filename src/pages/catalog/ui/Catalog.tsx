@@ -18,6 +18,7 @@ import { CatalogNavigation } from './CatalogNavigation/CatalogNavigation';
 import { SortSelect } from './SortSelect/SortSelect';
 import { SearchInput } from './SearchInput/SearchInput';
 import { CatalogPriceFilter } from './CatalogPriceFilter/CatalogPriceFilter';
+import { Button } from '../../../shared/ui/Button';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -72,6 +73,7 @@ export function Catalog() {
           />
         </FilterItem>
         <CatalogPriceFilter />
+        <Button>Reset</Button>
       </div>
       <div className="products-panel">
         <div className="sort-search-panel">
