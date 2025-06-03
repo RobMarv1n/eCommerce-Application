@@ -6,29 +6,22 @@ import { emailValidationRules } from '../../../../shared/validation/emailValidat
 import { nameValidationRules } from '../../../../shared/validation/nameValidation';
 import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
 import { AccountSettingsData } from '../../types/types';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function AccountSettings() {
-  const DefaultAccountValues: AccountSettingsData = {
-    firstName: 'Dianne',
-    lastName: 'Russell',
-    email: 'user@example.com',
-    birthDate: '1999-10-10',
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AccountSettingsData>({
     mode: 'onChange',
-    defaultValues: DefaultAccountValues,
+    defaultValues: client.profileData.accountSettingData,
   });
 
   const [isEditable, setIsEditable] = useState(false);
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const onSubmit: SubmitHandler<AccountSettingsData> = (data) => {
-    console.log(data);
+    client.updateAccountSettingData(data);
   };
 
   const toggleEditable = () => {
