@@ -21,7 +21,10 @@ export function AccountSettings() {
   const [isEditable, setIsEditable] = useState(false);
 
   const onSubmit: SubmitHandler<AccountSettingsData> = (data) => {
-    client.updateAccountSettingData(data);
+    client
+      .updateAccountSettingData(data)
+      .then(() => console.log('data updated successfully'))
+      .catch(() => console.log('data modification operation failed'));
   };
 
   const toggleEditable = () => {

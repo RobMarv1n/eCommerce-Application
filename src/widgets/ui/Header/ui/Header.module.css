@@ -49,9 +49,15 @@
 }
 
 .iconsLink {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.iconsLink:hover path {
+  stroke: var(--color-primary);
+  transition: all ease 0.5s;
 }
 
 @media (width <= 767px) {

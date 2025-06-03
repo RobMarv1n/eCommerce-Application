@@ -1,5 +1,6 @@
 import type {
   ByProjectKeyRequestBuilder,
+  MyCustomerChangePassword,
   MyCustomerUpdate,
 } from '@commercetools/platform-sdk';
 import {
@@ -18,7 +19,10 @@ import { DefaultProfileData, emptyProduct } from './constants';
 import { parseCategories } from './parseCategories';
 import { parseProfileData } from './parseProfileData';
 import { createSignUpBody } from './createSignUpBody';
-import { AccountSettingsData } from '../../../pages/profile/types/types';
+import {
+  AccountSettingsData,
+  PasswordChangeData,
+} from '../../../pages/profile/types/types';
 
 class ClientApi {
   public isLogin: boolean;
@@ -45,7 +49,6 @@ class ClientApi {
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
-    console.log(result);
     this.profileData = parseProfileData(result.body.customer);
   }
 
@@ -88,6 +91,21 @@ class ClientApi {
     const results = await this.apiRoot.me().post({ body }).execute();
 
     this.profileData.accountSettingData = data;
+    this.profileData.version = results.body.version;
+  }
+
+  public async updatePassword(data: PasswordChangeData): Promise<void> {
+    const body: MyCustomerChangePassword = {
+      version: this.profileData.version,
+      newPassword: data.newPassword,
+      currentPassword: data.currentPassword,
+    };
+    const results = await this.apiRoot.me().password().post({ body }).execute();
+
+    this.apiRoot = CreatePasswordApiRoot({
+      email: this.profileData.accountSettingData.email,
+      password: data.newPassword,
+    });
     this.profileData.version = results.body.version;
   }
 
