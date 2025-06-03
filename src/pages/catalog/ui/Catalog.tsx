@@ -15,6 +15,8 @@ import {
   emptySubcategory,
 } from '../../../shared/api/clientApi/constants';
 import { CatalogNavigation } from './CatalogNavigation/CatalogNavigation';
+import { SortSelect } from './SortSelect/SortSelect';
+import { SearchInput } from './SearchInput/SearchInput';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -46,7 +48,7 @@ export function Catalog() {
   }, []);
 
   return (
-    <section className="catalog">
+    <section className="catalog container">
       <div className="filters">
         <FilterItem title="Categories">
           <CategoriesList
@@ -70,6 +72,10 @@ export function Catalog() {
         </FilterItem>
       </div>
       <div className="products-panel">
+        <div className="sort-search-panel">
+          <SortSelect />
+          <SearchInput />
+        </div>
         <CatalogNavigation
           category={currentCategory}
           subcategory={currentSubcategory}
