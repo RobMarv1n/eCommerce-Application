@@ -16,5 +16,11 @@
 .products-panel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
+}
+
+.sort-search-panel {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
 }
