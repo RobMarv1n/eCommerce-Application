@@ -21,6 +21,6 @@
 
 .sort-search-panel {
   display: flex;
-  gap: 32px;
   flex-wrap: wrap;
+  gap: 32px;
 }
