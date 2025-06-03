@@ -3,6 +3,7 @@ import { Button } from '../../../../shared/ui/Button';
 import { passwordValidationRules } from '../../../../shared/validation/passwordValidation';
 import { FormPasswordInput } from '../../../../widgets/ui/inputs/FormPasswordInput';
 import { PasswordChangeData } from '../../types/types';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function PasswordChange() {
   const {
@@ -16,10 +17,11 @@ export function PasswordChange() {
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onSubmit: SubmitHandler<PasswordChangeData> = (data) => {
-    console.log(data);
+    client
+      .updatePassword(data)
+      .then(() => console.log('password changed successfully'))
+      .catch(() => console.log('current password entered is incorrect'));
   };
-
-  const currentMockPassword = '123456Aa-';
 
   return (
     <form className="change-password" onSubmit={handleSubmit(onSubmit)}>
@@ -37,8 +39,6 @@ export function PasswordChange() {
             errors={errors}
             rules={{
               required: 'This field is required',
-              validate: (value: string) =>
-                value === currentMockPassword || 'Passwords do not match',
             }}
           />
         </div>

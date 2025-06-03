@@ -32,7 +32,7 @@ const iconLinks = [
     path: ROUTES.PROFILE,
     label: 'My profile',
     icon: 'profile',
-    disabled: true,
+    disabled: false,
   },
 ] as const;
 

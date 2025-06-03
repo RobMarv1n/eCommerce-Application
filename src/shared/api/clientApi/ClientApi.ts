@@ -1,24 +1,34 @@
 import type {
-  BaseAddress,
   ByProjectKeyRequestBuilder,
-  ClientResponse,
-  CustomerSignInResult,
-  MyCustomerDraft,
+  MyCustomerChangePassword,
+  MyCustomerUpdate,
 } from '@commercetools/platform-sdk';
-import { countryCodes } from './CountryCodes';
 import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
-import type { loginDTO, MainCategory, ProductData, singUpDTO } from './types';
+import type {
+  loginDTO,
+  MainCategory,
+  ProductData,
+  ProfileData,
+  singUpDTO,
+} from './types';
 import { parseProduct } from './parseProduct';
-import { emptyProduct } from './constants';
+import { DefaultProfileData, emptyProduct } from './constants';
 import { parseCategories } from './parseCategories';
+import { parseProfileData } from './parseProfileData';
+import { createSignUpBody } from './createSignUpBody';
+import {
+  AccountSettingsData,
+  PasswordChangeData,
+} from '../../../pages/profile/types/types';
 
 class ClientApi {
   public isLogin: boolean;
   public categories: MainCategory[];
   public currentCategoryId: string;
+  public profileData: ProfileData;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -26,11 +36,10 @@ class ClientApi {
     this.apiRoot = CreateAnonymousApiRoot();
     this.currentCategoryId = '';
     this.categories = [];
+    this.profileData = DefaultProfileData;
   }
 
-  public async login(
-    dto: loginDTO
-  ): Promise<ClientResponse<CustomerSignInResult>> {
+  public async login(dto: loginDTO): Promise<void> {
     const result = await this.apiRoot
       .me()
       .login()
@@ -40,7 +49,7 @@ class ClientApi {
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
-    return result;
+    this.profileData = parseProfileData(result.body.customer);
   }
 
   public logout(): void {
@@ -48,49 +57,10 @@ class ClientApi {
     this.isLogin = false;
   }
 
-  public async signUp(
-    dto: singUpDTO
-  ): Promise<ClientResponse<CustomerSignInResult>> {
-    const addresses: BaseAddress[] = [
-      {
-        country: countryCodes[dto.shippingAddress.country],
-        city: dto.shippingAddress.city,
-        streetName: dto.shippingAddress.street,
-        postalCode: dto.shippingAddress.zipCode,
-      },
-    ];
+  public async signUp(dto: singUpDTO): Promise<void> {
+    const body = createSignUpBody(dto);
 
-    const defaultShippingAddress = dto.shippingAddress.useAsDefaultForShipping
-      ? 0
-      : undefined;
-    let defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
-      ? 0
-      : undefined;
-
-    if (!dto.shippingAddress.useShippingAsBilling) {
-      addresses.push({
-        country: countryCodes[dto.billingAddress.country],
-        city: dto.billingAddress.city,
-        streetName: dto.billingAddress.street,
-        postalCode: dto.billingAddress.zipCode,
-      });
-
-      defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
-        ? 1
-        : undefined;
-    }
-
-    const body: MyCustomerDraft = {
-      email: dto.email,
-      password: dto.password,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      defaultShippingAddress,
-      defaultBillingAddress,
-      addresses,
-    };
-
-    const result = this.apiRoot
+    const result = await this.apiRoot
       .me()
       .signup()
       .post({
@@ -102,7 +72,41 @@ class ClientApi {
       email: dto.email,
       password: dto.password,
     });
-    return result;
+
+    this.profileData = parseProfileData(result.body.customer);
+  }
+
+  public async updateAccountSettingData(
+    data: AccountSettingsData
+  ): Promise<void> {
+    const body: MyCustomerUpdate = {
+      version: this.profileData.version,
+      actions: [
+        { action: 'changeEmail', email: data.email },
+        { action: 'setFirstName', firstName: data.firstName },
+        { action: 'setLastName', lastName: data.lastName },
+        { action: 'setDateOfBirth', dateOfBirth: data.birthDate },
+      ],
+    };
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData.accountSettingData = data;
+    this.profileData.version = results.body.version;
+  }
+
+  public async updatePassword(data: PasswordChangeData): Promise<void> {
+    const body: MyCustomerChangePassword = {
+      version: this.profileData.version,
+      newPassword: data.newPassword,
+      currentPassword: data.currentPassword,
+    };
+    const results = await this.apiRoot.me().password().post({ body }).execute();
+
+    this.apiRoot = CreatePasswordApiRoot({
+      email: this.profileData.accountSettingData.email,
+      password: data.newPassword,
+    });
+    this.profileData.version = results.body.version;
   }
 
   public getCategoryName(id: string): string {

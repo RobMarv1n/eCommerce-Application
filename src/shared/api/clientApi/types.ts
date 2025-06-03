@@ -1,3 +1,4 @@
+import { AccountSettingsData } from '../../../pages/profile/types/types';
 import { RegistrationFormData } from '../../../pages/registration/model/types';
 
 export type singUpDTO = RegistrationFormData;
@@ -39,4 +40,9 @@ export type MainCategory = {
   id: string;
   name: string;
   subCategory: Subcategory[];
+};
+
+export type ProfileData = {
+  version: number;
+  accountSettingData: AccountSettingsData;
 };
