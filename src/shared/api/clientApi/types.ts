@@ -46,3 +46,12 @@ export type ProfileData = {
   version: number;
   accountSettingData: AccountSettingsData;
 };
+
+export type PriceRange = {
+  min: number;
+  max: number;
+};
+
+export type RangeObject = {
+  ranges: PriceRange[];
+};

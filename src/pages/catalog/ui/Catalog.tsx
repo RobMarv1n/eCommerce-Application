@@ -38,6 +38,7 @@ export function Catalog() {
 
   async function initial(): Promise<void> {
     await client.getMainCategories();
+    await client.getMinMaxPrice();
     const products = await client.getProducts();
     setCategories(client.categories);
     setCurrentCategory(client.categories[0]);
@@ -72,7 +73,11 @@ export function Catalog() {
             }}
           />
         </FilterItem>
-        <CatalogPriceFilter />
+        <CatalogPriceFilter
+          updateRange={() => {
+            updateProducts();
+          }}
+        />
         <Button>Reset</Button>
       </div>
       <div className="products-panel">

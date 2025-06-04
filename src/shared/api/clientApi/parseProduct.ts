@@ -1,13 +1,17 @@
-import type { Attribute, Price, Product } from '@commercetools/platform-sdk';
+import type {
+  Attribute,
+  Price,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import type { AttributesData, ProductData } from './types';
 import { client } from './ClientApi';
 
-export function parseProduct(result: Product): ProductData {
-  const variant = result.masterData.current.masterVariant;
+export function parseProduct(result: ProductProjection): ProductData {
+  const variant = result.masterVariant;
   const { title, descriptionShort, descriptionFull } = parseAttributes(
     variant.attributes
   );
-  const categoryId = result.masterData.current.categories[0].id;
+  const categoryId = result.categories[0].id;
 
   return {
     id: result.id,

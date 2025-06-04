@@ -1,12 +1,17 @@
 import { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 import './CatalogPriceFilter.css';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 
-export function CatalogPriceFilter() {
+type Properties = {
+  updateRange: () => void;
+};
+
+export function CatalogPriceFilter({ updateRange }: Properties) {
   const initialMinPrice = 0;
   const initialMaxPrice = 100;
 
-  const [sliderMinValue] = useState(initialMinPrice);
-  const [sliderMaxValue] = useState(initialMaxPrice);
+  const [sliderMinValue, setSliderMinValue] = useState(initialMinPrice);
+  const [sliderMaxValue, setSliderMaxValue] = useState(initialMaxPrice);
 
   const [minValue, setMinValue] = useState(initialMinPrice);
   const [maxValue, setMaxValue] = useState(initialMaxPrice);
@@ -46,6 +51,20 @@ export function CatalogPriceFilter() {
       range.style.right = `${100 - maxPercent}%`;
     }
   }
+
+  async function getMinMaxPrice() {
+    const results = await client.getMinMaxPrice();
+    setSliderMaxValue(results.max);
+    setMaxInput(results.max);
+    setMaxValue(results.max);
+    setSliderMinValue(results.min);
+    setMinValue(results.min);
+    setMinInput(results.min);
+  }
+
+  useEffect(() => {
+    getMinMaxPrice();
+  }, []);
 
   useEffect(() => {
     setSliderTrack();
@@ -101,6 +120,9 @@ export function CatalogPriceFilter() {
 
   function stopDrag() {
     setIsDragging(false);
+    console.log(minValue, maxValue);
+    client.priceRange = { min: 100 * minValue, max: 100 * maxValue };
+    updateRange();
   }
 
   return (

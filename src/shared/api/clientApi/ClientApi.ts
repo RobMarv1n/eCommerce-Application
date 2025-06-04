@@ -10,8 +10,10 @@ import {
 import type {
   loginDTO,
   MainCategory,
+  PriceRange,
   ProductData,
   ProfileData,
+  RangeObject,
   singUpDTO,
 } from './types';
 import { parseProduct } from './parseProduct';
@@ -29,6 +31,7 @@ class ClientApi {
   public categories: MainCategory[];
   public currentCategoryId: string;
   public profileData: ProfileData;
+  public priceRange: PriceRange;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -37,6 +40,7 @@ class ClientApi {
     this.currentCategoryId = '';
     this.categories = [];
     this.profileData = DefaultProfileData;
+    this.priceRange = { min: 0, max: 100 };
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -118,16 +122,16 @@ class ClientApi {
   public async getProducts(): Promise<ProductData[]> {
     try {
       const response = await this.apiRoot
-        .products()
-        .get(
-          this.currentCategoryId
-            ? {
-                queryArgs: {
-                  where: `masterData(current(categories(id = "${this.currentCategoryId}")))`,
-                },
-              }
-            : undefined
-        )
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            filter: [
+              `categories.id:"${this.currentCategoryId}"`,
+              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max})`,
+            ],
+          },
+        })
         .execute();
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
@@ -143,11 +147,15 @@ class ClientApi {
     try {
       if (id === undefined) return emptyProduct;
       const response = await this.apiRoot
-        .products()
-        .withId({ ID: id })
-        .get()
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            filter: `id:${id}`,
+          },
+        })
         .execute();
-      const result = response.body;
+      const result = response.body.results[0];
       return parseProduct(result);
     } catch {
       return emptyProduct;
@@ -162,6 +170,32 @@ class ClientApi {
     } catch {
       this.categories = [];
     }
+  }
+
+  public async getMinMaxPrice(): Promise<PriceRange> {
+    const response = await this.apiRoot
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          facet: 'variants.price.centAmount: range(0 to *)',
+        },
+      })
+      .execute();
+    if (!response.body.facets) return { min: 0, max: 100 };
+    const range = response.body.facets['variants.price.centAmount'] as unknown;
+    if (range && typeof range === 'object') {
+      const rangeObject: Partial<RangeObject> = range;
+      if (rangeObject.ranges !== undefined) {
+        const range = rangeObject.ranges[0];
+        this.priceRange = { min: range.min, max: range.max };
+        return {
+          min: Math.floor(range.min / 100),
+          max: Math.ceil(range.max / 100),
+        };
+      }
+    }
+    return { min: 0, max: 100 };
   }
 }
 
