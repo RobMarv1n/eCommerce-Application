@@ -22,6 +22,7 @@ export type ProductData = {
   price: number;
   discountedPrice: number;
   categoryName: string;
+  rating: string;
 };
 
 export type AttributesData = {
@@ -29,6 +30,7 @@ export type AttributesData = {
   title: string;
   descriptionShort: string;
   descriptionFull: string;
+  rating: string;
 };
 
 export type Subcategory = {
@@ -45,4 +47,13 @@ export type MainCategory = {
 export type ProfileData = {
   version: number;
   accountSettingData: AccountSettingsData;
+};
+
+export type PriceRange = {
+  min: number;
+  max: number;
+};
+
+export type RangeObject = {
+  ranges: PriceRange[];
 };

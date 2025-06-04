@@ -1,0 +1,15 @@
+.rating-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rating-item {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rating-label {
+  display: flex;
+  gap: 0.5rem;
+}

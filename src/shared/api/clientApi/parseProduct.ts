@@ -1,13 +1,17 @@
-import type { Attribute, Price, Product } from '@commercetools/platform-sdk';
+import type {
+  Attribute,
+  Price,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import type { AttributesData, ProductData } from './types';
 import { client } from './ClientApi';
 
-export function parseProduct(result: Product): ProductData {
-  const variant = result.masterData.current.masterVariant;
-  const { title, descriptionShort, descriptionFull } = parseAttributes(
+export function parseProduct(result: ProductProjection): ProductData {
+  const variant = result.masterVariant;
+  const { title, descriptionShort, descriptionFull, rating } = parseAttributes(
     variant.attributes
   );
-  const categoryId = result.masterData.current.categories[0].id;
+  const categoryId = result.categories[0].id;
 
   return {
     id: result.id,
@@ -18,6 +22,7 @@ export function parseProduct(result: Product): ProductData {
     price: parsePrice(variant.prices),
     discountedPrice: parseDiscountedPrice(variant.prices),
     categoryName: client.getCategoryName(categoryId),
+    rating,
   };
 }
 
@@ -42,6 +47,7 @@ function parseAttributes(attributes: Attribute[] | undefined): AttributesData {
     title: '',
     descriptionShort: '',
     descriptionFull: '',
+    rating: '1',
   };
   if (attributes) {
     const object: { [index: string]: string } = {};
@@ -51,6 +57,7 @@ function parseAttributes(attributes: Attribute[] | undefined): AttributesData {
     result.title = object['title'] || '';
     result.descriptionShort = object['description_short'] || '';
     result.descriptionFull = object['description_full'] || '';
+    result.rating = object['rating'] || '1';
   }
   return result;
 }

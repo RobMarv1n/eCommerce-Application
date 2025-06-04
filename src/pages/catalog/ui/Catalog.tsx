@@ -19,6 +19,7 @@ import { SortSelect } from './SortSelect/SortSelect';
 import { SearchInput } from './SearchInput/SearchInput';
 import { CatalogPriceFilter } from './CatalogPriceFilter/CatalogPriceFilter';
 import { Button } from '../../../shared/ui/Button';
+import { RatingList } from './RatingList/RatingList';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -38,6 +39,7 @@ export function Catalog() {
 
   async function initial(): Promise<void> {
     await client.getMainCategories();
+    await client.getMinMaxPrice();
     const products = await client.getProducts();
     setCategories(client.categories);
     setCurrentCategory(client.categories[0]);
@@ -72,7 +74,18 @@ export function Catalog() {
             }}
           />
         </FilterItem>
-        <CatalogPriceFilter />
+        <CatalogPriceFilter
+          updateRange={() => {
+            updateProducts();
+          }}
+        />
+        <FilterItem title="Rating">
+          <RatingList
+            onClick={() => {
+              updateProducts();
+            }}
+          />
+        </FilterItem>
         <Button>Reset</Button>
       </div>
       <div className="products-panel">

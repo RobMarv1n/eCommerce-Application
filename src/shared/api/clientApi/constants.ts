@@ -10,6 +10,7 @@ export const emptyProduct: ProductData = {
   price: 0,
   discountedPrice: 0,
   categoryName: '',
+  rating: '5',
 };
 
 export const emptySubcategory: Subcategory = {
