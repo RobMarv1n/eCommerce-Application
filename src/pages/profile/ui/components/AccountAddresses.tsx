@@ -1,36 +1,25 @@
-import { Country } from 'postal-code-validator';
 import { useState } from 'react';
 import { Button } from '../../../../shared/ui/Button';
-import { AccountAddressesData } from '../../types/types';
-import { BillingAddress } from './BillingAddress';
-import { ShippingAddress } from './ShippingAddress';
+import { Modal } from '../../../../shared/ui/Modal';
+import {
+  MOCK_DEFAULT_ADDRESS,
+  MOCK_DEFAULT_BILLING_ADDRESS,
+  MOCK_DEFAULT_SHIPPING_ADDRESS,
+} from '../../model/DefaultAddresses';
+import { AccountAddressFormData } from '../../types/types';
+import { AccountAddressForm } from './AccountAddressForm';
 
 export function AccountAddresses() {
-  const DefaultAddresses = {
-    shippingAddress: {
-      street: '',
-      city: '',
-      country: Country.Russia,
-      zipCode: '',
-      defaultForShipping: false,
-    },
-
-    billingAddress: {
-      street: 'Lenina 1',
-      city: 'Rostov',
-      country: Country.Russia,
-      zipCode: '123456',
-      defaultForBilling: false,
-    },
-  };
-
-  const getAddresses: AccountAddressesData[] = [DefaultAddresses];
+  const getAddresses: AccountAddressFormData[] = [
+    MOCK_DEFAULT_SHIPPING_ADDRESS,
+    MOCK_DEFAULT_BILLING_ADDRESS,
+  ];
 
   const [addresses, setAddresses] = useState(getAddresses);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const addAddressesHandler = () => {
-    console.log(addresses);
-    setAddresses([DefaultAddresses, ...addresses]);
+  const openModalHandler = () => {
+    setModalOpen(true);
   };
 
   return (
@@ -39,27 +28,37 @@ export function AccountAddresses() {
         return (
           <div
             className="account-addresses"
-            key={address.shippingAddress.street + Number(Math.random())}
+            key={address.street + Number(Math.random())}
           >
-            <ShippingAddress
-              street={address.shippingAddress.street}
-              city={address.shippingAddress.city}
-              country={address.shippingAddress.country}
-              zipCode={address.shippingAddress.zipCode}
-              defaultForShipping={address.shippingAddress.defaultForShipping}
-            />
-            <BillingAddress
-              street={address.billingAddress.street}
-              city={address.billingAddress.city}
-              country={address.billingAddress.country}
-              zipCode={address.billingAddress.zipCode}
-              defaultForBilling={address.billingAddress.defaultForBilling}
+            <AccountAddressForm
+              AccountAddressFormFormData={{
+                street: address.street,
+                city: address.city,
+                country: address.country,
+                zipCode: address.zipCode,
+                defaultForShipping: address.defaultForShipping,
+                defaultForBilling: address.defaultForBilling,
+              }}
+              isShowInModal={false}
             />
           </div>
         );
       })}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <AccountAddressForm
+            AccountAddressFormFormData={MOCK_DEFAULT_ADDRESS}
+            isShowInModal={modalOpen}
+            closeModal={() => {
+              setModalOpen(false);
+            }}
+            addresses={addresses}
+            setAddresses={setAddresses}
+          ></AccountAddressForm>
+        </Modal>
+      )}
 
-      <Button type="button" onClick={addAddressesHandler}>
+      <Button type="button" onClick={openModalHandler}>
         +
       </Button>
     </>

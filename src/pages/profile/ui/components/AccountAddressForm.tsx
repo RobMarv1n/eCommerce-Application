@@ -6,46 +6,42 @@ import { cityValidationRules } from '../../../../shared/validation/cityValidatio
 import { streetValidationRules } from '../../../../shared/validation/streetValidation';
 import { zipCodeValidationRules } from '../../../../shared/validation/zipCodeValidation';
 import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
+import { MOCK_DEFAULT_ADDRESS } from '../../model/DefaultAddresses';
 import {
-  AccountBillingAddressData,
-  AccountShippingAddressData,
+  AccountAddressFormData,
+  AccountAddressFormProperties,
 } from '../../types/types';
 
-const DefaultAddressData = {
-  street: '',
-  city: '',
-  country: Country.Russia,
-  zipCode: '',
-};
+export function AccountAddressForm(properties: AccountAddressFormProperties) {
+  const { isShowInModal, children, closeModal, addresses, setAddresses } =
+    properties;
+  const { defaultForBilling, defaultForShipping } =
+    properties.AccountAddressFormFormData;
 
-export function AddressForm(
-  properties: AccountBillingAddressData | AccountShippingAddressData
-) {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitted },
     getValues,
     setValue,
-  } = useForm<AccountBillingAddressData | AccountShippingAddressData>({
+  } = useForm<AccountAddressFormData>({
     mode: 'onChange',
-    defaultValues: DefaultAddressData,
-    values: properties,
+    defaultValues: MOCK_DEFAULT_ADDRESS,
+    values: properties.AccountAddressFormFormData,
   });
 
-  const onSubmit: SubmitHandler<
-    AccountBillingAddressData | AccountShippingAddressData
-    // eslint-disable-next-line unicorn/consistent-function-scoping
-  > = (data) => {
+  const onSubmit: SubmitHandler<AccountAddressFormData> = (data) => {
     console.log(data);
+    closeModal?.();
+    setAddresses?.([...(addresses || []), data]);
   };
 
   const [isEditable, setIsEditable] = useState(false);
-  const [isDefaultAddress, setIsDefaultAddress] = useState(false);
+  const [isDefaultForShipping, setIsDefaultForShipping] = useState(false);
+  const [isDefaultForBilling, setIsDefaultForBilling] = useState(false);
 
   const toggleEditable = () => {
     const hasNotErrors = Object.keys(errors).length === 0;
-
     if (!isEditable) {
       setIsEditable(true);
     } else if (isEditable && hasNotErrors) {
@@ -53,15 +49,17 @@ export function AddressForm(
     }
   };
 
-  const setDefaultAddressHandler = () => {
-    if ('defaultForBilling' in properties && isValid) {
-      setValue('defaultForBilling', true);
-    }
-    if ('defaultForShipping' in properties && isValid) {
-      setValue('defaultForShipping', true);
-    }
+  const setDefaultShippingAddressHandler = () => {
     if (isValid) {
-      setIsDefaultAddress(true);
+      setValue('defaultForShipping', true);
+      setIsDefaultForShipping(true);
+    }
+  };
+
+  const setDefaultBillingAddressHandler = () => {
+    if (isValid) {
+      setValue('defaultForBilling', true);
+      setIsDefaultForBilling(true);
     }
   };
 
@@ -69,11 +67,32 @@ export function AddressForm(
     <form className="address-form" onSubmit={handleSubmit(onSubmit)}>
       <Button
         type="submit"
-        disabled={isEditable || (isSubmitted && isDefaultAddress)}
-        onClick={setDefaultAddressHandler}
+        disabled={
+          defaultForShipping ||
+          isEditable ||
+          (isSubmitted && isDefaultForShipping)
+        }
+        onClick={setDefaultShippingAddressHandler}
       >
-        {isDefaultAddress ? 'default' : 'make default'}
+        {isDefaultForShipping
+          ? 'default for shipping'
+          : 'make default for shipping'}
       </Button>
+
+      <Button
+        type="submit"
+        disabled={
+          defaultForBilling ||
+          isEditable ||
+          (isSubmitted && isDefaultForBilling)
+        }
+        onClick={setDefaultBillingAddressHandler}
+      >
+        {isDefaultForBilling
+          ? 'default for billing'
+          : 'make default for billing'}
+      </Button>
+
       <div className="registration-field">
         <div className="form-group">
           <FormInput
@@ -84,7 +103,7 @@ export function AddressForm(
             register={register}
             errors={errors}
             rules={streetValidationRules}
-            disabled={!isEditable}
+            disabled={!isShowInModal && !isEditable}
           />
         </div>
 
@@ -97,7 +116,7 @@ export function AddressForm(
             register={register}
             errors={errors}
             rules={cityValidationRules}
-            disabled={!isEditable}
+            disabled={!isShowInModal && !isEditable}
           />
         </div>
 
@@ -108,7 +127,7 @@ export function AddressForm(
           <select
             id="country-input"
             className="form-input"
-            disabled={!isEditable}
+            disabled={!isShowInModal && !isEditable}
             {...register('country', { required: false })}
           >
             {Object.values(Country).map((country) => (
@@ -128,14 +147,23 @@ export function AddressForm(
             register={register}
             errors={errors}
             rules={zipCodeValidationRules(getValues('country'))}
-            disabled={!isEditable}
+            disabled={!isShowInModal && !isEditable}
           />
         </div>
       </div>
 
-      <Button type={isEditable ? 'button' : 'submit'} onClick={toggleEditable}>
-        {isEditable ? 'Save Changes' : 'Edit'}
-      </Button>
+      {!isShowInModal && (
+        <Button
+          type={isEditable ? 'button' : 'submit'}
+          onClick={toggleEditable}
+        >
+          {isEditable ? 'Save Changes' : 'Edit'}
+        </Button>
+      )}
+
+      {isShowInModal && <Button type="submit">Save</Button>}
+
+      {children}
     </form>
   );
 }
