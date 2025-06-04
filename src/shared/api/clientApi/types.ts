@@ -57,3 +57,16 @@ export type PriceRange = {
 export type RangeObject = {
   ranges: PriceRange[];
 };
+
+export enum SortingTypes {
+  DEFAULT = 'default',
+  NAME_ASC = 'variants.attributes.title asc',
+  NAME_DESC = 'variants.attributes.title desc',
+  PRICE_ASC = 'price asc',
+  PRICE_DESC = 'price desc',
+}
+
+export enum QueryMode {
+  FILTER = 'filter',
+  SEARCH = 'search',
+}

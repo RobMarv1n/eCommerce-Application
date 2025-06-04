@@ -5,6 +5,7 @@ import { client } from '../../../shared/api/clientApi/ClientApi';
 import {
   MainCategory,
   ProductData,
+  QueryMode,
   Subcategory,
 } from '../../../shared/api/clientApi/types';
 import { ProductsList } from './ProductsList/ProductsList';
@@ -34,6 +35,11 @@ export function Catalog() {
 
   async function updateProducts(): Promise<void> {
     const products = await client.getProducts();
+    setProducts(products);
+  }
+
+  async function searchProducts(): Promise<void> {
+    const products = await client.searchProducts();
     setProducts(products);
   }
 
@@ -90,8 +96,13 @@ export function Catalog() {
       </div>
       <div className="products-panel">
         <div className="sort-search-panel">
-          <SortSelect />
-          <SearchInput />
+          <SortSelect
+            onChange={() => {
+              if (client.queryMode === QueryMode.FILTER) updateProducts();
+              else searchProducts();
+            }}
+          />
+          <SearchInput onKeyDown={() => searchProducts()} />
         </div>
         <CatalogNavigation
           category={currentCategory}

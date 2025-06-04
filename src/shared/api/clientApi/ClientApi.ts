@@ -7,14 +7,16 @@ import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
-import type {
-  loginDTO,
-  MainCategory,
-  PriceRange,
-  ProductData,
-  ProfileData,
-  RangeObject,
-  singUpDTO,
+import {
+  QueryMode,
+  SortingTypes,
+  type loginDTO,
+  type MainCategory,
+  type PriceRange,
+  type ProductData,
+  type ProfileData,
+  type RangeObject,
+  type singUpDTO,
 } from './types';
 import { parseProduct } from './parseProduct';
 import { DefaultProfileData, emptyProduct } from './constants';
@@ -33,6 +35,9 @@ class ClientApi {
   public profileData: ProfileData;
   public priceRange: PriceRange;
   public minRating: string;
+  public sortingType: string;
+  public searchText: string;
+  public queryMode: string;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -43,6 +48,9 @@ class ClientApi {
     this.profileData = DefaultProfileData;
     this.priceRange = { min: 0, max: 100 };
     this.minRating = '1';
+    this.sortingType = SortingTypes.DEFAULT;
+    this.searchText = '';
+    this.queryMode = QueryMode.FILTER;
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -123,6 +131,7 @@ class ClientApi {
 
   public async getProducts(): Promise<ProductData[]> {
     try {
+      this.queryMode = QueryMode.FILTER;
       const response = await this.apiRoot
         .productProjections()
         .search()
@@ -133,6 +142,37 @@ class ClientApi {
               `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max})`,
               `variants.attributes.rating: range (${client.minRating} to 5)`,
             ],
+            sort:
+              client.sortingType === SortingTypes.DEFAULT
+                ? undefined
+                : client.sortingType,
+          },
+        })
+        .execute();
+      const results = response.body.results;
+      const products: ProductData[] = results.map((result) =>
+        parseProduct(result)
+      );
+      return products;
+    } catch {
+      return [];
+    }
+  }
+
+  public async searchProducts(): Promise<ProductData[]> {
+    try {
+      this.queryMode = QueryMode.SEARCH;
+      const response = await this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            'text.en-US': `${client.searchText}`,
+            fuzzy: true,
+            sort:
+              client.sortingType === SortingTypes.DEFAULT
+                ? undefined
+                : client.sortingType,
           },
         })
         .execute();
@@ -154,7 +194,7 @@ class ClientApi {
         .search()
         .get({
           queryArgs: {
-            filter: `id:${id}`,
+            filter: `id:"${id}"`,
           },
         })
         .execute();
