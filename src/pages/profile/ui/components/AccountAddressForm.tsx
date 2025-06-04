@@ -93,6 +93,10 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
           : 'make default for billing'}
       </Button>
 
+      <Button type="button" className="delete-address-button">
+        ✕
+      </Button>
+
       <div className="registration-field">
         <div className="form-group">
           <FormInput
