@@ -16,10 +16,10 @@ export function AccountAddresses() {
   ];
 
   const [addresses, setAddresses] = useState(getAddresses);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const openModalHandler = () => {
-    setIsModalOpen(true);
+    setModalOpen(true);
   };
 
   return (
@@ -44,22 +44,19 @@ export function AccountAddresses() {
           </div>
         );
       })}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      >
-        <AccountAddressForm
-          AccountAddressFormFormData={MOCK_DEFAULT_ADDRESS}
-          isShowInModal={isModalOpen}
-          closeModal={() => {
-            setIsModalOpen(false);
-          }}
-          addresses={addresses}
-          setAddresses={setAddresses}
-        ></AccountAddressForm>
-      </Modal>
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <AccountAddressForm
+            AccountAddressFormFormData={MOCK_DEFAULT_ADDRESS}
+            isShowInModal={modalOpen}
+            closeModal={() => {
+              setModalOpen(false);
+            }}
+            addresses={addresses}
+            setAddresses={setAddresses}
+          ></AccountAddressForm>
+        </Modal>
+      )}
 
       <Button type="button" onClick={openModalHandler}>
         +
