@@ -32,6 +32,7 @@ class ClientApi {
   public currentCategoryId: string;
   public profileData: ProfileData;
   public priceRange: PriceRange;
+  public minRating: string;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -41,6 +42,7 @@ class ClientApi {
     this.categories = [];
     this.profileData = DefaultProfileData;
     this.priceRange = { min: 0, max: 100 };
+    this.minRating = '1';
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -129,6 +131,7 @@ class ClientApi {
             filter: [
               `categories.id:"${this.currentCategoryId}"`,
               `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max})`,
+              `variants.attributes.rating: range (${client.minRating} to 5)`,
             ],
           },
         })

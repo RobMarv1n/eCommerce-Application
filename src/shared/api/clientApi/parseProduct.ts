@@ -8,7 +8,7 @@ import { client } from './ClientApi';
 
 export function parseProduct(result: ProductProjection): ProductData {
   const variant = result.masterVariant;
-  const { title, descriptionShort, descriptionFull } = parseAttributes(
+  const { title, descriptionShort, descriptionFull, rating } = parseAttributes(
     variant.attributes
   );
   const categoryId = result.categories[0].id;
@@ -22,6 +22,7 @@ export function parseProduct(result: ProductProjection): ProductData {
     price: parsePrice(variant.prices),
     discountedPrice: parseDiscountedPrice(variant.prices),
     categoryName: client.getCategoryName(categoryId),
+    rating,
   };
 }
 
@@ -46,6 +47,7 @@ function parseAttributes(attributes: Attribute[] | undefined): AttributesData {
     title: '',
     descriptionShort: '',
     descriptionFull: '',
+    rating: '1',
   };
   if (attributes) {
     const object: { [index: string]: string } = {};
@@ -55,6 +57,7 @@ function parseAttributes(attributes: Attribute[] | undefined): AttributesData {
     result.title = object['title'] || '';
     result.descriptionShort = object['description_short'] || '';
     result.descriptionFull = object['description_full'] || '';
+    result.rating = object['rating'] || '1';
   }
   return result;
 }

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ProductData } from '../../../../shared/api/clientApi/types';
 import './ProductCard.css';
+import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
 
 type Properties = {
   product: ProductData;
@@ -28,6 +29,7 @@ export function ProductCard({ product }: Properties) {
           <p className="price">${price.toFixed(2)}</p>
         )}
       </div>
+      <RatingStars rating={product.rating} />
     </div>
   );
 }
