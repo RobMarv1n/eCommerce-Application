@@ -13,21 +13,20 @@ export type PasswordChangeData = {
   confirmPassword: string;
 };
 
-type AccountAddressFormData = {
+export type AccountAddressFormData = {
   street: string;
   city: string;
   zipCode: string;
   country: Country;
-};
-export type AccountBillingAddressData = AccountAddressFormData & {
-  defaultForBilling: boolean;
-};
-
-export type AccountShippingAddressData = AccountAddressFormData & {
-  defaultForShipping: boolean;
+  defaultForShipping?: boolean;
+  defaultForBilling?: boolean;
 };
 
-export type AccountAddressesData = {
-  shippingAddress: AccountShippingAddressData;
-  billingAddress: AccountBillingAddressData;
+export type AccountAddressFormProperties = {
+  AccountAddressFormFormData: AccountAddressFormData;
+  isShowInModal?: boolean;
+  children?: React.ReactNode;
+  closeModal?: () => void;
+  addresses?: AccountAddressFormData[];
+  setAddresses?: (addresses: AccountAddressFormData[]) => void;
 };
