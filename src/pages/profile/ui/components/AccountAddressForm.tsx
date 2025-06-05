@@ -14,7 +14,6 @@ import {
 import { client } from '../../../../shared/api/clientApi/ClientApi';
 import './../../../../shared/styles/forms.css';
 
-
 export function AccountAddressForm(properties: AccountAddressFormProperties) {
   const { id, isShowInModal, children, closeModal, setAddresses } = properties;
   const { defaultForBilling, defaultForShipping } =
@@ -33,10 +32,17 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
   });
 
   const onSubmit: SubmitHandler<AccountAddressFormData> = (data) => {
-    client.updateAddress(id, data).then((addresses) => {
-      closeModal?.();
-      setAddresses?.([...(addresses || []), data]);
-    });
+    if (id) {
+      client.updateAddress(id, data).then((addresses) => {
+        closeModal?.();
+        setAddresses?.([...(addresses || [])]);
+      });
+    } else {
+      client.createAddress(data).then((addresses) => {
+        closeModal?.();
+        setAddresses?.([...(addresses || [])]);
+      });
+    }
   };
 
   const [isEditable, setIsEditable] = useState(false);

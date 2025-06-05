@@ -33,6 +33,7 @@ export function AccountAddresses() {
           return (
             <AccountAddressForm
               id={address.id || ''}
+              key={address.id}
               AccountAddressFormFormData={{
                 street: address.street,
                 city: address.city,
