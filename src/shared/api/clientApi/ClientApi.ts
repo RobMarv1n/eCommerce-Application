@@ -162,6 +162,51 @@ class ClientApi {
     return this.profileData.accountAddresses;
   }
 
+  public async createAddress(
+    data: AccountAddressFormData
+  ): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'addAddress',
+          address: {
+            streetName: data.street,
+            city: data.city,
+            postalCode: data.zipCode,
+            country: countryCodes[data.country],
+          },
+        },
+      ],
+    };
+    let results = await this.apiRoot.me().post({ body }).execute();
+
+    const id = results.body.addresses.at(-1)?.id;
+    if (id) {
+      const body: MyCustomerUpdate = {
+        version: client.profileData.version + 1,
+        actions: [],
+      };
+      if (data.defaultForBilling)
+        body.actions.push({
+          action: 'setDefaultBillingAddress',
+          addressId: id,
+        });
+      if (data.defaultForShipping)
+        body.actions.push({
+          action: 'setDefaultShippingAddress',
+          addressId: id,
+        });
+      if (body.actions.length > 0) {
+        results = await this.apiRoot.me().post({ body }).execute();
+      }
+    }
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
+  }
+
   public getCategoryName(id: string): string {
     const category = this.categories.find((item) => item.id === id);
     if (category) return category.name;
