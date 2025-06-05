@@ -1,5 +1,5 @@
 .search {
-  width: clamp(150px, 40vw, 500px);
+  width: clamp(300px, 40vw, 500px);
   height: 44px;
   padding: 10px 16px;
   border: 1px solid var(--color-gray-1);

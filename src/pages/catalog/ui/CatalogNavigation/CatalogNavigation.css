@@ -6,3 +6,9 @@
 .category-name-no-active {
   pointer-events: none;
 }
+
+@media (width <= 600px) {
+  .catalog-navigation {
+    text-align: center;
+  }
+}

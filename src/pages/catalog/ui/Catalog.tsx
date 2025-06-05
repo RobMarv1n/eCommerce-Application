@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CategoriesList } from './CategoriesList/CategoriesList';
 import { FilterItem } from './FilterItem/FilterItem';
 import { client } from '../../../shared/api/clientApi/ClientApi';
@@ -21,6 +21,7 @@ import { SearchInput } from './SearchInput/SearchInput';
 import { CatalogPriceFilter } from './CatalogPriceFilter/CatalogPriceFilter';
 import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
+import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -32,6 +33,8 @@ export function Catalog() {
     useState<MainCategory>(emptyCategory);
   const [currentSubcategory, setCurrentSubcategory] =
     useState<Subcategory>(emptySubcategory);
+
+  const filtersReference = useRef<HTMLDivElement>(null);
 
   async function updateProducts(): Promise<void> {
     const products = await client.getProducts();
@@ -57,9 +60,17 @@ export function Catalog() {
     initial();
   }, []);
 
+  function toggleFilters() {
+    filtersReference.current?.classList.toggle('filters-active');
+    document.body.classList.toggle('overflow-hidden');
+  }
+
   return (
     <section className="catalog container">
-      <div className="filters">
+      <div className="filters" ref={filtersReference}>
+        <button className="close-filters-button" onClick={toggleFilters}>
+          ✕
+        </button>
         <FilterItem title="Categories">
           <CategoriesList
             categories={categories}
@@ -80,11 +91,13 @@ export function Catalog() {
             }}
           />
         </FilterItem>
-        <CatalogPriceFilter
-          updateRange={() => {
-            updateProducts();
-          }}
-        />
+        <FilterItem title="Price">
+          <CatalogPriceFilter
+            updateRange={() => {
+              updateProducts();
+            }}
+          />
+        </FilterItem>
         <FilterItem title="Rating">
           <RatingList
             onClick={() => {
@@ -96,6 +109,9 @@ export function Catalog() {
       </div>
       <div className="products-panel">
         <div className="sort-search-panel">
+          <Button className="filters-button" onClick={toggleFilters}>
+            Filters <FiltersIcon />
+          </Button>
           <SortSelect
             onChange={() => {
               if (client.queryMode === QueryMode.FILTER) updateProducts();

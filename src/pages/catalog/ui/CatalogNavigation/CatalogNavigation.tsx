@@ -20,7 +20,7 @@ export function CatalogNavigation({
     'category-name' + (subcategory.id ? '' : 'category-name-active');
 
   return (
-    <div>
+    <div className="catalog-navigation">
       <span>Main &gt; </span>
       <span
         className={style}
