@@ -1,3 +1,4 @@
+import { Country } from 'postal-code-validator';
 import { AccountSettingsData } from '../../../pages/profile/types/types';
 import { RegistrationFormData } from '../../../pages/registration/model/types';
 
@@ -44,9 +45,20 @@ export type MainCategory = {
   subCategory: Subcategory[];
 };
 
+export type AccountAddress = {
+  id?: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  country: Country;
+  defaultForShipping?: boolean;
+  defaultForBilling?: boolean;
+};
+
 export type ProfileData = {
   version: number;
   accountSettingData: AccountSettingsData;
+  accountAddresses: AccountAddress[];
 };
 
 export type PriceRange = {

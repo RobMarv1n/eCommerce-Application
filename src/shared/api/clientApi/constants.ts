@@ -34,4 +34,5 @@ export const DefaultAccountSettingData: AccountSettingsData = {
 export const DefaultProfileData: ProfileData = {
   version: 0,
   accountSettingData: DefaultAccountSettingData,
+  accountAddresses: [],
 };
