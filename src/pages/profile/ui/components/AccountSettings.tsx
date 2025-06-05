@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { Button } from '../../../../shared/ui/Button';
 import { ageValidationRules } from '../../../../shared/validation/ageValidation';
 import { emailValidationRules } from '../../../../shared/validation/emailValidation';
 import { nameValidationRules } from '../../../../shared/validation/nameValidation';
 import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
 import { AccountSettingsData } from '../../types/types';
-import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function AccountSettings() {
   const {
@@ -40,7 +40,7 @@ export function AccountSettings() {
   return (
     <form className="account-settings" onSubmit={handleSubmit(onSubmit)}>
       <div className="registration-field">
-        <h2>Account Settings</h2>
+        <h2 className="form-title">Account Settings</h2>
         <div className="form-group">
           <FormInput
             name="email"

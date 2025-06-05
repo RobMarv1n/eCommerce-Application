@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { Button } from '../../../../shared/ui/Button';
 import { passwordValidationRules } from '../../../../shared/validation/passwordValidation';
 import { FormPasswordInput } from '../../../../widgets/ui/inputs/FormPasswordInput';
 import { PasswordChangeData } from '../../types/types';
-import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function PasswordChange() {
   const {
@@ -26,7 +26,7 @@ export function PasswordChange() {
   return (
     <form className="change-password" onSubmit={handleSubmit(onSubmit)}>
       <div className="registration-field">
-        <h2>Change Password</h2>
+        <h2 className="form-title">Change Password</h2>
 
         <div className="form-group password-input-container">
           <FormPasswordInput
