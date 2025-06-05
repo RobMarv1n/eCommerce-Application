@@ -32,6 +32,7 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
   });
 
   const onSubmit: SubmitHandler<AccountAddressFormData> = (data) => {
+    console.log('submit');
     if (id) {
       client.updateAddress(id, data).then((addresses) => {
         closeModal?.();
@@ -72,6 +73,15 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
     }
   };
 
+  const deleteAddress = () => {
+    if (id) {
+      client.deleteAddress(id).then((addresses) => {
+        closeModal?.();
+        setAddresses?.([...(addresses || [])]);
+      });
+    }
+  };
+
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="form-title">Address</h2>
@@ -108,9 +118,15 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
           </Button>
         </div>
 
-        <Button type="button" className="form-delete-button">
-          ✕
-        </Button>
+        {id && (
+          <Button
+            type="button"
+            className="form-delete-button"
+            onClick={() => deleteAddress()}
+          >
+            ✕
+          </Button>
+        )}
       </div>
 
       <div className="registration-field">
