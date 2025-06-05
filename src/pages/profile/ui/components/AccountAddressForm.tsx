@@ -36,6 +36,7 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
     if (id) {
       client.updateAddress(id, data).then((addresses) => {
         closeModal?.();
+        console.log(setAddresses);
         setAddresses?.([...(addresses || [])]);
       });
     } else {

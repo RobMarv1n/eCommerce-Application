@@ -1,22 +1,11 @@
 import { useState } from 'react';
 import { Button } from '../../../../shared/ui/Button';
 import { Modal } from '../../../../shared/ui/Modal';
-import {
-  MOCK_DEFAULT_ADDRESS,
-  // MOCK_DEFAULT_BILLING_ADDRESS,
-  // MOCK_DEFAULT_SHIPPING_ADDRESS,
-} from '../../model/DefaultAddresses';
-// import { AccountAddressFormData } from '../../types/types';
+import { MOCK_DEFAULT_ADDRESS } from '../../model/DefaultAddresses';
 import { AccountAddressForm } from './AccountAddressForm';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function AccountAddresses() {
-  // const getAddresses: AccountAddressFormData[] = [
-  //   MOCK_DEFAULT_SHIPPING_ADDRESS,
-  //   MOCK_DEFAULT_BILLING_ADDRESS,
-  // ];
-
-  // const [addresses, setAddresses] = useState(getAddresses);
   const [addresses, setAddresses] = useState(
     client.profileData.accountAddresses
   );
@@ -43,6 +32,7 @@ export function AccountAddresses() {
                 defaultForBilling: address.defaultForBilling,
               }}
               isShowInModal={false}
+              setAddresses={setAddresses}
             />
           );
         })}
@@ -60,6 +50,12 @@ export function AccountAddresses() {
             setAddresses={setAddresses}
           ></AccountAddressForm>
         </Modal>
+      )}
+
+      {addresses.length === 0 && (
+        <p>
+          <strong>No addresses</strong>
+        </p>
       )}
 
       <Button type="button" onClick={openModalHandler}>
