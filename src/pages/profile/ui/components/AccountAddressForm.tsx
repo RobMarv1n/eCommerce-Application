@@ -11,6 +11,7 @@ import {
   AccountAddressFormData,
   AccountAddressFormProperties,
 } from '../../types/types';
+import './../../../../shared/styles/forms.css';
 
 export function AccountAddressForm(properties: AccountAddressFormProperties) {
   const { isShowInModal, children, closeModal, addresses, setAddresses } =
@@ -64,38 +65,45 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
   };
 
   return (
-    <form className="address-form" onSubmit={handleSubmit(onSubmit)}>
-      <Button
-        type="submit"
-        disabled={
-          defaultForShipping ||
-          isEditable ||
-          (isSubmitted && isDefaultForShipping)
-        }
-        onClick={setDefaultShippingAddressHandler}
-      >
-        {isDefaultForShipping
-          ? 'default for shipping'
-          : 'make default for shipping'}
-      </Button>
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="form-title">Address</h2>
+      <div className="form-top-buttons-container">
+        <div className="default-buttons-container">
+          <Button
+            type="submit"
+            className="default-address-button"
+            disabled={
+              defaultForShipping ||
+              isEditable ||
+              (isSubmitted && isDefaultForShipping)
+            }
+            onClick={setDefaultShippingAddressHandler}
+          >
+            {isDefaultForShipping
+              ? 'default for shipping'
+              : 'make default for shipping'}
+          </Button>
 
-      <Button
-        type="submit"
-        disabled={
-          defaultForBilling ||
-          isEditable ||
-          (isSubmitted && isDefaultForBilling)
-        }
-        onClick={setDefaultBillingAddressHandler}
-      >
-        {isDefaultForBilling
-          ? 'default for billing'
-          : 'make default for billing'}
-      </Button>
+          <Button
+            type="submit"
+            className="default-address-button"
+            disabled={
+              defaultForBilling ||
+              isEditable ||
+              (isSubmitted && isDefaultForBilling)
+            }
+            onClick={setDefaultBillingAddressHandler}
+          >
+            {isDefaultForBilling
+              ? 'default for billing'
+              : 'make default for billing'}
+          </Button>
+        </div>
 
-      <Button type="button" className="delete-address-button">
-        ✕
-      </Button>
+        <Button type="button" className="form-delete-button">
+          ✕
+        </Button>
+      </div>
 
       <div className="registration-field">
         <div className="form-group">

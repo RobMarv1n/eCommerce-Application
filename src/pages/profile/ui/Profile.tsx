@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { client } from '../../../shared/api/clientApi/ClientApi';
+import { ROUTES } from '../../../types';
 import { AccountAddresses } from './components/AccountAddresses';
 import { AccountSettings } from './components/AccountSettings';
 import { PasswordChange } from './components/PasswordChange';
 import './profile.css';
-import { client } from '../../../shared/api/clientApi/ClientApi';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../types';
 
 export function Profile() {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ export function Profile() {
   if (!client.isLogin) return <></>;
 
   return (
-    <>
+    <div className="profile-page">
       <h1 className="visually-hidden">Profile Page</h1>
       <AccountSettings />
       <PasswordChange />
       <AccountAddresses />
-    </>
+    </div>
   );
 }

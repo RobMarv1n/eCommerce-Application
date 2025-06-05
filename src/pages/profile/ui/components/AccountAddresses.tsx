@@ -24,12 +24,9 @@ export function AccountAddresses() {
 
   return (
     <>
-      {addresses.map((address) => {
-        return (
-          <div
-            className="account-addresses"
-            key={address.street + Number(Math.random())}
-          >
+      <div className="account-addresses">
+        {addresses.map((address) => {
+          return (
             <AccountAddressForm
               AccountAddressFormFormData={{
                 street: address.street,
@@ -41,9 +38,9 @@ export function AccountAddresses() {
               }}
               isShowInModal={false}
             />
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
       {modalOpen && (
         <Modal onClose={() => setModalOpen(false)}>
           <AccountAddressForm
