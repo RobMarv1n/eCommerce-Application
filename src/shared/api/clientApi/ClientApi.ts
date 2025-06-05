@@ -207,6 +207,24 @@ class ClientApi {
     return this.profileData.accountAddresses;
   }
 
+  public async deleteAddress(id: string): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: id,
+        },
+      ],
+    };
+
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
+  }
+
   public getCategoryName(id: string): string {
     const category = this.categories.find((item) => item.id === id);
     if (category) return category.name;
