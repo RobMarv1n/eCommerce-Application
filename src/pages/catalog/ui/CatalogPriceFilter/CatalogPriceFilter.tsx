@@ -127,7 +127,6 @@ export function CatalogPriceFilter({ updateRange }: Properties) {
 
   return (
     <div className="double-slider-box">
-      <div className="range-slider-title">Price</div>
       <div className="input-box">
         <div className="min-box">
           <input

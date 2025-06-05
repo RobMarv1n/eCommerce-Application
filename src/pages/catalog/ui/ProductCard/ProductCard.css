@@ -36,3 +36,9 @@
   color: var(--color-gray-4);
   text-decoration: line-through;
 }
+
+@media (width <= 400px) {
+  .product-card {
+    width: 280px;
+  }
+}
