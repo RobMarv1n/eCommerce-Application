@@ -23,6 +23,7 @@ export type AccountAddressFormData = {
 };
 
 export type AccountAddressFormProperties = {
+  id: string;
   AccountAddressFormFormData: AccountAddressFormData;
   isShowInModal?: boolean;
   children?: React.ReactNode;

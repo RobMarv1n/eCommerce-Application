@@ -8,6 +8,7 @@ import {
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
 import {
+  AccountAddress,
   QueryMode,
   SortingTypes,
   type loginDTO,
@@ -24,9 +25,11 @@ import { parseCategories } from './parseCategories';
 import { parseProfileData } from './parseProfileData';
 import { createSignUpBody } from './createSignUpBody';
 import {
+  AccountAddressFormData,
   AccountSettingsData,
   PasswordChangeData,
 } from '../../../pages/profile/types/types';
+import { countryCodes } from './CountryCodes';
 
 class ClientApi {
   public isLogin: boolean;
@@ -121,6 +124,42 @@ class ClientApi {
       password: data.newPassword,
     });
     this.profileData.version = results.body.version;
+  }
+
+  public async updateAddress(
+    id: string,
+    data: AccountAddressFormData
+  ): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: id,
+          address: {
+            streetName: data.street,
+            city: data.city,
+            postalCode: data.zipCode,
+            country: countryCodes[data.country],
+          },
+        },
+      ],
+    };
+    if (data.defaultForBilling)
+      body.actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: id,
+      });
+    if (data.defaultForShipping)
+      body.actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: id,
+      });
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
   }
 
   public getCategoryName(id: string): string {

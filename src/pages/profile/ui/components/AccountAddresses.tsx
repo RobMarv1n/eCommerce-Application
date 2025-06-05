@@ -3,19 +3,23 @@ import { Button } from '../../../../shared/ui/Button';
 import { Modal } from '../../../../shared/ui/Modal';
 import {
   MOCK_DEFAULT_ADDRESS,
-  MOCK_DEFAULT_BILLING_ADDRESS,
-  MOCK_DEFAULT_SHIPPING_ADDRESS,
+  // MOCK_DEFAULT_BILLING_ADDRESS,
+  // MOCK_DEFAULT_SHIPPING_ADDRESS,
 } from '../../model/DefaultAddresses';
-import { AccountAddressFormData } from '../../types/types';
+// import { AccountAddressFormData } from '../../types/types';
 import { AccountAddressForm } from './AccountAddressForm';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function AccountAddresses() {
-  const getAddresses: AccountAddressFormData[] = [
-    MOCK_DEFAULT_SHIPPING_ADDRESS,
-    MOCK_DEFAULT_BILLING_ADDRESS,
-  ];
+  // const getAddresses: AccountAddressFormData[] = [
+  //   MOCK_DEFAULT_SHIPPING_ADDRESS,
+  //   MOCK_DEFAULT_BILLING_ADDRESS,
+  // ];
 
-  const [addresses, setAddresses] = useState(getAddresses);
+  // const [addresses, setAddresses] = useState(getAddresses);
+  const [addresses, setAddresses] = useState(
+    client.profileData.accountAddresses
+  );
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModalHandler = () => {
@@ -28,6 +32,7 @@ export function AccountAddresses() {
         {addresses.map((address) => {
           return (
             <AccountAddressForm
+              id={address.id || ''}
               AccountAddressFormFormData={{
                 street: address.street,
                 city: address.city,
@@ -44,6 +49,7 @@ export function AccountAddresses() {
       {modalOpen && (
         <Modal onClose={() => setModalOpen(false)}>
           <AccountAddressForm
+            id={''}
             AccountAddressFormFormData={MOCK_DEFAULT_ADDRESS}
             isShowInModal={modalOpen}
             closeModal={() => {

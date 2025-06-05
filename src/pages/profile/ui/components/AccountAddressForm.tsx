@@ -11,11 +11,12 @@ import {
   AccountAddressFormData,
   AccountAddressFormProperties,
 } from '../../types/types';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 import './../../../../shared/styles/forms.css';
 
+
 export function AccountAddressForm(properties: AccountAddressFormProperties) {
-  const { isShowInModal, children, closeModal, addresses, setAddresses } =
-    properties;
+  const { id, isShowInModal, children, closeModal, setAddresses } = properties;
   const { defaultForBilling, defaultForShipping } =
     properties.AccountAddressFormFormData;
 
@@ -32,9 +33,10 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
   });
 
   const onSubmit: SubmitHandler<AccountAddressFormData> = (data) => {
-    console.log(data);
-    closeModal?.();
-    setAddresses?.([...(addresses || []), data]);
+    client.updateAddress(id, data).then((addresses) => {
+      closeModal?.();
+      setAddresses?.([...(addresses || []), data]);
+    });
   };
 
   const [isEditable, setIsEditable] = useState(false);
