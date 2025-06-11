@@ -7,7 +7,7 @@
 
   width: 100%;
   max-width: 562px;
-  margin: 0 auto;
+  margin: auto;
   padding: 30px 45px;
   border: 1px solid var(--color-secondary-bg);
   border-radius: 8px;

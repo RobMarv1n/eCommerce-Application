@@ -1,0 +1,15 @@
+.fullDescriptionWrapper {
+  line-height: 150%;
+}
+
+.fullDescriptionLabel {
+  width: 124px;
+  height: 56px;
+  margin: 0 auto 30px;
+  padding: 16px;
+  border-bottom: 2px solid var(--color-primary);
+
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-gray-9);
+}

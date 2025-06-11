@@ -1,0 +1,31 @@
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.filter-item-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 150%;
+  color: var(--color-gray-9);
+}
+
+.filter-item-hide {
+  overflow: hidden;
+  height: 2rem;
+}
+
+.vector {
+  padding: 0.5rem;
+}
+
+.vector-rotate {
+  transform: rotate(180deg);
+}

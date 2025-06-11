@@ -17,7 +17,7 @@ export function zipCodeValidation(value: string, country: Country) {
 
 export function zipCodeValidationRules(country: Country) {
   return {
-    required: true,
+    required: 'This field is required',
     validate: (value: string) => zipCodeValidation(value, country),
   };
 }

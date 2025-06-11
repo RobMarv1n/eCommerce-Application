@@ -17,7 +17,7 @@ export function passwordValidation(value: string | unknown) {
 }
 
 export const passwordValidationRules = {
-  required: true,
+  required: 'This field is required',
   minLength: {
     value: 8,
     message: 'Minimum length should be 8 characters',

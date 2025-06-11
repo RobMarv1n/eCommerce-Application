@@ -1,0 +1,152 @@
+.wrapper {
+  display: flex;
+  gap: 24px;
+}
+
+.slider {
+  width: clamp(280px, 50vw, 556px);
+  height: clamp(280px, 50vw, 556px);
+}
+
+.detailed {
+  flex: 1;
+}
+
+.productTitle {
+  margin-bottom: 24px;
+
+  font-size: clamp(20px, 5vw, 36px);
+  font-weight: 600;
+  line-height: 120%;
+  color: var(--color-gray-9);
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: center;
+
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--color-gray-1);
+
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.discountedPrice {
+  font-size: 24px;
+  color: var(--color-hard-primary);
+}
+
+.price {
+  margin-left: 4px;
+
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-gray-3);
+  text-decoration: line-through;
+}
+
+.discount {
+  display: inline-block;
+
+  width: 74px;
+  height: 27px;
+  margin-left: 12px;
+  padding: 3px 10px;
+  border-radius: 30px;
+
+  color: var(--color-danger);
+
+  background: var(--color-danger-transparent);
+}
+
+.shortDescription {
+  padding: 24px 0;
+  border-bottom: 2px solid var(--color-gray-1);
+}
+
+.category {
+  padding: 24px 0;
+  font-weight: 500;
+  line-height: 150%;
+  color: var(--color-gray-9);
+}
+
+.categoryName {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-gray-5);
+}
+
+.CTA {
+  pointer-events: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  padding: 20px 0;
+
+  opacity: 0.2;
+}
+
+.counter {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+  border: 1px solid var(--color-gray-1);
+  border-radius: 170px;
+
+  font-size: 16px;
+  line-height: 150%;
+  color: var(--color-gray-9);
+  text-align: center;
+}
+
+.counterBtn {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 170px;
+}
+
+.buttonCart {
+  display: flex;
+  flex-grow: 1;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+
+  height: 52px;
+}
+
+.buttonWishlist {
+  cursor: pointer;
+
+  width: 52px;
+  height: 52px;
+  padding: 16px;
+  border: none;
+  border-radius: 43px;
+
+  background-color: var(--color-hard-primary-transparent);
+}
+
+@media (width <= 767px) {
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .slider {
+    align-self: center;
+  }
+}

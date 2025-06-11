@@ -1,29 +1,62 @@
 import type {
-  BaseAddress,
   ByProjectKeyRequestBuilder,
-  ClientResponse,
-  CustomerSignInResult,
-  MyCustomerDraft,
+  MyCustomerChangePassword,
+  MyCustomerUpdate,
 } from '@commercetools/platform-sdk';
-import { countryCodes } from './CountryCodes';
 import {
   CreateAnonymousApiRoot,
   CreatePasswordApiRoot,
 } from './CreateApiRoots';
-import type { loginDTO, singUpDTO } from './types';
+import {
+  AccountAddress,
+  QueryMode,
+  SortingTypes,
+  type loginDTO,
+  type MainCategory,
+  type PriceRange,
+  type ProductData,
+  type ProfileData,
+  type RangeObject,
+  type singUpDTO,
+} from './types';
+import { parseProduct } from './parseProduct';
+import { DefaultProfileData, emptyProduct } from './constants';
+import { parseCategories } from './parseCategories';
+import { parseProfileData } from './parseProfileData';
+import { createSignUpBody } from './createSignUpBody';
+import {
+  AccountAddressFormData,
+  AccountSettingsData,
+  PasswordChangeData,
+} from '../../../pages/profile/types/types';
+import { countryCodes } from './CountryCodes';
 
 class ClientApi {
   public isLogin: boolean;
+  public categories: MainCategory[];
+  public currentCategoryId: string;
+  public profileData: ProfileData;
+  public priceRange: PriceRange;
+  public minRating: string;
+  public sortingType: string;
+  public searchText: string;
+  public queryMode: string;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
     this.isLogin = false;
     this.apiRoot = CreateAnonymousApiRoot();
+    this.currentCategoryId = '';
+    this.categories = [];
+    this.profileData = DefaultProfileData;
+    this.priceRange = { min: 0, max: 100 };
+    this.minRating = '1';
+    this.sortingType = SortingTypes.DEFAULT;
+    this.searchText = '';
+    this.queryMode = QueryMode.FILTER;
   }
 
-  public async login(
-    dto: loginDTO
-  ): Promise<ClientResponse<CustomerSignInResult>> {
+  public async login(dto: loginDTO): Promise<void> {
     const result = await this.apiRoot
       .me()
       .login()
@@ -33,7 +66,7 @@ class ClientApi {
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
-    return result;
+    this.profileData = parseProfileData(result.body.customer);
   }
 
   public logout(): void {
@@ -41,49 +74,10 @@ class ClientApi {
     this.isLogin = false;
   }
 
-  public async signUp(
-    dto: singUpDTO
-  ): Promise<ClientResponse<CustomerSignInResult>> {
-    const addresses: BaseAddress[] = [
-      {
-        country: countryCodes[dto.shippingAddress.country],
-        city: dto.shippingAddress.city,
-        streetName: dto.shippingAddress.street,
-        postalCode: dto.shippingAddress.zipCode,
-      },
-    ];
+  public async signUp(dto: singUpDTO): Promise<void> {
+    const body = createSignUpBody(dto);
 
-    const defaultShippingAddress = dto.shippingAddress.useAsDefaultForShipping
-      ? 0
-      : undefined;
-    let defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
-      ? 0
-      : undefined;
-
-    if (!dto.shippingAddress.useShippingAsBilling) {
-      addresses.push({
-        country: countryCodes[dto.billingAddress.country],
-        city: dto.billingAddress.city,
-        streetName: dto.billingAddress.street,
-        postalCode: dto.billingAddress.zipCode,
-      });
-
-      defaultBillingAddress = dto.billingAddress.useAsDefaultForBilling
-        ? 1
-        : undefined;
-    }
-
-    const body: MyCustomerDraft = {
-      email: dto.email,
-      password: dto.password,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      defaultShippingAddress,
-      defaultBillingAddress,
-      addresses,
-    };
-
-    const result = this.apiRoot
+    const result = await this.apiRoot
       .me()
       .signup()
       .post({
@@ -95,7 +89,258 @@ class ClientApi {
       email: dto.email,
       password: dto.password,
     });
-    return result;
+
+    this.profileData = parseProfileData(result.body.customer);
+  }
+
+  public async updateAccountSettingData(
+    data: AccountSettingsData
+  ): Promise<void> {
+    const body: MyCustomerUpdate = {
+      version: this.profileData.version,
+      actions: [
+        { action: 'changeEmail', email: data.email },
+        { action: 'setFirstName', firstName: data.firstName },
+        { action: 'setLastName', lastName: data.lastName },
+        { action: 'setDateOfBirth', dateOfBirth: data.birthDate },
+      ],
+    };
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData.accountSettingData = data;
+    this.profileData.version = results.body.version;
+  }
+
+  public async updatePassword(data: PasswordChangeData): Promise<void> {
+    const body: MyCustomerChangePassword = {
+      version: this.profileData.version,
+      newPassword: data.newPassword,
+      currentPassword: data.currentPassword,
+    };
+    const results = await this.apiRoot.me().password().post({ body }).execute();
+
+    this.apiRoot = CreatePasswordApiRoot({
+      email: this.profileData.accountSettingData.email,
+      password: data.newPassword,
+    });
+    this.profileData.version = results.body.version;
+  }
+
+  public async updateAddress(
+    id: string,
+    data: AccountAddressFormData
+  ): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: id,
+          address: {
+            streetName: data.street,
+            city: data.city,
+            postalCode: data.zipCode,
+            country: countryCodes[data.country],
+          },
+        },
+      ],
+    };
+    if (data.defaultForBilling)
+      body.actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: id,
+      });
+    if (data.defaultForShipping)
+      body.actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: id,
+      });
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
+  }
+
+  public async createAddress(
+    data: AccountAddressFormData
+  ): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'addAddress',
+          address: {
+            streetName: data.street,
+            city: data.city,
+            postalCode: data.zipCode,
+            country: countryCodes[data.country],
+          },
+        },
+      ],
+    };
+    let results = await this.apiRoot.me().post({ body }).execute();
+
+    const id = results.body.addresses.at(-1)?.id;
+    if (id) {
+      const body: MyCustomerUpdate = {
+        version: client.profileData.version + 1,
+        actions: [],
+      };
+      if (data.defaultForBilling)
+        body.actions.push({
+          action: 'setDefaultBillingAddress',
+          addressId: id,
+        });
+      if (data.defaultForShipping)
+        body.actions.push({
+          action: 'setDefaultShippingAddress',
+          addressId: id,
+        });
+      if (body.actions.length > 0) {
+        results = await this.apiRoot.me().post({ body }).execute();
+      }
+    }
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
+  }
+
+  public async deleteAddress(id: string): Promise<AccountAddress[]> {
+    const body: MyCustomerUpdate = {
+      version: client.profileData.version,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: id,
+        },
+      ],
+    };
+
+    const results = await this.apiRoot.me().post({ body }).execute();
+
+    this.profileData = parseProfileData(results.body);
+    this.profileData.version = results.body.version;
+    return this.profileData.accountAddresses;
+  }
+
+  public getCategoryName(id: string): string {
+    const category = this.categories.find((item) => item.id === id);
+    if (category) return category.name;
+    return '';
+  }
+
+  public async getProducts(): Promise<ProductData[]> {
+    try {
+      this.queryMode = QueryMode.FILTER;
+      const response = await this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            filter: [
+              `categories.id:"${this.currentCategoryId}"`,
+              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max})`,
+              `variants.attributes.rating: range (${client.minRating} to 5)`,
+            ],
+            sort:
+              client.sortingType === SortingTypes.DEFAULT
+                ? undefined
+                : client.sortingType,
+          },
+        })
+        .execute();
+      const results = response.body.results;
+      const products: ProductData[] = results.map((result) =>
+        parseProduct(result)
+      );
+      return products;
+    } catch {
+      return [];
+    }
+  }
+
+  public async searchProducts(): Promise<ProductData[]> {
+    try {
+      this.queryMode = QueryMode.SEARCH;
+      const response = await this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            'text.en-US': `${client.searchText}`,
+            fuzzy: true,
+            sort:
+              client.sortingType === SortingTypes.DEFAULT
+                ? undefined
+                : client.sortingType,
+          },
+        })
+        .execute();
+      const results = response.body.results;
+      const products: ProductData[] = results.map((result) =>
+        parseProduct(result)
+      );
+      return products;
+    } catch {
+      return [];
+    }
+  }
+
+  public async getProduct(id: string | undefined): Promise<ProductData> {
+    try {
+      if (id === undefined) return emptyProduct;
+      const response = await this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            filter: `id:"${id}"`,
+          },
+        })
+        .execute();
+      const result = response.body.results[0];
+      return parseProduct(result);
+    } catch {
+      return emptyProduct;
+    }
+  }
+
+  public async getMainCategories(): Promise<void> {
+    try {
+      const response = await this.apiRoot.categories().get().execute();
+      this.categories = parseCategories(response.body.results);
+      this.currentCategoryId = this.categories[0].id;
+    } catch {
+      this.categories = [];
+    }
+  }
+
+  public async getMinMaxPrice(): Promise<PriceRange> {
+    const response = await this.apiRoot
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          facet: 'variants.price.centAmount: range(0 to *)',
+        },
+      })
+      .execute();
+    if (!response.body.facets) return { min: 0, max: 100 };
+    const range = response.body.facets['variants.price.centAmount'] as unknown;
+    if (range && typeof range === 'object') {
+      const rangeObject: Partial<RangeObject> = range;
+      if (rangeObject.ranges !== undefined) {
+        const range = rangeObject.ranges[0];
+        this.priceRange = { min: range.min, max: range.max };
+        return {
+          min: Math.floor(range.min / 100),
+          max: Math.ceil(range.max / 100),
+        };
+      }
+    }
+    return { min: 0, max: 100 };
   }
 }
 
