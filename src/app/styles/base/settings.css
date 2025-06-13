@@ -98,7 +98,8 @@ img {
 }
 
 .title {
-  font-size: 32px;
+  font-size: clamp(24px, 2vw, 32px);
   font-weight: 600;
   color: var(--color-gray-9);
+  text-align: center;
 }

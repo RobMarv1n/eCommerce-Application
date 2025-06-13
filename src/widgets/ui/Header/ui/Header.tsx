@@ -26,7 +26,7 @@ const iconLinks = [
     path: ROUTES.CART,
     label: 'My cart',
     icon: 'cart',
-    disabled: true,
+    disabled: false,
   },
   {
     path: ROUTES.PROFILE,

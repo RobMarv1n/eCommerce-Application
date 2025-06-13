@@ -8,6 +8,7 @@ import { ROUTES } from '../types';
 import { Layout } from './layouts/Layout';
 import { Catalog } from '../pages/catalog/ui/Catalog';
 import { Product } from '../pages/product';
+import { Cart } from '../pages/cart';
 
 export function Router() {
   return (
@@ -20,6 +21,7 @@ export function Router() {
           <Route path={ROUTES.PROFILE} element={<Profile />} />
           <Route path={ROUTES.CATALOG} element={<Catalog />} />
           <Route path={ROUTES.PRODUCT} element={<Product />} />
+          <Route path={ROUTES.CART} element={<Cart />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
