@@ -22,6 +22,7 @@ import { CatalogPriceFilter } from './CatalogPriceFilter/CatalogPriceFilter';
 import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
+import { Pagination } from './Pagination/Pagination';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -127,6 +128,11 @@ export function Catalog() {
             setCurrentSubcategory(emptySubcategory);
             updateProducts();
           }}
+        />
+        <Pagination
+          currentPage={1}
+          totalPages={4}
+          onPageChange={(page) => console.log('Go to page:', page)}
         />
         <ProductsList products={products} />
       </div>
