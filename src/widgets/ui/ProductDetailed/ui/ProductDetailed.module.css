@@ -79,15 +79,10 @@
 }
 
 .CTA {
-  pointer-events: none;
-
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-
   padding: 20px 0;
-
-  opacity: 0.2;
 }
 
 .counter {
@@ -119,17 +114,8 @@
   border-radius: 170px;
 }
 
-.buttonCart {
-  display: flex;
-  flex-grow: 1;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-
-  height: 52px;
-}
-
 .buttonWishlist {
+  pointer-events: none;
   cursor: pointer;
 
   width: 52px;
@@ -138,6 +124,7 @@
   border: none;
   border-radius: 43px;
 
+  opacity: 0.2;
   background-color: var(--color-hard-primary-transparent);
 }
 
