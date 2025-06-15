@@ -55,7 +55,10 @@ export function ProductDetailed({ product }: ProductDetailedProperties) {
         <p className={styles.shortDescription}>{product.descriptionShort}</p>
         <div className={styles.CTA}>
           <Counter />
-          <CartActionButton productId={product.id} />
+          <CartActionButton
+            productId={product.id}
+            productTitle={product.title}
+          />
           <button className={styles.buttonWishlist}>
             <WishlistIcon width="20" height="20" color="#2C742F" />
           </button>
