@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { ProductData } from '../../../../shared/api/clientApi/types';
-import './ProductCard.css';
 import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
+import { CartIcon } from '../../../../shared/ui/Icon/CartIcon';
+
+import './ProductCard.css';
 
 type Properties = {
   product: ProductData;
@@ -30,6 +32,17 @@ export function ProductCard({ product }: Properties) {
         )}
       </div>
       <RatingStars rating={product.rating} />
+      <button
+        className="product-card-button"
+        aria-label="Add to Cart"
+        title="Add to Cart"
+        onClick={(event) => {
+          event.stopPropagation();
+          console.log('add to cart');
+        }}
+      >
+        <CartIcon width="18" height="18" />
+      </button>
     </div>
   );
 }
