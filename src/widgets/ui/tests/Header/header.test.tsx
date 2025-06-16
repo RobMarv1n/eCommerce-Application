@@ -8,7 +8,7 @@ describe('Header component', () => {
   test('should render Header component', () => {
     render(
       <BrowserRouter>
-        <Header />
+        <Header cartCount={0} setCartCount={() => {}} />
       </BrowserRouter>
     );
 
@@ -20,7 +20,9 @@ describe('Header component', () => {
   });
 
   test('should call useNavigate with the correct path', async () => {
-    render(<Header />, { wrapper: BrowserRouter });
+    render(<Header cartCount={0} setCartCount={() => {}} />, {
+      wrapper: BrowserRouter,
+    });
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('link', { name: /login/i }));
