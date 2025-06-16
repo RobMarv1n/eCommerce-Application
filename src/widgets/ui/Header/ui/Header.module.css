@@ -55,9 +55,11 @@
   justify-content: center;
 }
 
-.iconsLink:hover path {
-  stroke: var(--color-primary);
-  transition: all ease 0.5s;
+@media (hover: hover) and (pointer: fine) {
+  .iconsLink:hover path {
+    stroke: var(--color-primary);
+    transition: all ease 0.5s;
+  }
 }
 
 .iconsLink.isActive svg path {

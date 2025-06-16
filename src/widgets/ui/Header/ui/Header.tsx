@@ -111,7 +111,7 @@ export function Header() {
             })}
 
             {isAuthenticated && (
-              <li className={styles.iconsLink}>
+              <li>
                 <LogOutButton onClick={handleLogout} />
               </li>
             )}

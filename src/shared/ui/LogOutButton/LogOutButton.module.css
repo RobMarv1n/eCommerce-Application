@@ -10,7 +10,9 @@
   background: none;
 }
 
-.logoutButton svg:hover {
-  fill: var(--color-green-5);
-  transition: all ease 0.7s;
+@media (hover: hover) and (pointer: fine) {
+  .logoutButton svg:hover {
+    fill: var(--color-hard-primary);
+    transition: all ease 0.7s;
+  }
 }
