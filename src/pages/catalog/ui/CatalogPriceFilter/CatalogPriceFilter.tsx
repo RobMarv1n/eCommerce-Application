@@ -120,7 +120,6 @@ export function CatalogPriceFilter({ updateRange }: Properties) {
 
   function stopDrag() {
     setIsDragging(false);
-    console.log(minValue, maxValue);
     client.priceRange = { min: 100 * minValue, max: 100 * maxValue };
     updateRange();
   }

@@ -48,9 +48,13 @@ export function Catalog() {
     }
   }
 
-  async function searchProducts(): Promise<void> {
-    const products = await client.searchProducts();
+  async function searchProducts(pageIndex?: number): Promise<void> {
+    const products = await client.searchProducts(pageIndex);
     setProducts(products);
+    if (pageIndex === undefined) {
+      setPageCount(client.pageCount);
+      setPageIndex(1);
+    }
   }
 
   async function initial(): Promise<void> {
@@ -140,7 +144,8 @@ export function Catalog() {
           pageIndex={pageIndex}
           pageCount={pageCount}
           onPageChange={(page) => {
-            updateProducts(page);
+            if (client.queryMode === QueryMode.FILTER) updateProducts(page);
+            else searchProducts(page);
             setPageIndex(page);
           }}
         />

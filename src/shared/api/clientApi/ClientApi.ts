@@ -235,8 +235,9 @@ class ClientApi {
 
   public async getProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
+      this.queryMode = QueryMode.FILTER;
+
       if (pageIndex === undefined) {
-        this.queryMode = QueryMode.FILTER;
         const response = await this.apiRoot
           .productProjections()
           .search()
@@ -255,7 +256,7 @@ class ClientApi {
         if (this.pageCount === 0) this.pageCount = 1;
       }
 
-      const response2 = await this.apiRoot
+      const response = await this.apiRoot
         .productProjections()
         .search()
         .get({
@@ -270,7 +271,9 @@ class ClientApi {
           },
         })
         .execute();
-      const products: ProductData[] = response2.body.results.map((result) =>
+
+      const results = response.body.results;
+      const products: ProductData[] = results.map((result) =>
         parseProduct(result)
       );
       return products;
@@ -279,9 +282,26 @@ class ClientApi {
     }
   }
 
-  public async searchProducts(): Promise<ProductData[]> {
+  public async searchProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.SEARCH;
+
+      if (pageIndex === undefined) {
+        const response = await this.apiRoot
+          .productProjections()
+          .search()
+          .get({
+            queryArgs: {
+              'text.en-US': `${client.searchText}`,
+              fuzzy: true,
+            },
+          })
+          .execute();
+        const countProduct = response.body.results.length;
+        this.pageCount = Math.ceil(countProduct / productPerPage);
+        if (this.pageCount === 0) this.pageCount = 1;
+      }
+
       const response = await this.apiRoot
         .productProjections()
         .search()
@@ -293,9 +313,12 @@ class ClientApi {
               client.sortingType === SortingTypes.DEFAULT
                 ? undefined
                 : client.sortingType,
+            limit: productPerPage,
+            offset: pageIndex ? pageIndex - 1 : 0,
           },
         })
         .execute();
+
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
         parseProduct(result)
