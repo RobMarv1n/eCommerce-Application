@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { IconFactory } from '../../../../shared/ui/Icon';
 import { Logo } from '../../../../shared/ui/Logo';
 import { LogOutButton } from '../../../../shared/ui/LogOutButton';
+import { CartIconWithCount } from './CartIconWithCount/CartIconWithCount';
 import { ROUTES } from '../../../../types';
+
 import styles from './Header.module.css';
 
 const navLinks = [
@@ -75,23 +77,41 @@ export function Header() {
         </nav>
         <div className={styles.icons}>
           <ul className={styles.iconsList}>
-            {iconLinks.map(({ path, label, icon, disabled }) => (
-              <li key={label}>
-                <Link
-                  to={path}
-                  className={
-                    disabled
-                      ? `${styles.iconsLink} disabled-link`
-                      : styles.iconsLink
-                  }
-                  aria-label={label}
-                >
-                  <IconFactory name={icon} />
-                </Link>
-              </li>
-            ))}
+            {iconLinks.map(({ path, label, icon, disabled }) => {
+              if (icon === 'cart') {
+                return (
+                  <li key={label}>
+                    <CartIconWithCount
+                      count={10}
+                      path={path}
+                      className={styles.iconsLink}
+                    />
+                  </li>
+                );
+              }
+
+              return (
+                <li key={label}>
+                  <NavLink
+                    to={path}
+                    className={({ isActive }) => {
+                      const baseClass = isActive
+                        ? `${styles.iconsLink} ${styles.isActive}`
+                        : styles.iconsLink;
+                      return disabled
+                        ? `${baseClass} disabled-link`
+                        : baseClass;
+                    }}
+                    aria-label={label}
+                  >
+                    <IconFactory name={icon} />
+                  </NavLink>
+                </li>
+              );
+            })}
+
             {isAuthenticated && (
-              <li className={styles.iconsLink}>
+              <li>
                 <LogOutButton onClick={handleLogout} />
               </li>
             )}

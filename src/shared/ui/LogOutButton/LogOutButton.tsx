@@ -10,8 +10,8 @@ export function LogOutButton({ onClick }: LogOutButtonProperties) {
     <button
       onClick={onClick}
       className={styles.logoutButton}
-      aria-label="logout"
-      title="log out"
+      aria-label="Logout"
+      title="Logout"
     >
       <LogOutIcon />
     </button>
