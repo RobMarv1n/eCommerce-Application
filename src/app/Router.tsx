@@ -31,7 +31,10 @@ export function Router() {
             path={ROUTES.CATALOG}
             element={<Catalog setCartCount={setCartCount} />}
           />
-          <Route path={ROUTES.PRODUCT} element={<Product />} />
+          <Route
+            path={ROUTES.PRODUCT}
+            element={<Product setCartCount={setCartCount} />}
+          />
           <Route path={ROUTES.CART} element={<Cart />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>

@@ -6,7 +6,12 @@ export function parseCartData(cart: Cart): CartData {
 
   if (cart.lineItems)
     data.products = cart.lineItems.map((lineItem) => {
-      const product: CartProduct = { id: lineItem.productId, image: '' };
+      const product: CartProduct = {
+        id: lineItem.productId,
+        image: '',
+        quantity: lineItem.quantity,
+        lineItemId: lineItem.id,
+      };
       if (lineItem.variant.images)
         product.image = lineItem.variant.images[0].url;
 

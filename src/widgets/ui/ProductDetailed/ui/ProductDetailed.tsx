@@ -3,16 +3,20 @@ import { Modal } from '../../../../shared/ui/Modal';
 import { ProductData } from '../../../../shared/api/clientApi/types';
 import { WishlistIcon } from '../../../../shared/ui/Icon/WishlistIcon';
 import { SwiperSlider } from '../../../../shared/ui/SwiperSlider/SwiperSlider';
-import { Counter } from '../../../../shared/ui/Counter';
+// import { Counter } from '../../../../shared/ui/Counter';
 import { CartActionButton } from './CartActionButton/CartActionButton';
 
 import styles from './ProductDetailed.module.css';
 
 interface ProductDetailedProperties {
   product: ProductData;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function ProductDetailed({ product }: ProductDetailedProperties) {
+export function ProductDetailed({
+  product,
+  setCartCount,
+}: ProductDetailedProperties) {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -54,10 +58,11 @@ export function ProductDetailed({ product }: ProductDetailedProperties) {
         </div>
         <p className={styles.shortDescription}>{product.descriptionShort}</p>
         <div className={styles.CTA}>
-          <Counter />
+          {/* <Counter /> */}
           <CartActionButton
             productId={product.id}
             productTitle={product.title}
+            setCartCount={setCartCount}
           />
           <button className={styles.buttonWishlist}>
             <WishlistIcon width="20" height="20" color="#2C742F" />

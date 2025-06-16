@@ -46,7 +46,7 @@ export function ProductCard({ product, setCartCount }: Properties) {
         onClick={async (event) => {
           event.stopPropagation();
           setInCart(true);
-          await client.addProductToCart(id);
+          await client.addCartProduct(id);
           setCartCount(client.cartCount);
           toast.success(`${title} has been added to cart`);
         }}
