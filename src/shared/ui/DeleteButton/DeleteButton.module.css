@@ -10,4 +10,13 @@
   color: var(--color-gray-6);
 
   background-color: transparent;
+
+  transition: all ease 0.4s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .deleteButton:hover {
+    border-color: var(--color-gray-9);
+    color: var(--color-gray-9);
+  }
 }
