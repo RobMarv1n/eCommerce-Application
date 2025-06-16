@@ -6,7 +6,7 @@
 .headerContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 35px;
+  gap: 31px;
   align-items: center;
   justify-content: space-between;
 }
@@ -17,7 +17,7 @@
 
 .navList {
   display: flex;
-  gap: 28px;
+  gap: 25px;
   align-items: center;
   justify-content: center;
 }
@@ -45,7 +45,9 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+
+  width: 172px;
 }
 
 .iconsLink {
@@ -66,13 +68,19 @@
   stroke: var(--color-primary);
 }
 
-@media (width <= 767px) {
+@media (width < 800px) {
   .icons {
     order: 1;
   }
 
   .nav {
     order: 2;
+  }
+}
+
+@media (width < 500px) {
+  .headerContainer {
+    column-gap: 0;
   }
 }
 
@@ -90,7 +98,8 @@
   }
 
   .iconsList {
-    gap: 10px;
+    gap: 8px;
+    width: 136px;
   }
 
   .iconsLink {
