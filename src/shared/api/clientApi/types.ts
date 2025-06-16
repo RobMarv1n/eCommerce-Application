@@ -87,3 +87,14 @@ export enum QueryMode {
   FILTER = 'filter',
   SEARCH = 'search',
 }
+
+export type CartProduct = {
+  id: string;
+  image: string;
+};
+
+export type CartData = {
+  id: string;
+  version: number;
+  products: CartProduct[];
+};
