@@ -1,18 +1,18 @@
 import styles from './Pagination.module.css';
 
 interface PaginationProperties {
-  currentPage: number;
-  totalPages: number;
+  pageIndex: number;
+  pageCount: number;
   onPageChange: (page: number) => void;
 }
 
 export function Pagination({
-  currentPage,
-  totalPages,
+  pageIndex,
+  pageCount,
   onPageChange,
 }: PaginationProperties) {
   const handlePageClick = (page: number) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
+    if (page !== pageIndex && page >= 1 && page <= pageCount) {
       onPageChange(page);
     }
   };
@@ -20,11 +20,11 @@ export function Pagination({
   const renderPages = () => {
     const pages = [];
 
-    for (let index = 1; index <= totalPages; index++) {
+    for (let index = 1; index <= pageCount; index++) {
       pages.push(
         <button
           key={index}
-          className={`${styles.button} ${index === currentPage ? styles.active : ''}`}
+          className={`${styles.button} ${index === pageIndex ? styles.active : ''}`}
           onClick={() => handlePageClick(index)}
         >
           {index}
@@ -35,12 +35,14 @@ export function Pagination({
     return pages;
   };
 
+  if (pageCount == 1) return <></>;
+
   return (
     <div className={styles.pagination}>
       <button
         className={`${styles.button} ${styles.arrow}`}
-        onClick={() => handlePageClick(currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={() => handlePageClick(pageIndex - 1)}
+        disabled={pageIndex === 1}
       >
         <svg
           width="8"
@@ -61,8 +63,8 @@ export function Pagination({
       {renderPages()}
       <button
         className={`${styles.button} ${styles.arrow}`}
-        onClick={() => handlePageClick(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        onClick={() => handlePageClick(pageIndex + 1)}
+        disabled={pageIndex === pageCount}
       >
         <svg
           width="8"

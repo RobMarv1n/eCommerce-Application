@@ -36,3 +36,5 @@ export const DefaultProfileData: ProfileData = {
   accountSettingData: DefaultAccountSettingData,
   accountAddresses: [],
 };
+
+export const productPerPage = 4;

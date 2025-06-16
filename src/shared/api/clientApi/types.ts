@@ -26,6 +26,11 @@ export type ProductData = {
   rating: string;
 };
 
+export type ProductList = {
+  pageCount: number;
+  products: ProductData[];
+};
+
 export type AttributesData = {
   [index: string]: string;
   title: string;
