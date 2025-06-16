@@ -91,6 +91,8 @@ export enum QueryMode {
 export type CartProduct = {
   id: string;
   image: string;
+  quantity: number;
+  lineItemId: string;
 };
 
 export type CartData = {

@@ -10,9 +10,10 @@ import { toast } from 'sonner';
 
 type Properties = {
   product: ProductData;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function ProductCard({ product }: Properties) {
+export function ProductCard({ product, setCartCount }: Properties) {
   const navigation = useNavigate();
 
   const { id, title, images, descriptionShort, price, discountedPrice } =
@@ -42,10 +43,11 @@ export function ProductCard({ product }: Properties) {
         aria-label="Add to Cart"
         title="Add to Cart"
         disabled={inCart}
-        onClick={(event) => {
+        onClick={async (event) => {
           event.stopPropagation();
           setInCart(true);
-          client.addProductToCart(id);
+          await client.addCartProduct(id);
+          setCartCount(client.cartCount);
           toast.success(`${title} has been added to cart`);
         }}
       >

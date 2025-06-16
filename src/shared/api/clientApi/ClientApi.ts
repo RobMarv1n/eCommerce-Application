@@ -82,6 +82,7 @@ class ClientApi {
     const cart = await this.apiRoot.me().activeCart().get().execute();
     this.cartData.id = cart.body.id;
     this.cartData.version = cart.body.version;
+    this.cartData = parseCartData(cart.body);
   }
 
   public async logout(): Promise<void> {
@@ -90,6 +91,7 @@ class ClientApi {
     const cart = await this.createCart();
     this.cartData.id = cart.id;
     this.cartData.version = cart.version;
+    this.cartData.products = [];
   }
 
   public async signUp(dto: singUpDTO): Promise<void> {
@@ -412,14 +414,14 @@ class ClientApi {
     return cart.body;
   }
 
-  public async addProductToCart(productId: string): Promise<void> {
+  public async addCartProduct(productId: string): Promise<void> {
     if (this.cartData.id === '') {
       const cart = await this.createCart();
       this.cartData.id = cart.id;
       this.cartData.version = cart.version;
     }
 
-    await this.apiRoot
+    const cart = await this.apiRoot
       .me()
       .carts()
       .withId({ ID: this.cartData.id })
@@ -430,6 +432,33 @@ class ClientApi {
         },
       })
       .execute();
+    this.cartData = parseCartData(cart.body);
+  }
+
+  public async removeCardProduct(productId: string): Promise<void> {
+    const product = this.cartData.products.find(
+      (product) => product.id === productId
+    );
+    if (product === undefined) return;
+
+    const cart = await this.apiRoot
+      .me()
+      .carts()
+      .withId({ ID: this.cartData.id })
+      .post({
+        body: {
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId: product.lineItemId,
+              quantity: product.quantity,
+            },
+          ],
+          version: this.cartData.version,
+        },
+      })
+      .execute();
+    this.cartData = parseCartData(cart.body);
   }
 
   public async getCartData(): Promise<void> {
@@ -445,6 +474,10 @@ class ClientApi {
 
   public inCart(id: string): boolean {
     return this.cartData.products.some((product) => product.id === id);
+  }
+
+  public get cartCount(): number {
+    return this.cartData.products.length;
   }
 }
 
