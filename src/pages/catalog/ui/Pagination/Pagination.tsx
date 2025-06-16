@@ -53,7 +53,7 @@ export function Pagination({
         >
           <path
             d="M6.91699 1.16634L1.08366 6.99967L6.91699 12.833"
-            stroke="#B3B3B3"
+            stroke="#1A1A1A"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
