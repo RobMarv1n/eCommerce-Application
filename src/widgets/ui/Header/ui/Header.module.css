@@ -60,6 +60,10 @@
   transition: all ease 0.5s;
 }
 
+.iconsLink.isActive svg path {
+  stroke: var(--color-primary);
+}
+
 @media (width <= 767px) {
   .icons {
     order: 1;
