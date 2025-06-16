@@ -34,17 +34,27 @@ export function Catalog() {
     useState<MainCategory>(emptyCategory);
   const [currentSubcategory, setCurrentSubcategory] =
     useState<Subcategory>(emptySubcategory);
+  const [pageCount, setPageCount] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
-  async function updateProducts(): Promise<void> {
-    const products = await client.getProducts();
+  async function updateProducts(pageIndex?: number): Promise<void> {
+    const products = await client.getProducts(pageIndex);
     setProducts(products);
+    if (pageIndex === undefined) {
+      setPageCount(client.pageCount);
+      setPageIndex(1);
+    }
   }
 
-  async function searchProducts(): Promise<void> {
-    const products = await client.searchProducts();
+  async function searchProducts(pageIndex?: number): Promise<void> {
+    const products = await client.searchProducts(pageIndex);
     setProducts(products);
+    if (pageIndex === undefined) {
+      setPageCount(client.pageCount);
+      setPageIndex(1);
+    }
   }
 
   async function initial(): Promise<void> {
@@ -55,6 +65,7 @@ export function Catalog() {
     setCurrentCategory(client.categories[0]);
     setSubcategories(client.categories[0].subCategory);
     setProducts(products);
+    setPageCount(client.pageCount);
   }
 
   useEffect(() => {
@@ -130,9 +141,13 @@ export function Catalog() {
           }}
         />
         <Pagination
-          currentPage={1}
-          totalPages={4}
-          onPageChange={(page) => console.log('Go to page:', page)}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+          onPageChange={(page) => {
+            if (client.queryMode === QueryMode.FILTER) updateProducts(page);
+            else searchProducts(page);
+            setPageIndex(page);
+          }}
         />
         <ProductsList products={products} />
       </div>

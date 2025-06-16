@@ -20,7 +20,7 @@ import {
   type singUpDTO,
 } from './types';
 import { parseProduct } from './parseProduct';
-import { DefaultProfileData, emptyProduct } from './constants';
+import { DefaultProfileData, emptyProduct, productPerPage } from './constants';
 import { parseCategories } from './parseCategories';
 import { parseProfileData } from './parseProfileData';
 import { createSignUpBody } from './createSignUpBody';
@@ -41,6 +41,7 @@ class ClientApi {
   public sortingType: string;
   public searchText: string;
   public queryMode: string;
+  public pageCount: number;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -54,6 +55,7 @@ class ClientApi {
     this.sortingType = SortingTypes.DEFAULT;
     this.searchText = '';
     this.queryMode = QueryMode.FILTER;
+    this.pageCount = 1;
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -231,9 +233,29 @@ class ClientApi {
     return '';
   }
 
-  public async getProducts(): Promise<ProductData[]> {
+  public async getProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.FILTER;
+
+      if (pageIndex === undefined) {
+        const response = await this.apiRoot
+          .productProjections()
+          .search()
+          .get({
+            queryArgs: {
+              filter: [
+                `categories.id:"${this.currentCategoryId}"`,
+                `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
+                `variants.attributes.rating: range (${client.minRating} to 6)`,
+              ],
+            },
+          })
+          .execute();
+        const countProduct = response.body.results.length;
+        this.pageCount = Math.ceil(countProduct / productPerPage);
+        if (this.pageCount === 0) this.pageCount = 1;
+      }
+
       const response = await this.apiRoot
         .productProjections()
         .search()
@@ -241,16 +263,15 @@ class ClientApi {
           queryArgs: {
             filter: [
               `categories.id:"${this.currentCategoryId}"`,
-              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max})`,
-              `variants.attributes.rating: range (${client.minRating} to 5)`,
+              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
+              `variants.attributes.rating: range (${client.minRating} to 6)`,
             ],
-            sort:
-              client.sortingType === SortingTypes.DEFAULT
-                ? undefined
-                : client.sortingType,
+            limit: productPerPage,
+            offset: pageIndex ? pageIndex - 1 : 0,
           },
         })
         .execute();
+
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
         parseProduct(result)
@@ -261,9 +282,26 @@ class ClientApi {
     }
   }
 
-  public async searchProducts(): Promise<ProductData[]> {
+  public async searchProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.SEARCH;
+
+      if (pageIndex === undefined) {
+        const response = await this.apiRoot
+          .productProjections()
+          .search()
+          .get({
+            queryArgs: {
+              'text.en-US': `${client.searchText}`,
+              fuzzy: true,
+            },
+          })
+          .execute();
+        const countProduct = response.body.results.length;
+        this.pageCount = Math.ceil(countProduct / productPerPage);
+        if (this.pageCount === 0) this.pageCount = 1;
+      }
+
       const response = await this.apiRoot
         .productProjections()
         .search()
@@ -275,9 +313,12 @@ class ClientApi {
               client.sortingType === SortingTypes.DEFAULT
                 ? undefined
                 : client.sortingType,
+            limit: productPerPage,
+            offset: pageIndex ? pageIndex - 1 : 0,
           },
         })
         .execute();
+
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
         parseProduct(result)
