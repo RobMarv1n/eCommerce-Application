@@ -12,7 +12,11 @@ import { RegistrationFormDefaultValues } from '../registration/lib/RegistrationF
 import './login.css';
 import { LoginFormData } from './model/types';
 
-export function Login() {
+type Properties = {
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function Login({ setCartCount }: Properties) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,11 +35,12 @@ export function Login() {
     defaultValues: RegistrationFormDefaultValues,
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    client
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    await client
       .login(data)
       .then(() => {
         client.isLogin = true;
+        setCartCount(client.cartCount);
         navigate(ROUTES.HOME);
       })
       .catch(() => {

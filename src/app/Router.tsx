@@ -9,17 +9,28 @@ import { Layout } from './layouts/Layout';
 import { Catalog } from '../pages/catalog/ui/Catalog';
 import { Product } from '../pages/product';
 import { Cart } from '../pages/cart';
+import { useState } from 'react';
 
 export function Router() {
+  const [cartCount, setCartCount] = useState(0);
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout />}>
+        <Route
+          element={<Layout cartCount={cartCount} setCartCount={setCartCount} />}
+        >
           <Route path={ROUTES.HOME} element={<Home />} />
-          <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route
+            path={ROUTES.LOGIN}
+            element={<Login setCartCount={setCartCount} />}
+          />
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path={ROUTES.PROFILE} element={<Profile />} />
-          <Route path={ROUTES.CATALOG} element={<Catalog />} />
+          <Route
+            path={ROUTES.CATALOG}
+            element={<Catalog setCartCount={setCartCount} />}
+          />
           <Route path={ROUTES.PRODUCT} element={<Product />} />
           <Route path={ROUTES.CART} element={<Cart />} />
           <Route path="*" element={<ErrorPage />} />

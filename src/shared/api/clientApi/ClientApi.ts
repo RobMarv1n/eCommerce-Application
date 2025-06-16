@@ -82,6 +82,7 @@ class ClientApi {
     const cart = await this.apiRoot.me().activeCart().get().execute();
     this.cartData.id = cart.body.id;
     this.cartData.version = cart.body.version;
+    this.cartData = parseCartData(cart.body);
   }
 
   public async logout(): Promise<void> {
@@ -90,6 +91,7 @@ class ClientApi {
     const cart = await this.createCart();
     this.cartData.id = cart.id;
     this.cartData.version = cart.version;
+    this.cartData.products = [];
   }
 
   public async signUp(dto: singUpDTO): Promise<void> {
@@ -419,7 +421,7 @@ class ClientApi {
       this.cartData.version = cart.version;
     }
 
-    await this.apiRoot
+    const cart = await this.apiRoot
       .me()
       .carts()
       .withId({ ID: this.cartData.id })
@@ -430,6 +432,7 @@ class ClientApi {
         },
       })
       .execute();
+    this.cartData = parseCartData(cart.body);
   }
 
   public async getCartData(): Promise<void> {
@@ -445,6 +448,10 @@ class ClientApi {
 
   public inCart(id: string): boolean {
     return this.cartData.products.some((product) => product.id === id);
+  }
+
+  public get cartCount(): number {
+    return this.cartData.products.length;
   }
 }
 
