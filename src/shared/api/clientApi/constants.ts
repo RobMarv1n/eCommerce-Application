@@ -1,5 +1,11 @@
 import { AccountSettingsData } from '../../../pages/profile/types/types';
-import { MainCategory, ProductData, ProfileData, Subcategory } from './types';
+import {
+  CartData,
+  MainCategory,
+  ProductData,
+  ProfileData,
+  Subcategory,
+} from './types';
 
 export const emptyProduct: ProductData = {
   id: '',
@@ -38,3 +44,9 @@ export const DefaultProfileData: ProfileData = {
 };
 
 export const productPerPage = 4;
+
+export const DefaultCartData: CartData = {
+  id: '',
+  version: 0,
+  products: [],
+};

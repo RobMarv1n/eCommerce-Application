@@ -4,6 +4,9 @@ import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
 import { CartIcon } from '../../../../shared/ui/Icon/CartIcon';
 
 import './ProductCard.css';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 type Properties = {
   product: ProductData;
@@ -14,6 +17,8 @@ export function ProductCard({ product }: Properties) {
 
   const { id, title, images, descriptionShort, price, discountedPrice } =
     product;
+
+  const [inCart, setInCart] = useState(client.inCart(id));
 
   return (
     <div
@@ -36,9 +41,12 @@ export function ProductCard({ product }: Properties) {
         className="product-card-button"
         aria-label="Add to Cart"
         title="Add to Cart"
+        disabled={inCart}
         onClick={(event) => {
           event.stopPropagation();
-          console.log('add to cart');
+          setInCart(true);
+          client.addProductToCart(id);
+          toast.success(`${title} has been added to cart`);
         }}
       >
         <CartIcon width="18" height="18" />

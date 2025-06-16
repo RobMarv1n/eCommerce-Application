@@ -1,5 +1,6 @@
 import type {
   ByProjectKeyRequestBuilder,
+  Cart,
   MyCustomerChangePassword,
   MyCustomerUpdate,
 } from '@commercetools/platform-sdk';
@@ -9,6 +10,7 @@ import {
 } from './CreateApiRoots';
 import {
   AccountAddress,
+  CartData,
   QueryMode,
   SortingTypes,
   type loginDTO,
@@ -20,7 +22,12 @@ import {
   type singUpDTO,
 } from './types';
 import { parseProduct } from './parseProduct';
-import { DefaultProfileData, emptyProduct, productPerPage } from './constants';
+import {
+  DefaultCartData,
+  DefaultProfileData,
+  emptyProduct,
+  productPerPage,
+} from './constants';
 import { parseCategories } from './parseCategories';
 import { parseProfileData } from './parseProfileData';
 import { createSignUpBody } from './createSignUpBody';
@@ -30,6 +37,7 @@ import {
   PasswordChangeData,
 } from '../../../pages/profile/types/types';
 import { countryCodes } from './CountryCodes';
+import { parseCartData } from './parseCartData';
 
 class ClientApi {
   public isLogin: boolean;
@@ -43,6 +51,7 @@ class ClientApi {
   public queryMode: string;
   public pageCount: number;
   private apiRoot: ByProjectKeyRequestBuilder;
+  private cartData: CartData;
 
   constructor() {
     this.isLogin = false;
@@ -56,6 +65,7 @@ class ClientApi {
     this.searchText = '';
     this.queryMode = QueryMode.FILTER;
     this.pageCount = 1;
+    this.cartData = DefaultCartData;
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -63,17 +73,23 @@ class ClientApi {
       .me()
       .login()
       .post({
-        body: dto,
+        body: { ...dto, activeCartSignInMode: 'MergeWithExistingCustomerCart' },
       })
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
     this.profileData = parseProfileData(result.body.customer);
+    const cart = await this.apiRoot.me().activeCart().get().execute();
+    this.cartData.id = cart.body.id;
+    this.cartData.version = cart.body.version;
   }
 
-  public logout(): void {
+  public async logout(): Promise<void> {
     this.apiRoot = CreateAnonymousApiRoot();
     this.isLogin = false;
+    const cart = await this.createCart();
+    this.cartData.id = cart.id;
+    this.cartData.version = cart.version;
   }
 
   public async signUp(dto: singUpDTO): Promise<void> {
@@ -93,6 +109,9 @@ class ClientApi {
     });
 
     this.profileData = parseProfileData(result.body.customer);
+    const cart = await this.apiRoot.me().activeCart().get().execute();
+    this.cartData.id = cart.body.id;
+    this.cartData.version = cart.body.version;
   }
 
   public async updateAccountSettingData(
@@ -382,6 +401,50 @@ class ClientApi {
       }
     }
     return { min: 0, max: 100 };
+  }
+
+  public async createCart(): Promise<Cart> {
+    const cart = await this.apiRoot
+      .me()
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+    return cart.body;
+  }
+
+  public async addProductToCart(productId: string): Promise<void> {
+    if (this.cartData.id === '') {
+      const cart = await this.createCart();
+      this.cartData.id = cart.id;
+      this.cartData.version = cart.version;
+    }
+
+    await this.apiRoot
+      .me()
+      .carts()
+      .withId({ ID: this.cartData.id })
+      .post({
+        body: {
+          actions: [{ action: 'addLineItem', productId }],
+          version: this.cartData.version,
+        },
+      })
+      .execute();
+  }
+
+  public async getCartData(): Promise<void> {
+    if (this.cartData.id == '') return;
+    const cart = await this.apiRoot
+      .me()
+      .carts()
+      .withId({ ID: this.cartData.id })
+      .get()
+      .execute();
+    this.cartData = parseCartData(cart.body);
+  }
+
+  public inCart(id: string): boolean {
+    return this.cartData.products.some((product) => product.id === id);
   }
 }
 

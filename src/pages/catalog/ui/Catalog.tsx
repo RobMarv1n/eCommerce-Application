@@ -40,6 +40,7 @@ export function Catalog() {
   const filtersReference = useRef<HTMLDivElement>(null);
 
   async function updateProducts(pageIndex?: number): Promise<void> {
+    await client.getCartData();
     const products = await client.getProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
@@ -49,6 +50,7 @@ export function Catalog() {
   }
 
   async function searchProducts(pageIndex?: number): Promise<void> {
+    await client.getCartData();
     const products = await client.searchProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
@@ -60,6 +62,7 @@ export function Catalog() {
   async function initial(): Promise<void> {
     await client.getMainCategories();
     await client.getMinMaxPrice();
+    await client.getCartData();
     const products = await client.getProducts();
     setCategories(client.categories);
     setCurrentCategory(client.categories[0]);
