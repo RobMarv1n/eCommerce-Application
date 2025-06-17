@@ -1,0 +1,40 @@
+.aboutUs {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.aboutUsTitle {
+  margin-bottom: 24px;
+}
+
+.aboutUsTitleAccent {
+  color: var(--color-primary);
+}
+
+.aboutUsIntroduction {
+  width: clamp(300px, 605px, 80%);
+  margin: 0 auto;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 120%;
+  color: var(--color-gray-5);
+  text-align: center;
+}
+
+.aboutUsProfileCards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+@media (width < 1000px) {
+  .aboutUsProfileCards {
+    flex-wrap: wrap;
+  }
+}
