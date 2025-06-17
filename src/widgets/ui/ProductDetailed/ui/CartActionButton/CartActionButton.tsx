@@ -25,7 +25,7 @@ export function CartActionButton({
 
   async function handleClick() {
     const result = inCart
-      ? await client.removeCardProduct(productId)
+      ? await client.removeCardProduct(productId, true)
       : await client.addCartProduct(productId);
     setCartCount(client.cartCount);
 

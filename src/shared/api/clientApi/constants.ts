@@ -48,5 +48,6 @@ export const productPerPage = 4;
 export const DefaultCartData: CartData = {
   id: '',
   version: 0,
+  totalPrice: 0,
   products: [],
 };
