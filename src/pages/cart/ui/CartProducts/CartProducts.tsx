@@ -71,7 +71,10 @@ export function CartProducts({
 
         {modalOpen && cardData.products.length > 0 && (
           <Modal onClose={() => setModalOpen(false)}>
-            <ClearCartNotification />
+            <ClearCartNotification
+              setCardData={setCardData}
+              setCartCount={setCartCount}
+            />
           </Modal>
         )}
       </div>

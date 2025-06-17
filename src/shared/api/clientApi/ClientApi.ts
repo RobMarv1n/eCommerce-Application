@@ -288,7 +288,7 @@ class ClientApi {
               `variants.attributes.rating: range (${client.minRating} to 6)`,
             ],
             limit: productPerPage,
-            offset: pageIndex ? pageIndex - 1 : 0,
+            offset: pageIndex ? (pageIndex - 1) * productPerPage : 0,
           },
         })
         .execute();
@@ -335,7 +335,7 @@ class ClientApi {
                 ? undefined
                 : client.sortingType,
             limit: productPerPage,
-            offset: pageIndex ? pageIndex - 1 : 0,
+            offset: pageIndex ? (pageIndex - 1) * productPerPage : 0,
           },
         })
         .execute();
@@ -462,6 +462,12 @@ class ClientApi {
       })
       .execute();
     this.cartData = parseCartData(cart.body);
+  }
+
+  public async cleanCart(): Promise<void> {
+    const productIds = this.cartData.products.map((product) => product.id);
+    for (const productId of productIds)
+      await this.removeCardProduct(productId, true);
   }
 
   public async getCartData(): Promise<void> {
