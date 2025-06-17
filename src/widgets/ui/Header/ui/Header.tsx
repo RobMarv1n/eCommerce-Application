@@ -38,7 +38,12 @@ const iconLinks = [
   },
 ] as const;
 
-export function Header() {
+type Properties = {
+  cartCount: number;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function Header({ cartCount, setCartCount }: Properties) {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(client.isLogin);
 
@@ -46,9 +51,10 @@ export function Header() {
     setIsAuthenticated(client.isLogin);
   }, [client.isLogin]);
 
-  const handleLogout = () => {
-    client.logout();
+  const handleLogout = async () => {
+    await client.logout();
     setIsAuthenticated(false);
+    setCartCount(client.cartCount);
     navigate(ROUTES.HOME);
   };
 
@@ -81,7 +87,7 @@ export function Header() {
                 return (
                   <li key={label}>
                     <CartIconWithCount
-                      count={10}
+                      count={cartCount}
                       path={path}
                       className={styles.iconsLink}
                     />

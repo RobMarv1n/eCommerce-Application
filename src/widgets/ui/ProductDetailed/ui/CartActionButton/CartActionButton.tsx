@@ -1,22 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../../../../shared/ui/Button';
 import { CartIcon } from '../../../../../shared/ui/Icon/CartIcon';
 import { toast } from 'sonner';
 
 import styles from './CartActionButton.module.css';
+import { client } from '../../../../../shared/api/clientApi/ClientApi';
 
 interface CartActionButtonProperties {
   productId: string;
   productTitle: string;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CartActionButton({
   productId,
   productTitle,
+  setCartCount,
 }: CartActionButtonProperties) {
   const [inCart, setInCart] = useState(false);
 
-  function handleClick() {
+  useEffect(() => {
+    setInCart(client.inCart(productId));
+  }, [productId]);
+
+  async function handleClick() {
+    const result = inCart
+      ? await client.removeCardProduct(productId, true)
+      : await client.addCartProduct(productId);
+    setCartCount(client.cartCount);
+
     const next = !inCart;
     setInCart(next);
     toast.success(
@@ -24,7 +36,7 @@ export function CartActionButton({
         ? `${productTitle} has been added to cart`
         : `${productTitle} has been removed from cart`
     );
-    console.log(productId);
+    return result;
   }
 
   return (

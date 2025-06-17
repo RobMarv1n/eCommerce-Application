@@ -24,7 +24,11 @@ import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 import { Pagination } from './Pagination/Pagination';
 
-export function Catalog() {
+type Properties = {
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function Catalog({ setCartCount }: Properties) {
   const [categories, setCategories] = useState<MainCategory[]>([]);
   const [products, setProducts] = useState<ProductData[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([
@@ -69,6 +73,7 @@ export function Catalog() {
     setSubcategories(client.categories[0].subCategory);
     setProducts(products);
     setPageCount(client.pageCount);
+    setCartCount(client.cartCount);
   }
 
   useEffect(() => {
@@ -152,7 +157,7 @@ export function Catalog() {
             setPageIndex(page);
           }}
         />
-        <ProductsList products={products} />
+        <ProductsList products={products} setCartCount={setCartCount} />
       </div>
     </section>
   );
