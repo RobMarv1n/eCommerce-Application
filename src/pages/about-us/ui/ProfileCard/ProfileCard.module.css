@@ -58,6 +58,7 @@
 }
 
 .contributions {
+  cursor: pointer;
   color: var(--color-hard-primary);
   text-align: center;
 }

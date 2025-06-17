@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../../../shared/ui/Button';
 import { LinkButton } from '../../../../shared/ui/LinkButton';
 import { CartProduct } from '../CartProduct/CartProduct';
+import { Modal } from '../../../../shared/ui/Modal';
+import { ClearCartNotification } from '../ClearCartNotification/ClearCartNotification';
 
 import { ROUTES } from '../../../../types';
+import { CartData } from '../../../../shared/api/clientApi/types';
 
 import styles from './CartProducts.module.css';
-import { CartData } from '../../../../shared/api/clientApi/types';
 
 type Properties = {
   cardData: CartData;
@@ -19,6 +22,8 @@ export function CartProducts({
   setCardData,
   setCartCount,
 }: Properties) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <div className={styles.cartProducts}>
       <div className={styles.cartProductsHeader}>
@@ -57,9 +62,18 @@ export function CartProducts({
         <LinkButton to={ROUTES.CATALOG} className={styles.cartProductsButton}>
           Return to shop
         </LinkButton>
-        <Button className={styles.cartProductsButton}>
+        <Button
+          className={styles.cartProductsButton}
+          onClick={() => setModalOpen(true)}
+        >
           Clear Shopping Cart
         </Button>
+
+        {modalOpen && cardData.products.length > 0 && (
+          <Modal onClose={() => setModalOpen(false)}>
+            <ClearCartNotification />
+          </Modal>
+        )}
       </div>
     </div>
   );
