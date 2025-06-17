@@ -486,7 +486,10 @@ class ClientApi {
   }
 
   public get cartCount(): number {
-    return this.cartData.products.length;
+    return this.cartData.products.reduce(
+      (sum, product) => sum + product.quantity,
+      0
+    );
   }
 
   public async setCartDiscountCode(code: string): Promise<void> {
