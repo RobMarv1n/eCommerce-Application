@@ -49,5 +49,7 @@ export const DefaultCartData: CartData = {
   id: '',
   version: 0,
   totalPrice: 0,
+  discount: 0,
+  fullPrice: 0,
   products: [],
 };

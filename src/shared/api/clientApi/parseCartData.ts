@@ -6,8 +6,10 @@ export function parseCartData(cart: Cart): CartData {
     id: cart.id,
     version: cart.version,
     totalPrice: parseTotalPrice(cart.totalPrice),
+    discount: parseDiscounted(cart),
     products: [],
   };
+  data.fullPrice = data.totalPrice - data.discount;
 
   if (cart.lineItems)
     data.products = cart.lineItems.map((lineItem) => {
@@ -48,4 +50,13 @@ function parsePrice(price: Price): number {
 function parseTotalPrice(price: CentPrecisionMoney): number {
   const { centAmount = 0, fractionDigits = 0 } = price;
   return centAmount / Math.pow(10, fractionDigits);
+}
+
+function parseDiscounted(cart: Cart): number {
+  if (cart.discountOnTotalPrice) {
+    const { centAmount = 0, fractionDigits = 0 } =
+      cart.discountOnTotalPrice.discountedAmount;
+    return centAmount / Math.pow(10, fractionDigits);
+  }
+  return 0;
 }

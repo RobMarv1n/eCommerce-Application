@@ -33,13 +33,15 @@ export function CartProduct({
         </div>
         <div className={styles.cartProductName}>{product.title}</div>
       </div>
-      <div className={styles.cartProductPrice}>${product.price}</div>
+      <div className={styles.cartProductPrice}>${product.price.toFixed(2)}</div>
       <CartCounter
         product={product}
         setCardData={setCardData}
         className={styles.cartProductCounter}
       />
-      <div className={styles.cartProductSubtotal}>${product.totalPrice}</div>
+      <div className={styles.cartProductSubtotal}>
+        ${product.totalPrice.toFixed(2)}
+      </div>
       <DeleteButton
         onClick={deleteClick}
         className={styles.cartProductDelete}

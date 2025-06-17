@@ -482,6 +482,26 @@ class ClientApi {
   public get cartCount(): number {
     return this.cartData.products.length;
   }
+
+  public async setCartDiscountCode(code: string): Promise<void> {
+    const cart = await this.apiRoot
+      .me()
+      .carts()
+      .withId({ ID: this.cartData.id })
+      .post({
+        body: {
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code,
+            },
+          ],
+          version: this.cartData.version,
+        },
+      })
+      .execute();
+    this.cartData = parseCartData(cart.body);
+  }
 }
 
 export const client = new ClientApi();

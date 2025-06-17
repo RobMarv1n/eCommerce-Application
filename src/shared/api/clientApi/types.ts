@@ -102,5 +102,7 @@ export type CartData = {
   id: string;
   version: number;
   totalPrice: number;
+  discount: number;
+  fullPrice?: number;
   products: CartProductData[];
 };

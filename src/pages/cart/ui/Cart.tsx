@@ -34,7 +34,7 @@ export function Cart({ setCartCount }: Properties) {
           setCartCount={setCartCount}
         />
         <CartPrice cartData={cartData} />
-        <CartCoupon />
+        <CartCoupon setCardData={setCartData} />
       </div>
     </section>
   );
