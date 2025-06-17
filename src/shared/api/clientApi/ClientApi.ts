@@ -50,8 +50,8 @@ class ClientApi {
   public searchText: string;
   public queryMode: string;
   public pageCount: number;
+  public cartData: CartData;
   private apiRoot: ByProjectKeyRequestBuilder;
-  private cartData: CartData;
 
   constructor() {
     this.isLogin = false;
@@ -435,7 +435,10 @@ class ClientApi {
     this.cartData = parseCartData(cart.body);
   }
 
-  public async removeCardProduct(productId: string): Promise<void> {
+  public async removeCardProduct(
+    productId: string,
+    all: boolean = false
+  ): Promise<void> {
     const product = this.cartData.products.find(
       (product) => product.id === productId
     );
@@ -451,7 +454,7 @@ class ClientApi {
             {
               action: 'removeLineItem',
               lineItemId: product.lineItemId,
-              quantity: product.quantity,
+              quantity: all ? product.quantity : 1,
             },
           ],
           version: this.cartData.version,
@@ -478,6 +481,26 @@ class ClientApi {
 
   public get cartCount(): number {
     return this.cartData.products.length;
+  }
+
+  public async setCartDiscountCode(code: string): Promise<void> {
+    const cart = await this.apiRoot
+      .me()
+      .carts()
+      .withId({ ID: this.cartData.id })
+      .post({
+        body: {
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code,
+            },
+          ],
+          version: this.cartData.version,
+        },
+      })
+      .execute();
+    this.cartData = parseCartData(cart.body);
   }
 }
 

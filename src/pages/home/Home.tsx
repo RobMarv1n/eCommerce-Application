@@ -1,13 +1,23 @@
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../types';
+import styles from './Home.module.css';
 
 export function Home() {
   return (
-    <>
-      <h1>Home</h1>
-      <Link to={ROUTES.LOGIN}>Sign in</Link>
-      <Link to={ROUTES.REGISTRATION}>Sign up</Link>
-      <Link to={ROUTES.PROFILE}>Profile</Link>
-    </>
+    <div className={styles['discount-container']}>
+      <h1>Discount codes</h1>
+      <div className={styles['discount-list']}>
+        <span>Discount amount</span>
+        <span>Discount code</span>
+        <span>10 %</span>
+        <span>DISCOUNT-10</span>
+        <span>15 %</span>
+        <span>DISCOUNT-15</span>
+        <span>20 %</span>
+        <span>DISCOUNT-20</span>
+      </div>
+      <p>
+        <strong>Attention!</strong> A big discount replaces a small one. You
+        cannot accept the same discount twice.
+      </p>
+    </div>
   );
 }

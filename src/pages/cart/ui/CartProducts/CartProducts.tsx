@@ -6,8 +6,19 @@ import { CartProduct } from '../CartProduct/CartProduct';
 import { ROUTES } from '../../../../types';
 
 import styles from './CartProducts.module.css';
+import { CartData } from '../../../../shared/api/clientApi/types';
 
-export function CartProducts() {
+type Properties = {
+  cardData: CartData;
+  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function CartProducts({
+  cardData,
+  setCardData,
+  setCartCount,
+}: Properties) {
   return (
     <div className={styles.cartProducts}>
       <div className={styles.cartProductsHeader}>
@@ -21,17 +32,26 @@ export function CartProducts() {
         <span className={styles.cartHeaderColumn}>Subtotal</span>
       </div>
       <div className={styles.cartProductsList}>
-        <CartProduct />
+        {cardData.products.map((product) => (
+          <CartProduct
+            product={product}
+            setCardData={setCardData}
+            setCartCount={setCartCount}
+            key={product.id}
+          />
+        ))}
 
-        <div className={styles.cartProductsEmpty}>
-          <p className={styles.cartProductsMessage}>
-            Oops! Looks like you haven&rsquo;t added any items to&nbsp;your cart
-            yet
-          </p>
-          <Link className={styles.cartProductsLink} to={ROUTES.CATALOG}>
-            Continue Shopping
-          </Link>
-        </div>
+        {cardData.products.length === 0 && (
+          <div className={styles.cartProductsEmpty}>
+            <p className={styles.cartProductsMessage}>
+              Oops! Looks like you haven&rsquo;t added any items to&nbsp;your
+              cart yet
+            </p>
+            <Link className={styles.cartProductsLink} to={ROUTES.CATALOG}>
+              Continue Shopping
+            </Link>
+          </div>
+        )}
       </div>
       <div className={styles.cartProductsCTA}>
         <LinkButton to={ROUTES.CATALOG} className={styles.cartProductsButton}>
