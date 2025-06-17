@@ -43,7 +43,7 @@ export const DefaultProfileData: ProfileData = {
   accountAddresses: [],
 };
 
-export const productPerPage = 4;
+export const productPerPage = 6;
 
 export const DefaultCartData: CartData = {
   id: '',
