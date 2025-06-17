@@ -1,0 +1,12 @@
+.clearCartNotification {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationMessage {
+  font-size: 20px;
+  text-align: center;
+}
