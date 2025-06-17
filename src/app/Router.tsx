@@ -9,6 +9,7 @@ import { Layout } from './layouts/Layout';
 import { Catalog } from '../pages/catalog/ui/Catalog';
 import { Product } from '../pages/product';
 import { Cart } from '../pages/cart';
+import { AboutUs } from '../pages/about-us';
 import { useState } from 'react';
 
 export function Router() {
@@ -27,6 +28,7 @@ export function Router() {
           />
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path={ROUTES.PROFILE} element={<Profile />} />
+          <Route path={ROUTES.ABOUT} element={<AboutUs />} />
           <Route
             path={ROUTES.CATALOG}
             element={<Catalog setCartCount={setCartCount} />}

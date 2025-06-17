@@ -1,0 +1,81 @@
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  width: clamp(300px, 45%, 100%);
+  padding: 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 16px;
+}
+
+@media (width < 700px) {
+  .profileCard {
+    width: 100%;
+  }
+}
+
+.header {
+  display: flex;
+}
+
+.headerLeft {
+  font-size: 0;
+}
+
+.headerPhoto {
+  display: inline-block;
+  min-width: 140px;
+  border-radius: 50%;
+  background-color: var(--color-gray-1);
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 10px;
+  align-items: center;
+  justify-content: end;
+}
+
+.headerName {
+  font-size: 18px;
+  color: var(--color-gray-9);
+  text-align: center;
+}
+
+.headerRole {
+  margin-bottom: 10px;
+  color: var(--color-gray-6);
+  text-align: center;
+}
+
+.description {
+  flex: 1;
+  font-size: 12px;
+  text-align: center;
+}
+
+.contributions {
+  color: var(--color-hard-primary);
+  text-align: center;
+}
+
+.contributionsLabel {
+  margin-bottom: 5px;
+}
+
+.contributionsList {
+  color: var(--color-gray-7);
+}
+
+.contributionsItem {
+  margin-bottom: 10px;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

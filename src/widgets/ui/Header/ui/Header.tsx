@@ -14,7 +14,7 @@ const navLinks = [
   { path: ROUTES.REGISTRATION, label: 'Register' },
   { path: ROUTES.HOME, label: 'Home' },
   { path: ROUTES.CATALOG, label: 'Catalog' },
-  { path: ROUTES.ABOUT, label: 'About Us', disabled: true },
+  { path: ROUTES.ABOUT, label: 'About Us' },
 ];
 
 const iconLinks = [
@@ -64,15 +64,14 @@ export function Header({ cartCount, setCartCount }: Properties) {
         <Logo />
         <nav className={styles.nav}>
           <ul className={styles.navList}>
-            {navLinks.map(({ path, label, disabled }) => (
+            {navLinks.map(({ path, label }) => (
               <li key={path} className={styles.navItem}>
                 <NavLink
                   to={path}
                   className={({ isActive }) => {
-                    const baseClass = isActive
+                    return isActive
                       ? `${styles.navLink} ${styles.isActive}`
                       : styles.navLink;
-                    return disabled ? `${baseClass} disabled-link` : baseClass;
                   }}
                 >
                   {label}
