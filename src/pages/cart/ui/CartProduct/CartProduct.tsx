@@ -37,6 +37,7 @@ export function CartProduct({
       <CartCounter
         product={product}
         setCardData={setCardData}
+        setCartCount={setCartCount}
         className={styles.cartProductCounter}
       />
       <div className={styles.cartProductSubtotal}>

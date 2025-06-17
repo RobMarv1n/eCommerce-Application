@@ -13,6 +13,7 @@ interface CounterProperties {
   max?: number;
   product: CartProductData;
   setCardData: React.Dispatch<React.SetStateAction<CartData>>;
+  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CartCounter({
@@ -21,6 +22,7 @@ export function CartCounter({
   max = Infinity,
   product,
   setCardData,
+  setCartCount,
 }: CounterProperties) {
   const [internalValue, setInternalValue] = useState(product.quantity ?? min);
 
@@ -28,7 +30,8 @@ export function CartCounter({
     if (internalValue < max) {
       await client.addCartProduct(product.id);
       setCardData(client.cartData);
-      setInternalValue(internalValue + 1);
+      setCartCount(client.cartCount);
+      setInternalValue((internalValue) => internalValue + 1);
     }
   }
 
@@ -36,7 +39,8 @@ export function CartCounter({
     if (internalValue > min) {
       await client.removeCardProduct(product.id);
       setCardData(client.cartData);
-      setInternalValue(internalValue - 1);
+      setCartCount(client.cartCount);
+      setInternalValue((internalValue) => internalValue - 1);
     }
   }
 
