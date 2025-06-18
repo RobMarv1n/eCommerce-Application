@@ -1,27 +1,22 @@
 import { DeleteButton } from '../../../../shared/ui/DeleteButton';
 
 import styles from './CartProduct.module.css';
-import {
-  CartData,
-  CartProductData,
-} from '../../../../shared/api/clientApi/types';
+import { CartProductData } from '../../../../shared/api/clientApi/types';
 import { CartCounter } from './CartCounter';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { useCartCount, useCartData } from '../CartContexts/CartContexts';
 
 type Properties = {
   product: CartProductData;
-  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function CartProduct({
-  product,
-  setCardData,
-  setCartCount,
-}: Properties) {
+export function CartProduct({ product }: Properties) {
+  const { setCartCount } = useCartCount();
+  const { setCartData } = useCartData();
+
   const deleteClick = async () => {
     await client.removeCardProduct(product.id, true);
-    setCardData(client.cartData);
+    setCartData(client.cartData);
     setCartCount(client.cartCount);
   };
 
@@ -34,12 +29,7 @@ export function CartProduct({
         <div className={styles.cartProductName}>{product.title}</div>
       </div>
       <div className={styles.cartProductPrice}>${product.price.toFixed(2)}</div>
-      <CartCounter
-        product={product}
-        setCardData={setCardData}
-        setCartCount={setCartCount}
-        className={styles.cartProductCounter}
-      />
+      <CartCounter product={product} className={styles.cartProductCounter} />
       <div className={styles.cartProductSubtotal}>
         ${product.totalPrice.toFixed(2)}
       </div>

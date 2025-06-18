@@ -8,6 +8,7 @@ import { CartIconWithCount } from './CartIconWithCount/CartIconWithCount';
 import { ROUTES } from '../../../../types';
 
 import styles from './Header.module.css';
+import { useCartCount } from '../../../../pages/cart/ui/CartContexts/CartContexts';
 
 const navLinks = [
   { path: ROUTES.LOGIN, label: 'Login' },
@@ -38,14 +39,10 @@ const iconLinks = [
   },
 ] as const;
 
-type Properties = {
-  cartCount: number;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export function Header({ cartCount, setCartCount }: Properties) {
+export function Header() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(client.isLogin);
+  const { cartCount, setCartCount } = useCartCount();
 
   useEffect(() => {
     setIsAuthenticated(client.isLogin);
