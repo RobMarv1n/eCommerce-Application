@@ -23,6 +23,7 @@ import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 import { Pagination } from './Pagination/Pagination';
+import { SpinnerCircularFixed } from 'spinners-react';
 import { useCartCount } from '../../cart/ui/CartContexts/CartContexts';
 
 export function Catalog() {
@@ -37,11 +38,13 @@ export function Catalog() {
     useState<Subcategory>(emptySubcategory);
   const [pageCount, setPageCount] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
+  const [loading, setLoading] = useState(true);
   const { setCartCount } = useCartCount();
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
   async function updateProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
     await client.getCartData();
     const products = await client.getProducts(pageIndex);
     setProducts(products);
@@ -49,9 +52,11 @@ export function Catalog() {
       setPageCount(client.pageCount);
       setPageIndex(1);
     }
+    setLoading(false);
   }
 
   async function searchProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
     await client.getCartData();
     const products = await client.searchProducts(pageIndex);
     setProducts(products);
@@ -59,6 +64,7 @@ export function Catalog() {
       setPageCount(client.pageCount);
       setPageIndex(1);
     }
+    setLoading(false);
   }
 
   async function initial(): Promise<void> {
@@ -72,6 +78,7 @@ export function Catalog() {
     setProducts(products);
     setPageCount(client.pageCount);
     setCartCount(client.cartCount);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -156,7 +163,20 @@ export function Catalog() {
             setPageIndex(page);
           }}
         />
-        <ProductsList products={products} />
+        {loading && (
+          <div className="loader-container">
+            <SpinnerCircularFixed
+              size={75}
+              thickness={150}
+              speed={100}
+              color="var(--color-primary)"
+              secondaryColor="rgba(0, 178, 7, 0.3)"
+            />
+          </div>
+        )}
+        {!loading && (
+          <ProductsList products={products} />
+        )}
       </div>
     </section>
   );
