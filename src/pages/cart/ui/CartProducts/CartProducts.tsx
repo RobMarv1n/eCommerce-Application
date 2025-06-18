@@ -7,17 +7,13 @@ import { Modal } from '../../../../shared/ui/Modal';
 import { ClearCartNotification } from '../ClearCartNotification/ClearCartNotification';
 
 import { ROUTES } from '../../../../types';
-import { CartData } from '../../../../shared/api/clientApi/types';
 
 import styles from './CartProducts.module.css';
+import { useCartData } from '../CartContexts/CartContexts';
 
-type Properties = {
-  cardData: CartData;
-  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-};
-
-export function CartProducts({ cardData, setCardData }: Properties) {
+export function CartProducts() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { cartData } = useCartData();
 
   return (
     <div className={styles.cartProducts}>
@@ -32,15 +28,11 @@ export function CartProducts({ cardData, setCardData }: Properties) {
         <span className={styles.cartHeaderColumn}>Subtotal</span>
       </div>
       <div className={styles.cartProductsList}>
-        {cardData.products.map((product) => (
-          <CartProduct
-            product={product}
-            setCardData={setCardData}
-            key={product.id}
-          />
+        {cartData.products.map((product) => (
+          <CartProduct product={product} key={product.id} />
         ))}
 
-        {cardData.products.length === 0 && (
+        {cartData.products.length === 0 && (
           <div className={styles.cartProductsEmpty}>
             <p className={styles.cartProductsMessage}>
               Oops! Looks like you haven&rsquo;t added any items to&nbsp;your
@@ -63,9 +55,9 @@ export function CartProducts({ cardData, setCardData }: Properties) {
           Clear Shopping Cart
         </Button>
 
-        {modalOpen && cardData.products.length > 0 && (
+        {modalOpen && cartData.products.length > 0 && (
           <Modal onClose={() => setModalOpen(false)}>
-            <ClearCartNotification setCardData={setCardData} />
+            <ClearCartNotification />
           </Modal>
         )}
       </div>

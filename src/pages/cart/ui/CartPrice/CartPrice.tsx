@@ -1,13 +1,11 @@
-import { CartData } from '../../../../shared/api/clientApi/types';
 import { Button } from '../../../../shared/ui/Button';
+import { useCartData } from '../CartContexts/CartContexts';
 
 import styles from './CartPrice.module.css';
 
-type Properties = {
-  cartData: CartData;
-};
+export function CartPrice() {
+  const { cartData } = useCartData();
 
-export function CartPrice({ cartData }: Properties) {
   return (
     <div className={styles.cartPrice}>
       <div className={styles.cartPriceTitle}>Cart Total</div>

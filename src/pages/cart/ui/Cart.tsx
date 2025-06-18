@@ -3,13 +3,12 @@ import { CartPrice } from './CartPrice/CartPrice';
 import { CartCoupon } from './CartCoupon/CartCoupon';
 
 import styles from './Cart.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { client } from '../../../shared/api/clientApi/ClientApi';
-import { CartData } from '../../../shared/api/clientApi/types';
-import { DefaultCartData } from '../../../shared/api/clientApi/constants';
+import { useCartData } from './CartContexts/CartContexts';
 
 export function Cart() {
-  const [cartData, setCartData] = useState<CartData>(DefaultCartData);
+  const { setCartData } = useCartData();
 
   async function initial(): Promise<void> {
     await client.getCartData();
@@ -18,15 +17,16 @@ export function Cart() {
 
   useEffect(() => {
     initial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section className={`${styles.cart} container`}>
       <h1 className={`${styles.cartTitle} title`}>My Shopping Cart</h1>
       <div className={styles.cartWrapper}>
-        <CartProducts cardData={cartData} setCardData={setCartData} />
-        <CartPrice cartData={cartData} />
-        <CartCoupon setCardData={setCartData} />
+        <CartProducts />
+        <CartPrice />
+        <CartCoupon />
       </div>
     </section>
   );

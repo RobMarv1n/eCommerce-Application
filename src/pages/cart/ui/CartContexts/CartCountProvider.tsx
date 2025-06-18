@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ContextValue } from './types';
 import { CartCountContext } from './CartContexts';
+import { CartCountContextValue } from './types';
 
 type Properties = {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ type Properties = {
 export function CartCountProvider({ children }: Properties) {
   const [cartCount, setCartCount] = useState(0);
 
-  const value: ContextValue = {
+  const value: CartCountContextValue = {
     cartCount,
     setCartCount: (count) => setCartCount(count),
   };

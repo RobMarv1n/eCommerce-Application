@@ -12,6 +12,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!client.isLogin) navigate(ROUTES.HOME);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!client.isLogin) return <></>;

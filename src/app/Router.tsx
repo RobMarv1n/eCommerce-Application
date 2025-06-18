@@ -11,6 +11,7 @@ import { Product } from '../pages/product';
 import { Cart } from '../pages/cart';
 import { AboutUs } from '../pages/about-us';
 import { CartCountProvider } from '../pages/cart/ui/CartContexts/CartCountProvider';
+import { CartDataProvider } from '../pages/cart/ui/CartContexts/CartDataProvider';
 
 export function Router() {
   return (
@@ -25,7 +26,14 @@ export function Router() {
             <Route path={ROUTES.ABOUT} element={<AboutUs />} />
             <Route path={ROUTES.CATALOG} element={<Catalog />} />
             <Route path={ROUTES.PRODUCT} element={<Product />} />
-            <Route path={ROUTES.CART} element={<Cart />} />
+            <Route
+              path={ROUTES.CART}
+              element={
+                <CartDataProvider>
+                  <Cart />
+                </CartDataProvider>
+              }
+            />
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>

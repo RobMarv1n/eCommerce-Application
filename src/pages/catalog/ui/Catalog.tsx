@@ -76,6 +76,7 @@ export function Catalog() {
 
   useEffect(() => {
     initial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleFilters() {
