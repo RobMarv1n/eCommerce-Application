@@ -23,6 +23,7 @@ import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 import { Pagination } from './Pagination/Pagination';
+import { SpinnerCircularFixed } from 'spinners-react';
 
 type Properties = {
   setCartCount: React.Dispatch<React.SetStateAction<number>>;
@@ -40,6 +41,7 @@ export function Catalog({ setCartCount }: Properties) {
     useState<Subcategory>(emptySubcategory);
   const [pageCount, setPageCount] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
@@ -74,6 +76,7 @@ export function Catalog({ setCartCount }: Properties) {
     setProducts(products);
     setPageCount(client.pageCount);
     setCartCount(client.cartCount);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -157,7 +160,20 @@ export function Catalog({ setCartCount }: Properties) {
             setPageIndex(page);
           }}
         />
-        <ProductsList products={products} setCartCount={setCartCount} />
+        {loading && (
+          <div className="loader-container">
+            <SpinnerCircularFixed
+              size={75}
+              thickness={150}
+              speed={100}
+              color="var(--color-primary)"
+              secondaryColor="rgba(0, 178, 7, 0.3)"
+            />
+          </div>
+        )}
+        {!loading && (
+          <ProductsList products={products} setCartCount={setCartCount} />
+        )}
       </div>
     </section>
   );
