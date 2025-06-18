@@ -10,13 +10,9 @@ import styles from './ProductDetailed.module.css';
 
 interface ProductDetailedProperties {
   product: ProductData;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function ProductDetailed({
-  product,
-  setCartCount,
-}: ProductDetailedProperties) {
+export function ProductDetailed({ product }: ProductDetailedProperties) {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -62,7 +58,6 @@ export function ProductDetailed({
           <CartActionButton
             productId={product.id}
             productTitle={product.title}
-            setCartCount={setCartCount}
           />
           <button className={styles.buttonWishlist}>
             <WishlistIcon width="20" height="20" color="#2C742F" />

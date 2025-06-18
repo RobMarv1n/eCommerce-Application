@@ -1,19 +1,15 @@
 import { useState } from 'react';
 
 import styles from './CartCounter.module.css';
-import {
-  CartData,
-  CartProductData,
-} from '../../../../../shared/api/clientApi/types';
+import { CartProductData } from '../../../../../shared/api/clientApi/types';
 import { client } from '../../../../../shared/api/clientApi/ClientApi';
+import { useCartCount, useCartData } from '../../CartContexts/CartContexts';
 
 interface CounterProperties {
   className?: string;
   min?: number;
   max?: number;
   product: CartProductData;
-  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CartCounter({
@@ -21,15 +17,15 @@ export function CartCounter({
   min = 1,
   max = Infinity,
   product,
-  setCardData,
-  setCartCount,
 }: CounterProperties) {
   const [internalValue, setInternalValue] = useState(product.quantity ?? min);
+  const { setCartCount } = useCartCount();
+  const { setCartData } = useCartData();
 
   async function increment() {
     if (internalValue < max) {
       await client.addCartProduct(product.id);
-      setCardData(client.cartData);
+      setCartData(client.cartData);
       setCartCount(client.cartCount);
       setInternalValue((internalValue) => internalValue + 1);
     }
@@ -38,7 +34,7 @@ export function CartCounter({
   async function decrement() {
     if (internalValue > min) {
       await client.removeCardProduct(product.id);
-      setCardData(client.cartData);
+      setCartData(client.cartData);
       setCartCount(client.cartCount);
       setInternalValue((internalValue) => internalValue - 1);
     }

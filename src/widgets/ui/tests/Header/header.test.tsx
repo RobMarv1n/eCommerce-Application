@@ -8,7 +8,7 @@ describe('Header component', () => {
   test('should render Header component', () => {
     render(
       <BrowserRouter>
-        <Header cartCount={0} setCartCount={() => {}} />
+        <Header />
       </BrowserRouter>
     );
 
@@ -20,7 +20,7 @@ describe('Header component', () => {
   });
 
   test('should call useNavigate with the correct path', async () => {
-    render(<Header cartCount={0} setCartCount={() => {}} />, {
+    render(<Header />, {
       wrapper: BrowserRouter,
     });
     const user = userEvent.setup();

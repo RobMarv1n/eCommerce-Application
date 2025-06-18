@@ -4,14 +4,11 @@ import { Button } from '../../../../shared/ui/Button';
 import styles from './CartCoupon.module.css';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { toast } from 'sonner';
-import { CartData } from '../../../../shared/api/clientApi/types';
+import { useCartData } from '../CartContexts/CartContexts';
 
-type Properties = {
-  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-};
-
-export function CartCoupon({ setCardData }: Properties) {
+export function CartCoupon() {
   const [text, setText] = useState('');
+  const { setCartData } = useCartData();
 
   return (
     <div className={styles.cartCoupon}>
@@ -35,7 +32,7 @@ export function CartCoupon({ setCardData }: Properties) {
             client
               .setCartDiscountCode(text)
               .then(() => {
-                setCardData(client.cartData);
+                setCartData(client.cartData);
               })
               .catch(() => {
                 toast.error('Invalid discount code');

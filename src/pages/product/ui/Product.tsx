@@ -6,11 +6,7 @@ import { emptyProduct } from '../../../shared/api/clientApi/constants';
 import { ProductDetailed } from '../../../widgets/ui/ProductDetailed';
 import styles from './Product.module.css';
 
-type Properties = {
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export function Product({ setCartCount }: Properties) {
+export function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState<ProductData>(emptyProduct);
 
@@ -21,11 +17,12 @@ export function Product({ setCartCount }: Properties) {
 
   useEffect(() => {
     getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section className="container">
-      <ProductDetailed product={product} setCartCount={setCartCount} />
+      <ProductDetailed product={product} />
       <div className={styles.fullDescriptionWrapper}>
         <div className={styles.fullDescriptionLabel}>Description</div>
         <p>{product.descriptionFull}</p>

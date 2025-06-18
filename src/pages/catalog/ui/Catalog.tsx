@@ -23,12 +23,9 @@ import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 import { Pagination } from './Pagination/Pagination';
+import { useCartCount } from '../../cart/ui/CartContexts/CartContexts';
 
-type Properties = {
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export function Catalog({ setCartCount }: Properties) {
+export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
   const [products, setProducts] = useState<ProductData[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([
@@ -40,6 +37,7 @@ export function Catalog({ setCartCount }: Properties) {
     useState<Subcategory>(emptySubcategory);
   const [pageCount, setPageCount] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
+  const { setCartCount } = useCartCount();
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
@@ -78,6 +76,7 @@ export function Catalog({ setCartCount }: Properties) {
 
   useEffect(() => {
     initial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleFilters() {
@@ -157,7 +156,7 @@ export function Catalog({ setCartCount }: Properties) {
             setPageIndex(page);
           }}
         />
-        <ProductsList products={products} setCartCount={setCartCount} />
+        <ProductsList products={products} />
       </div>
     </section>
   );

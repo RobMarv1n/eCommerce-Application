@@ -1,18 +1,13 @@
 import { client } from '../../../../shared/api/clientApi/ClientApi';
-import { CartData } from '../../../../shared/api/clientApi/types';
 import { Button } from '../../../../shared/ui/Button';
+import { useCartCount, useCartData } from '../CartContexts/CartContexts';
 
 import styles from './ClearCartNotification.module.css';
 
-type Properties = {
-  setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
-};
+export function ClearCartNotification() {
+  const { setCartCount } = useCartCount();
+  const { setCartData } = useCartData();
 
-export function ClearCartNotification({
-  setCardData,
-  setCartCount,
-}: Properties) {
   return (
     <div className={styles.clearCartNotification}>
       <p className={styles.notificationMessage}>
@@ -21,7 +16,7 @@ export function ClearCartNotification({
       <Button
         onClick={async () => {
           await client.cleanCart();
-          setCardData(client.cartData);
+          setCartData(client.cartData);
           setCartCount(client.cartCount);
         }}
       >
