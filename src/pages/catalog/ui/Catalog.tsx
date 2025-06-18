@@ -174,9 +174,7 @@ export function Catalog() {
             />
           </div>
         )}
-        {!loading && (
-          <ProductsList products={products} />
-        )}
+        {!loading && <ProductsList products={products} />}
       </div>
     </section>
   );
