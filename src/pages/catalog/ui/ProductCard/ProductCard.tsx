@@ -53,7 +53,9 @@ export function ProductCard({ product }: Properties) {
           setLoading(true);
           await client.addCartProduct(id);
           setCartCount(client.cartCount);
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
           toast.success(`${title} has been added to cart`);
         }}
       >
