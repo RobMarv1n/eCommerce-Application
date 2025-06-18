@@ -4,21 +4,16 @@ import './productsList.css';
 
 type Properties = {
   products: ProductData[];
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function ProductsList({ products, setCartCount }: Properties) {
+export function ProductsList({ products }: Properties) {
   const styles =
     'products-list' + (products.length === 0 ? ' no-products' : '');
 
   return (
     <div className={styles}>
       {products.map((product) => (
-        <ProductCard
-          product={product}
-          key={product.id}
-          setCartCount={setCartCount}
-        />
+        <ProductCard product={product} key={product.id} />
       ))}
       {products.length === 0 && <h1>No products found</h1>}
     </div>

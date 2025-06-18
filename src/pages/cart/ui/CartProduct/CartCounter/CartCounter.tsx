@@ -6,6 +6,7 @@ import {
   CartProductData,
 } from '../../../../../shared/api/clientApi/types';
 import { client } from '../../../../../shared/api/clientApi/ClientApi';
+import { useCartCount } from '../../CartContexts/CartContexts';
 
 interface CounterProperties {
   className?: string;
@@ -13,7 +14,6 @@ interface CounterProperties {
   max?: number;
   product: CartProductData;
   setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CartCounter({
@@ -22,9 +22,9 @@ export function CartCounter({
   max = Infinity,
   product,
   setCardData,
-  setCartCount,
 }: CounterProperties) {
   const [internalValue, setInternalValue] = useState(product.quantity ?? min);
+  const { setCartCount } = useCartCount();
 
   async function increment() {
     if (internalValue < max) {

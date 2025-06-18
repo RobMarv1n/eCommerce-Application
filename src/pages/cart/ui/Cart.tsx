@@ -8,11 +8,7 @@ import { client } from '../../../shared/api/clientApi/ClientApi';
 import { CartData } from '../../../shared/api/clientApi/types';
 import { DefaultCartData } from '../../../shared/api/clientApi/constants';
 
-type Properties = {
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export function Cart({ setCartCount }: Properties) {
+export function Cart() {
   const [cartData, setCartData] = useState<CartData>(DefaultCartData);
 
   async function initial(): Promise<void> {
@@ -28,11 +24,7 @@ export function Cart({ setCartCount }: Properties) {
     <section className={`${styles.cart} container`}>
       <h1 className={`${styles.cartTitle} title`}>My Shopping Cart</h1>
       <div className={styles.cartWrapper}>
-        <CartProducts
-          cardData={cartData}
-          setCardData={setCartData}
-          setCartCount={setCartCount}
-        />
+        <CartProducts cardData={cartData} setCardData={setCartData} />
         <CartPrice cartData={cartData} />
         <CartCoupon setCardData={setCartData} />
       </div>

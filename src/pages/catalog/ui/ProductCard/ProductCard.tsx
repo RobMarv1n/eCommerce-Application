@@ -7,14 +7,15 @@ import './ProductCard.css';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useCartCount } from '../../../cart/ui/CartContexts/CartContexts';
 
 type Properties = {
   product: ProductData;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function ProductCard({ product, setCartCount }: Properties) {
+export function ProductCard({ product }: Properties) {
   const navigation = useNavigate();
+  const { setCartCount } = useCartCount();
 
   const { id, title, images, descriptionShort, price, discountedPrice } =
     product;

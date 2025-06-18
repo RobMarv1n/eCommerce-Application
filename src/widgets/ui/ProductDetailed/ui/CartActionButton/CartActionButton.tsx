@@ -5,19 +5,19 @@ import { toast } from 'sonner';
 
 import styles from './CartActionButton.module.css';
 import { client } from '../../../../../shared/api/clientApi/ClientApi';
+import { useCartCount } from '../../../../../pages/cart/ui/CartContexts/CartContexts';
 
 interface CartActionButtonProperties {
   productId: string;
   productTitle: string;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CartActionButton({
   productId,
   productTitle,
-  setCartCount,
 }: CartActionButtonProperties) {
   const [inCart, setInCart] = useState(false);
+  const { setCartCount } = useCartCount();
 
   useEffect(() => {
     setInCart(client.inCart(productId));

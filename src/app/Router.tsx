@@ -10,40 +10,26 @@ import { Catalog } from '../pages/catalog/ui/Catalog';
 import { Product } from '../pages/product';
 import { Cart } from '../pages/cart';
 import { AboutUs } from '../pages/about-us';
-import { useState } from 'react';
+import { CartCountProvider } from '../pages/cart/ui/CartContexts/CartCountProvider';
 
 export function Router() {
-  const [cartCount, setCartCount] = useState(0);
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          element={<Layout cartCount={cartCount} setCartCount={setCartCount} />}
-        >
-          <Route path={ROUTES.HOME} element={<Home />} />
-          <Route
-            path={ROUTES.LOGIN}
-            element={<Login setCartCount={setCartCount} />}
-          />
-          <Route path={ROUTES.REGISTRATION} element={<Registration />} />
-          <Route path={ROUTES.PROFILE} element={<Profile />} />
-          <Route path={ROUTES.ABOUT} element={<AboutUs />} />
-          <Route
-            path={ROUTES.CATALOG}
-            element={<Catalog setCartCount={setCartCount} />}
-          />
-          <Route
-            path={ROUTES.PRODUCT}
-            element={<Product setCartCount={setCartCount} />}
-          />
-          <Route
-            path={ROUTES.CART}
-            element={<Cart setCartCount={setCartCount} />}
-          />
-          <Route path="*" element={<ErrorPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <CartCountProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+            <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.ABOUT} element={<AboutUs />} />
+            <Route path={ROUTES.CATALOG} element={<Catalog />} />
+            <Route path={ROUTES.PRODUCT} element={<Product />} />
+            <Route path={ROUTES.CART} element={<Cart />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </CartCountProvider>
   );
 }

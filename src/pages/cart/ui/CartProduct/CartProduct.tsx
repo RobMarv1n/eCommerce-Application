@@ -7,18 +7,16 @@ import {
 } from '../../../../shared/api/clientApi/types';
 import { CartCounter } from './CartCounter';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { useCartCount } from '../CartContexts/CartContexts';
 
 type Properties = {
   product: CartProductData;
   setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function CartProduct({
-  product,
-  setCardData,
-  setCartCount,
-}: Properties) {
+export function CartProduct({ product, setCardData }: Properties) {
+  const { setCartCount } = useCartCount();
+
   const deleteClick = async () => {
     await client.removeCardProduct(product.id, true);
     setCardData(client.cartData);
@@ -37,7 +35,6 @@ export function CartProduct({
       <CartCounter
         product={product}
         setCardData={setCardData}
-        setCartCount={setCartCount}
         className={styles.cartProductCounter}
       />
       <div className={styles.cartProductSubtotal}>

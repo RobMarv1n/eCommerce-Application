@@ -14,14 +14,9 @@ import styles from './CartProducts.module.css';
 type Properties = {
   cardData: CartData;
   setCardData: React.Dispatch<React.SetStateAction<CartData>>;
-  setCartCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function CartProducts({
-  cardData,
-  setCardData,
-  setCartCount,
-}: Properties) {
+export function CartProducts({ cardData, setCardData }: Properties) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -41,7 +36,6 @@ export function CartProducts({
           <CartProduct
             product={product}
             setCardData={setCardData}
-            setCartCount={setCartCount}
             key={product.id}
           />
         ))}
@@ -71,10 +65,7 @@ export function CartProducts({
 
         {modalOpen && cardData.products.length > 0 && (
           <Modal onClose={() => setModalOpen(false)}>
-            <ClearCartNotification
-              setCardData={setCardData}
-              setCartCount={setCartCount}
-            />
+            <ClearCartNotification setCardData={setCardData} />
           </Modal>
         )}
       </div>
