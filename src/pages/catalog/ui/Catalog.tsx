@@ -46,6 +46,7 @@ export function Catalog({ setCartCount }: Properties) {
   const filtersReference = useRef<HTMLDivElement>(null);
 
   async function updateProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
     await client.getCartData();
     const products = await client.getProducts(pageIndex);
     setProducts(products);
@@ -53,9 +54,11 @@ export function Catalog({ setCartCount }: Properties) {
       setPageCount(client.pageCount);
       setPageIndex(1);
     }
+    setLoading(false);
   }
 
   async function searchProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
     await client.getCartData();
     const products = await client.searchProducts(pageIndex);
     setProducts(products);
@@ -63,6 +66,7 @@ export function Catalog({ setCartCount }: Properties) {
       setPageCount(client.pageCount);
       setPageIndex(1);
     }
+    setLoading(false);
   }
 
   async function initial(): Promise<void> {
