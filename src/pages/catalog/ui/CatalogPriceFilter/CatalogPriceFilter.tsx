@@ -53,7 +53,7 @@ export function CatalogPriceFilter({ updateRange }: Properties) {
   }
 
   async function getMinMaxPrice() {
-    const results = await client.getMinMaxPrice();
+    const results = await client.productApi.getMinMaxPrice();
     setSliderMaxValue(results.max);
     setMaxInput(results.max);
     setMaxValue(results.max);
@@ -120,7 +120,7 @@ export function CatalogPriceFilter({ updateRange }: Properties) {
 
   function stopDrag() {
     setIsDragging(false);
-    client.priceRange = { min: 100 * minValue, max: 100 * maxValue };
+    client.productApi.priceRange = { min: 100 * minValue, max: 100 * maxValue };
     updateRange();
   }
 

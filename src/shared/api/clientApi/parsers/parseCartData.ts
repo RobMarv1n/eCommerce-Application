@@ -1,5 +1,5 @@
 import { Cart, CentPrecisionMoney, Price } from '@commercetools/platform-sdk';
-import { CartData, CartProductData } from './types';
+import { CartData, CartProductData } from '../types';
 
 export function parseCartData(cart: Cart): CartData {
   const data: CartData = {

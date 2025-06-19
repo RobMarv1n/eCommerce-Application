@@ -30,7 +30,7 @@ export function RatingList({ onClick }: Properties) {
             checked={selectValue === rating.value}
             onChange={(event) => {
               setSelectValue(event.target.value);
-              client.minRating = event.target.value;
+              client.productApi.minRating = event.target.value;
               onClick();
             }}
           />

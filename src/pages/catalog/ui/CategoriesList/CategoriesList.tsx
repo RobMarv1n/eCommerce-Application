@@ -27,8 +27,8 @@ export function CategoriesList({ categories, onClick }: Properties) {
             checked={selectValue === category.id}
             onChange={(event) => {
               setSelectValue(event.target.value);
-              client.currentCategoryId = event.target.value;
-              const currentCategory = client.categories.find(
+              client.productApi.currentCategoryId = event.target.value;
+              const currentCategory = client.productApi.categories.find(
                 (item) => item.id === category.id
               );
               onClick(currentCategory || emptyCategory);

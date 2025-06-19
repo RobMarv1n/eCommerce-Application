@@ -3,8 +3,8 @@ import type {
   Price,
   ProductProjection,
 } from '@commercetools/platform-sdk';
-import type { AttributesData, ProductData } from './types';
-import { client } from './ClientApi';
+import type { AttributesData, ProductData } from '../types';
+import { client } from '../ClientApi';
 
 export function parseProduct(result: ProductProjection): ProductData {
   const variant = result.masterVariant;
@@ -21,7 +21,7 @@ export function parseProduct(result: ProductProjection): ProductData {
     descriptionFull,
     price: parsePrice(variant.prices),
     discountedPrice: parseDiscountedPrice(variant.prices),
-    categoryName: client.getCategoryName(categoryId),
+    categoryName: client.productApi.getCategoryName(categoryId),
     rating,
   };
 }

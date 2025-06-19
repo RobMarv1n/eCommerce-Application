@@ -12,7 +12,7 @@ export function SearchInput({ onKeyDown }: Properties) {
       type="search"
       placeholder="Search..."
       onChange={(event) => {
-        client.searchText = event.target.value;
+        client.productApi.searchText = event.target.value;
       }}
       onKeyDown={(event) => {
         if (event.key === 'Enter') {

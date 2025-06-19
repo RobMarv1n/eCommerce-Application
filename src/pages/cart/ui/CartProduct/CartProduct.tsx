@@ -15,9 +15,9 @@ export function CartProduct({ product }: Properties) {
   const { setCartData } = useCartData();
 
   const deleteClick = async () => {
-    await client.removeCardProduct(product.id, true);
-    setCartData(client.cartData);
-    setCartCount(client.cartCount);
+    await client.cartApi.removeCardProduct(product.id, true);
+    setCartData(client.cartApi.cartData);
+    setCartCount(client.cartApi.cartCount);
   };
 
   return (

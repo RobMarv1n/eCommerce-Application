@@ -26,7 +26,7 @@ export function SubcategoriesList({
             checked={selectValue === subcategory.id}
             onChange={(event) => {
               setSelectValue(event.target.value);
-              client.currentCategoryId = subcategory.id;
+              client.productApi.currentCategoryId = subcategory.id;
               onClick(subcategory);
             }}
           />

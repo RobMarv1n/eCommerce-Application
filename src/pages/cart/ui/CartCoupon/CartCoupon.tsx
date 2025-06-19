@@ -21,18 +21,18 @@ export function CartCoupon() {
           id="coupon"
           placeholder="Enter code"
           value={text}
-          disabled={client.cartData.id === ''}
+          disabled={client.cartApi.cartData.id === ''}
           onChange={(event) => {
             setText(event.target.value);
           }}
         />
         <Button
-          disabled={client.cartData.id === ''}
+          disabled={client.cartApi.cartData.id === ''}
           onClick={() => {
-            client
+            client.cartApi
               .setCartDiscountCode(text)
               .then(() => {
-                setCartData(client.cartData);
+                setCartData(client.cartApi.cartData);
               })
               .catch(() => {
                 toast.error('Invalid discount code');

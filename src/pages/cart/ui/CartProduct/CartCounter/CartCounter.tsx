@@ -24,18 +24,18 @@ export function CartCounter({
 
   async function increment() {
     if (internalValue < max) {
-      await client.addCartProduct(product.id);
-      setCartData(client.cartData);
-      setCartCount(client.cartCount);
+      await client.cartApi.addCartProduct(product.id);
+      setCartData(client.cartApi.cartData);
+      setCartCount(client.cartApi.cartCount);
       setInternalValue((internalValue) => internalValue + 1);
     }
   }
 
   async function decrement() {
     if (internalValue > min) {
-      await client.removeCardProduct(product.id);
-      setCartData(client.cartData);
-      setCartCount(client.cartCount);
+      await client.cartApi.removeCardProduct(product.id);
+      setCartData(client.cartApi.cartData);
+      setCartCount(client.cartApi.cartCount);
       setInternalValue((internalValue) => internalValue - 1);
     }
   }

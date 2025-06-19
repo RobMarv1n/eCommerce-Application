@@ -45,11 +45,11 @@ export function Catalog() {
 
   async function updateProducts(pageIndex?: number): Promise<void> {
     setLoading(true);
-    await client.getCartData();
-    const products = await client.getProducts(pageIndex);
+    await client.cartApi.getCartData();
+    const products = await client.productApi.getProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
-      setPageCount(client.pageCount);
+      setPageCount(client.productApi.pageCount);
       setPageIndex(1);
     }
     setLoading(false);
@@ -57,27 +57,27 @@ export function Catalog() {
 
   async function searchProducts(pageIndex?: number): Promise<void> {
     setLoading(true);
-    await client.getCartData();
-    const products = await client.searchProducts(pageIndex);
+    await client.cartApi.getCartData();
+    const products = await client.productApi.searchProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
-      setPageCount(client.pageCount);
+      setPageCount(client.productApi.pageCount);
       setPageIndex(1);
     }
     setLoading(false);
   }
 
   async function initial(): Promise<void> {
-    await client.getMainCategories();
-    await client.getMinMaxPrice();
-    await client.getCartData();
-    const products = await client.getProducts();
-    setCategories(client.categories);
-    setCurrentCategory(client.categories[0]);
-    setSubcategories(client.categories[0].subCategory);
+    await client.productApi.getMainCategories();
+    await client.productApi.getMinMaxPrice();
+    await client.cartApi.getCartData();
+    const products = await client.productApi.getProducts();
+    setCategories(client.productApi.categories);
+    setCurrentCategory(client.productApi.categories[0]);
+    setSubcategories(client.productApi.categories[0].subCategory);
     setProducts(products);
-    setPageCount(client.pageCount);
-    setCartCount(client.cartCount);
+    setPageCount(client.productApi.pageCount);
+    setCartCount(client.cartApi.cartCount);
     setLoading(false);
   }
 
@@ -140,7 +140,8 @@ export function Catalog() {
           </Button>
           <SortSelect
             onChange={() => {
-              if (client.queryMode === QueryMode.FILTER) updateProducts();
+              if (client.productApi.queryMode === QueryMode.FILTER)
+                updateProducts();
               else searchProducts();
             }}
           />
@@ -158,7 +159,8 @@ export function Catalog() {
           pageIndex={pageIndex}
           pageCount={pageCount}
           onPageChange={(page) => {
-            if (client.queryMode === QueryMode.FILTER) updateProducts(page);
+            if (client.productApi.queryMode === QueryMode.FILTER)
+              updateProducts(page);
             else searchProducts(page);
             setPageIndex(page);
           }}

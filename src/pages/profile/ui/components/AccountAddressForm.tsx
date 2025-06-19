@@ -34,13 +34,13 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
   const onSubmit: SubmitHandler<AccountAddressFormData> = (data) => {
     console.log('submit');
     if (id) {
-      client.updateAddress(id, data).then((addresses) => {
+      client.profileApi.updateAddress(id, data).then((addresses) => {
         closeModal?.();
         console.log(setAddresses);
         setAddresses?.([...(addresses || [])]);
       });
     } else {
-      client.createAddress(data).then((addresses) => {
+      client.profileApi.createAddress(data).then((addresses) => {
         closeModal?.();
         setAddresses?.([...(addresses || [])]);
       });
@@ -76,7 +76,7 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
 
   const deleteAddress = () => {
     if (id) {
-      client.deleteAddress(id).then((addresses) => {
+      client.profileApi.deleteAddress(id).then((addresses) => {
         closeModal?.();
         setAddresses?.([...(addresses || [])]);
       });

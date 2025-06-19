@@ -15,9 +15,9 @@ export function ClearCartNotification() {
       </p>
       <Button
         onClick={async () => {
-          await client.cleanCart();
-          setCartData(client.cartData);
-          setCartCount(client.cartCount);
+          await client.cartApi.cleanCart();
+          setCartData(client.cartApi.cartData);
+          setCartCount(client.cartApi.cartCount);
         }}
       >
         Confirm
