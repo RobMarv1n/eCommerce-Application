@@ -7,7 +7,7 @@ import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 export function AccountAddresses() {
   const [addresses, setAddresses] = useState(
-    client.profileData.accountAddresses
+    client.profileApi.profileData.accountAddresses
   );
   const [modalOpen, setModalOpen] = useState(false);
 
