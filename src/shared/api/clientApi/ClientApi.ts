@@ -258,25 +258,6 @@ class ClientApi {
     try {
       this.queryMode = QueryMode.FILTER;
 
-      if (pageIndex === undefined) {
-        const response = await this.apiRoot
-          .productProjections()
-          .search()
-          .get({
-            queryArgs: {
-              filter: [
-                `categories.id:"${this.currentCategoryId}"`,
-                `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
-                `variants.attributes.rating: range (${client.minRating} to 6)`,
-              ],
-            },
-          })
-          .execute();
-        const countProduct = response.body.results.length;
-        this.pageCount = Math.ceil(countProduct / productPerPage);
-        if (this.pageCount === 0) this.pageCount = 1;
-      }
-
       const response = await this.apiRoot
         .productProjections()
         .search()
@@ -293,6 +274,10 @@ class ClientApi {
         })
         .execute();
 
+      const countProduct = response.body.total || 0;
+      this.pageCount = Math.ceil(countProduct / productPerPage);
+      if (this.pageCount === 0) this.pageCount = 1;
+
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
         parseProduct(result)
@@ -306,22 +291,6 @@ class ClientApi {
   public async searchProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.SEARCH;
-
-      if (pageIndex === undefined) {
-        const response = await this.apiRoot
-          .productProjections()
-          .search()
-          .get({
-            queryArgs: {
-              'text.en-US': `${client.searchText}`,
-              fuzzy: true,
-            },
-          })
-          .execute();
-        const countProduct = response.body.results.length;
-        this.pageCount = Math.ceil(countProduct / productPerPage);
-        if (this.pageCount === 0) this.pageCount = 1;
-      }
 
       const response = await this.apiRoot
         .productProjections()
@@ -339,6 +308,10 @@ class ClientApi {
           },
         })
         .execute();
+
+      const countProduct = response.body.results.length;
+      this.pageCount = Math.ceil(countProduct / productPerPage);
+      if (this.pageCount === 0) this.pageCount = 1;
 
       const results = response.body.results;
       const products: ProductData[] = results.map((result) =>
