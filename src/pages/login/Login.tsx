@@ -38,7 +38,7 @@ export function Login() {
       .login(data)
       .then(() => {
         client.isLogin = true;
-        setCartCount(client.cartCount);
+        setCartCount(client.cartApi.cartCount);
         navigate(ROUTES.HOME);
       })
       .catch(() => {

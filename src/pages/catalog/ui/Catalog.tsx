@@ -45,7 +45,7 @@ export function Catalog() {
 
   async function updateProducts(pageIndex?: number): Promise<void> {
     setLoading(true);
-    await client.getCartData();
+    await client.cartApi.getCartData();
     const products = await client.getProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
@@ -57,7 +57,7 @@ export function Catalog() {
 
   async function searchProducts(pageIndex?: number): Promise<void> {
     setLoading(true);
-    await client.getCartData();
+    await client.cartApi.getCartData();
     const products = await client.searchProducts(pageIndex);
     setProducts(products);
     if (pageIndex === undefined) {
@@ -70,14 +70,14 @@ export function Catalog() {
   async function initial(): Promise<void> {
     await client.getMainCategories();
     await client.getMinMaxPrice();
-    await client.getCartData();
+    await client.cartApi.getCartData();
     const products = await client.getProducts();
     setCategories(client.categories);
     setCurrentCategory(client.categories[0]);
     setSubcategories(client.categories[0].subCategory);
     setProducts(products);
     setPageCount(client.pageCount);
-    setCartCount(client.cartCount);
+    setCartCount(client.cartApi.cartCount);
     setLoading(false);
   }
 

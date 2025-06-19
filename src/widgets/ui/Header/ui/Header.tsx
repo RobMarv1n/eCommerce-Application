@@ -51,7 +51,7 @@ export function Header() {
   const handleLogout = async () => {
     await client.logout();
     setIsAuthenticated(false);
-    setCartCount(client.cartCount);
+    setCartCount(client.cartApi.cartCount);
     navigate(ROUTES.HOME);
   };
 

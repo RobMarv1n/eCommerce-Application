@@ -11,8 +11,8 @@ export function Cart() {
   const { setCartData } = useCartData();
 
   async function initial(): Promise<void> {
-    await client.getCartData();
-    setCartData(client.cartData);
+    await client.cartApi.getCartData();
+    setCartData(client.cartApi.cartData);
   }
 
   useEffect(() => {

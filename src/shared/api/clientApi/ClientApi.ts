@@ -1,6 +1,5 @@
 import type {
   ByProjectKeyRequestBuilder,
-  Cart,
   MyCustomerChangePassword,
   MyCustomerUpdate,
 } from '@commercetools/platform-sdk';
@@ -10,7 +9,6 @@ import {
 } from './CreateApiRoots';
 import {
   AccountAddress,
-  CartData,
   QueryMode,
   SortingTypes,
   type loginDTO,
@@ -22,12 +20,7 @@ import {
   type singUpDTO,
 } from './types';
 import { parseProduct } from './parsers/parseProduct';
-import {
-  DefaultCartData,
-  DefaultProfileData,
-  emptyProduct,
-  productPerPage,
-} from './constants';
+import { DefaultProfileData, emptyProduct, productPerPage } from './constants';
 import { parseCategories } from './parsers/parseCategories';
 import { parseProfileData } from './parsers/parseProfileData';
 import { createSignUpBody } from './utils/createSignUpBody';
@@ -38,6 +31,7 @@ import {
 } from '../../../pages/profile/types/types';
 import { countryCodes } from './utils/CountryCodes';
 import { parseCartData } from './parsers/parseCartData';
+import { CartApi } from './subclasses/CartApi';
 
 class ClientApi {
   public isLogin: boolean;
@@ -50,7 +44,7 @@ class ClientApi {
   public searchText: string;
   public queryMode: string;
   public pageCount: number;
-  public cartData: CartData;
+  public cartApi: CartApi;
   private apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
@@ -65,7 +59,8 @@ class ClientApi {
     this.searchText = '';
     this.queryMode = QueryMode.FILTER;
     this.pageCount = 1;
-    this.cartData = DefaultCartData;
+
+    this.cartApi = new CartApi(this.apiRoot);
   }
 
   public async login(dto: loginDTO): Promise<void> {
@@ -80,18 +75,18 @@ class ClientApi {
     this.apiRoot = CreatePasswordApiRoot(dto);
     this.profileData = parseProfileData(result.body.customer);
     const cart = await this.apiRoot.me().activeCart().get().execute();
-    this.cartData.id = cart.body.id;
-    this.cartData.version = cart.body.version;
-    this.cartData = parseCartData(cart.body);
+    this.cartApi.cartData.id = cart.body.id;
+    this.cartApi.cartData.version = cart.body.version;
+    this.cartApi.cartData = parseCartData(cart.body);
   }
 
   public async logout(): Promise<void> {
     this.apiRoot = CreateAnonymousApiRoot();
     this.isLogin = false;
-    const cart = await this.createCart();
-    this.cartData.id = cart.id;
-    this.cartData.version = cart.version;
-    this.cartData.products = [];
+    const cart = await this.cartApi.createCart();
+    this.cartApi.cartData.id = cart.id;
+    this.cartApi.cartData.version = cart.version;
+    this.cartApi.cartData.products = [];
   }
 
   public async signUp(dto: singUpDTO): Promise<void> {
@@ -112,8 +107,8 @@ class ClientApi {
 
     this.profileData = parseProfileData(result.body.customer);
     const cart = await this.apiRoot.me().activeCart().get().execute();
-    this.cartData.id = cart.body.id;
-    this.cartData.version = cart.body.version;
+    this.cartApi.cartData.id = cart.body.id;
+    this.cartApi.cartData.version = cart.body.version;
   }
 
   public async updateAccountSettingData(
@@ -376,113 +371,6 @@ class ClientApi {
       }
     }
     return { min: 0, max: 100 };
-  }
-
-  public async createCart(): Promise<Cart> {
-    const cart = await this.apiRoot
-      .me()
-      .carts()
-      .post({ body: { currency: 'USD' } })
-      .execute();
-    return cart.body;
-  }
-
-  public async addCartProduct(productId: string): Promise<void> {
-    if (this.cartData.id === '') {
-      const cart = await this.createCart();
-      this.cartData.id = cart.id;
-      this.cartData.version = cart.version;
-    }
-
-    const cart = await this.apiRoot
-      .me()
-      .carts()
-      .withId({ ID: this.cartData.id })
-      .post({
-        body: {
-          actions: [{ action: 'addLineItem', productId }],
-          version: this.cartData.version,
-        },
-      })
-      .execute();
-    this.cartData = parseCartData(cart.body);
-  }
-
-  public async removeCardProduct(
-    productId: string,
-    all: boolean = false
-  ): Promise<void> {
-    const product = this.cartData.products.find(
-      (product) => product.id === productId
-    );
-    if (product === undefined) return;
-
-    const cart = await this.apiRoot
-      .me()
-      .carts()
-      .withId({ ID: this.cartData.id })
-      .post({
-        body: {
-          actions: [
-            {
-              action: 'removeLineItem',
-              lineItemId: product.lineItemId,
-              quantity: all ? product.quantity : 1,
-            },
-          ],
-          version: this.cartData.version,
-        },
-      })
-      .execute();
-    this.cartData = parseCartData(cart.body);
-  }
-
-  public async cleanCart(): Promise<void> {
-    const productIds = this.cartData.products.map((product) => product.id);
-    for (const productId of productIds)
-      await this.removeCardProduct(productId, true);
-  }
-
-  public async getCartData(): Promise<void> {
-    if (this.cartData.id == '') return;
-    const cart = await this.apiRoot
-      .me()
-      .carts()
-      .withId({ ID: this.cartData.id })
-      .get()
-      .execute();
-    this.cartData = parseCartData(cart.body);
-  }
-
-  public inCart(id: string): boolean {
-    return this.cartData.products.some((product) => product.id === id);
-  }
-
-  public get cartCount(): number {
-    return this.cartData.products.reduce(
-      (sum, product) => sum + product.quantity,
-      0
-    );
-  }
-
-  public async setCartDiscountCode(code: string): Promise<void> {
-    const cart = await this.apiRoot
-      .me()
-      .carts()
-      .withId({ ID: this.cartData.id })
-      .post({
-        body: {
-          actions: [
-            {
-              action: 'addDiscountCode',
-              code,
-            },
-          ],
-          version: this.cartData.version,
-        },
-      })
-      .execute();
-    this.cartData = parseCartData(cart.body);
   }
 }
 

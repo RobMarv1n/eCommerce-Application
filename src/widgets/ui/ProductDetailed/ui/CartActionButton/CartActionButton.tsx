@@ -20,14 +20,14 @@ export function CartActionButton({
   const { setCartCount } = useCartCount();
 
   useEffect(() => {
-    setInCart(client.inCart(productId));
+    setInCart(client.cartApi.inCart(productId));
   }, [productId]);
 
   async function handleClick() {
     const result = inCart
-      ? await client.removeCardProduct(productId, true)
-      : await client.addCartProduct(productId);
-    setCartCount(client.cartCount);
+      ? await client.cartApi.removeCardProduct(productId, true)
+      : await client.cartApi.addCartProduct(productId);
+    setCartCount(client.cartApi.cartCount);
 
     const next = !inCart;
     setInCart(next);

@@ -22,7 +22,7 @@ export function ProductCard({ product }: Properties) {
   const { id, title, images, descriptionShort, price, discountedPrice } =
     product;
 
-  const [inCart, setInCart] = useState(client.inCart(id));
+  const [inCart, setInCart] = useState(client.cartApi.inCart(id));
 
   return (
     <div
@@ -51,8 +51,8 @@ export function ProductCard({ product }: Properties) {
           event.stopPropagation();
           setInCart(true);
           setLoading(true);
-          await client.addCartProduct(id);
-          setCartCount(client.cartCount);
+          await client.cartApi.addCartProduct(id);
+          setCartCount(client.cartApi.cartCount);
           setTimeout(() => {
             setLoading(false);
           }, 1000);
