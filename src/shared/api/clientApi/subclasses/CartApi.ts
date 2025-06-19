@@ -5,7 +5,7 @@ import { parseCartData } from '../parsers/parseCartData';
 
 export class CartApi {
   public cartData: CartData;
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor(apiRoot: ByProjectKeyRequestBuilder) {
     this.apiRoot = apiRoot;
