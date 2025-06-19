@@ -21,23 +21,23 @@ import {
   type RangeObject,
   type singUpDTO,
 } from './types';
-import { parseProduct } from './parseProduct';
+import { parseProduct } from './parsers/parseProduct';
 import {
   DefaultCartData,
   DefaultProfileData,
   emptyProduct,
   productPerPage,
 } from './constants';
-import { parseCategories } from './parseCategories';
-import { parseProfileData } from './parseProfileData';
-import { createSignUpBody } from './createSignUpBody';
+import { parseCategories } from './parsers/parseCategories';
+import { parseProfileData } from './parsers/parseProfileData';
+import { createSignUpBody } from './utils/createSignUpBody';
 import {
   AccountAddressFormData,
   AccountSettingsData,
   PasswordChangeData,
 } from '../../../pages/profile/types/types';
-import { countryCodes } from './CountryCodes';
-import { parseCartData } from './parseCartData';
+import { countryCodes } from './utils/CountryCodes';
+import { parseCartData } from './parsers/parseCartData';
 
 class ClientApi {
   public isLogin: boolean;

@@ -1,6 +1,6 @@
 import { BaseAddress, MyCustomerDraft } from '@commercetools/platform-sdk';
 import { singUpDTO } from './types';
-import { countryCodes } from './CountryCodes';
+import { countryCodes } from './utils/CountryCodes';
 
 export function createSignUpBody(dto: singUpDTO): MyCustomerDraft {
   const addresses: BaseAddress[] = [
