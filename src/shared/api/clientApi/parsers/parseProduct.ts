@@ -21,7 +21,7 @@ export function parseProduct(result: ProductProjection): ProductData {
     descriptionFull,
     price: parsePrice(variant.prices),
     discountedPrice: parseDiscountedPrice(variant.prices),
-    categoryName: client.getCategoryName(categoryId),
+    categoryName: client.productApi.getCategoryName(categoryId),
     rating,
   };
 }

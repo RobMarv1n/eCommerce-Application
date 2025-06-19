@@ -25,7 +25,7 @@ export function CatalogNavigation({
       <span
         className={style}
         onClick={() => {
-          client.currentCategoryId = category.id;
+          client.productApi.currentCategoryId = category.id;
           onClick();
         }}
       >
