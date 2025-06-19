@@ -37,6 +37,7 @@ class ClientApi {
       .execute();
 
     this.apiRoot = CreatePasswordApiRoot(dto);
+    this.setApiRoot(this.apiRoot);
     this.profileApi.profileData = parseProfileData(result.body.customer);
     const cart = await this.apiRoot.me().activeCart().get().execute();
     this.cartApi.cartData.id = cart.body.id;
@@ -46,6 +47,7 @@ class ClientApi {
 
   public async logout(): Promise<void> {
     this.apiRoot = CreateAnonymousApiRoot();
+    this.setApiRoot(this.apiRoot);
     this.isLogin = false;
     const cart = await this.cartApi.createCart();
     this.cartApi.cartData.id = cart.id;
@@ -68,11 +70,15 @@ class ClientApi {
       email: dto.email,
       password: dto.password,
     });
+    this.setApiRoot(this.apiRoot);
 
     this.profileApi.profileData = parseProfileData(result.body.customer);
-    const cart = await this.apiRoot.me().activeCart().get().execute();
-    this.cartApi.cartData.id = cart.body.id;
-    this.cartApi.cartData.version = cart.body.version;
+  }
+
+  setApiRoot(apiRoot: ByProjectKeyRequestBuilder) {
+    this.cartApi.apiRoot = apiRoot;
+    this.productApi.apiRoot = apiRoot;
+    this.productApi.apiRoot = apiRoot;
   }
 }
 

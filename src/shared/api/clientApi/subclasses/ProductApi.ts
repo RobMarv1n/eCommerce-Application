@@ -20,7 +20,7 @@ export class ProductApi {
   public pageCount: number;
   public sortingType: string;
   public searchText: string;
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor(apiRoot: ByProjectKeyRequestBuilder) {
     this.apiRoot = apiRoot;

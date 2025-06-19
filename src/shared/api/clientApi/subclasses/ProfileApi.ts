@@ -16,7 +16,7 @@ import { parseProfileData } from '../parsers/parseProfileData';
 
 export class ProfileApi {
   public profileData: ProfileData;
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor(apiRoot: ByProjectKeyRequestBuilder) {
     this.apiRoot = apiRoot;
