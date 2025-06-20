@@ -1,13 +1,13 @@
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
+import { ClipboardIcon } from '../../../shared/ui/Icon/ClipboardIcon';
 import image1 from './assets/home-image-1.png';
 import image2 from './assets/home-image-2.png';
 import image3 from './assets/home-image-3.png';
 import './home-swiper-slider.css';
-import { useState } from 'react';
-import { ClipboardIcon } from '../../../shared/ui/Icon/ClipboardIcon';
-import { toast } from 'sonner';
 
 const data = [
   { image: image1, discount: 10 },
@@ -47,6 +47,7 @@ export function HomeSwiperSlider() {
           onActiveIndexChange={(swiper) => {
             setSlideIndex(swiper.realIndex);
           }}
+          grabCursor={true}
         >
           {data.map((item, index) => (
             <SwiperSlide key={index}>
