@@ -5,6 +5,7 @@
 }
 
 .home-slider {
+  user-select: none;
   width: 795px;
 }
 
@@ -42,8 +43,22 @@
 }
 
 .home-code {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+
   font-size: 32px;
   text-transform: uppercase;
+}
+
+.home-code-icon {
+  cursor: pointer;
+}
+
+.home-code-icon:hover {
+  .clipboard-line {
+    stroke: var(--color-soft-primary);
+  }
 }
 
 @media (width <= 1250px) {
