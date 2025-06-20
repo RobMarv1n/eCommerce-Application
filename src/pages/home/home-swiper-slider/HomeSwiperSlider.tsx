@@ -29,8 +29,8 @@ export function HomeSwiperSlider() {
             pauseOnMouseEnter: true,
           }}
           loop={true}
-          onActiveIndexChange={() => {
-            setSlideIndex((previous) => (previous + 1) % 3);
+          onActiveIndexChange={(swiper) => {
+            setSlideIndex(swiper.realIndex);
           }}
         >
           {data.map((item, index) => (
