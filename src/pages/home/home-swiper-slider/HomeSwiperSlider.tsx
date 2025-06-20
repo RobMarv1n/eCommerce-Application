@@ -6,6 +6,8 @@ import image2 from './assets/home-image-2.png';
 import image3 from './assets/home-image-3.png';
 import './home-swiper-slider.css';
 import { useState } from 'react';
+import { ClipboardIcon } from '../../../shared/ui/Icon/ClipboardIcon';
+import { toast } from 'sonner';
 
 const data = [
   { image: image1, discount: 10 },
@@ -13,8 +15,21 @@ const data = [
   { image: image3, discount: 20 },
 ];
 
+const bodyCode = 'DISCOUNT-';
+
 export function HomeSwiperSlider() {
   const [slideIndex, setSlideIndex] = useState(0);
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${bodyCode}${data[slideIndex].discount}`
+      );
+      toast.success('Code is copied to the buffer');
+    } catch {
+      toast.error("Couldn't copy the code");
+    }
+  };
 
   return (
     <div className="home-slider-wrapper">
@@ -48,7 +63,13 @@ export function HomeSwiperSlider() {
       </div>
       {
         <div className="home-code">
-          code: discount-{data[slideIndex].discount}
+          <span>
+            code: {bodyCode}
+            {data[slideIndex].discount}
+          </span>
+          <span className="home-code-icon" onClick={copyToClipboard}>
+            <ClipboardIcon color="var(--color-gray-5)" />
+          </span>
         </div>
       }
     </div>

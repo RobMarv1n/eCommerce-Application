@@ -1,0 +1,40 @@
+export function ClipboardIcon({ width = 24, height = 24, color = '#000' }) {
+  return (
+    <svg
+      className="clipboard"
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line
+        className="clipboard-line"
+        x1="3"
+        y1="2"
+        x2="3"
+        y2="18"
+        stroke={color}
+        strokeWidth="2"
+      />
+      <line
+        className="clipboard-line"
+        x1="18"
+        y1="3"
+        x2="2"
+        y2="3"
+        stroke={color}
+        strokeWidth="2"
+      />
+      <rect
+        className="clipboard-line"
+        x="7"
+        y="7"
+        width="14"
+        height="14"
+        stroke={color}
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
