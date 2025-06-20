@@ -1,23 +1,27 @@
-import styles from './Home.module.css';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../shared/ui/Button';
+import { ArrowIcon } from '../../shared/ui/Icon/ArrowIcon';
+import { HomeSwiperSlider } from './home-swiper-slider/HomeSwiperSlider';
+import './home.css';
+import { ROUTES } from '../../types';
 
 export function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div className={styles['discount-container']}>
-      <h1>Discount codes</h1>
-      <div className={styles['discount-list']}>
-        <span>Discount amount</span>
-        <span>Discount code</span>
-        <span>10 %</span>
-        <span>DISCOUNT-10</span>
-        <span>15 %</span>
-        <span>DISCOUNT-15</span>
-        <span>20 %</span>
-        <span>DISCOUNT-20</span>
-      </div>
-      <p>
-        <strong>Attention!</strong> A big discount replaces a small one. You
-        cannot accept the same discount twice.
-      </p>
-    </div>
+    <>
+      <section className="home container">
+        <HomeSwiperSlider />
+        <div className="home-content">
+          <div className="home-title">
+            <p className="home-welcome">welcome to shopery</p>
+            <h1 className="home-header">Fresh & Health Organic Food</h1>
+          </div>
+          <Button onClick={() => navigate(ROUTES.CATALOG)}>
+            Shop now <ArrowIcon />
+          </Button>
+        </div>
+      </section>
+    </>
   );
 }
