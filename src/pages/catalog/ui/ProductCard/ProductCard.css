@@ -1,0 +1,89 @@
+.product-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 312px;
+  padding: 1rem;
+  border: solid 1px var(--color-gray-1);
+  border-radius: 8px;
+
+  color: var(--color-gray-9);
+
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  border: 1px solid var(--color-hard-primary);
+  box-shadow: 0 0 12px 0 rgb(32 181 38 / 32%);
+}
+
+.product-card:hover .product-title {
+  color: var(--color-hard-primary);
+}
+
+.product-image {
+  flex-grow: 1;
+  align-self: center;
+}
+
+.prices {
+  display: flex;
+  gap: 1rem;
+}
+
+.price {
+  color: var(--color-gray-4);
+  text-decoration: line-through;
+}
+
+.product-card-button {
+  cursor: pointer;
+
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+
+  transition: all ease 0.5s;
+}
+
+.product-card-button:disabled {
+  cursor: default;
+  background-color: var(--color-gray-1);
+}
+
+.product-card-button:disabled path {
+  stroke: var(--color-gray-4);
+}
+
+@media (width <= 400px) {
+  .product-card {
+    width: 280px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-card:hover .product-card-button:not(:disabled) {
+    background-color: var(--color-primary);
+  }
+
+  .product-card:hover .product-card-button:not(:disabled) path {
+    stroke: var(--color-main);
+  }
+
+  .product-card .product-card-button:not(:disabled):hover {
+    transform: scale(0.95);
+    background-color: var(--color-hard-primary);
+  }
+
+  .product-card .product-card-button:not(:disabled):active {
+    background-color: var(--color-soft-primary);
+  }
+}

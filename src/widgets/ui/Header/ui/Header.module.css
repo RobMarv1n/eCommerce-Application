@@ -1,0 +1,108 @@
+.header {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-gray-1);
+}
+
+.headerContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 31px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav {
+  flex-grow: 1;
+}
+
+.navList {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLink {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+  color: var(--color-gray-5);
+
+  transition: color 0.5s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover {
+    color: var(--color-gray-9);
+  }
+}
+
+.navLink.isActive {
+  color: var(--color-gray-9);
+}
+
+.iconsList {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: end;
+
+  width: 172px;
+}
+
+.iconsLink {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconsLink:hover path {
+    stroke: var(--color-primary);
+    transition: all ease 0.5s;
+  }
+}
+
+.iconsLink.isActive svg path {
+  stroke: var(--color-primary);
+}
+
+@media (width < 800px) {
+  .icons {
+    order: 1;
+  }
+
+  .nav {
+    order: 2;
+  }
+}
+
+@media (width < 500px) {
+  .headerContainer {
+    column-gap: 0;
+  }
+}
+
+@media (width <= 400px) {
+  .navList {
+    gap: 18px;
+  }
+
+  .navItem {
+    flex-grow: 1;
+  }
+
+  .navLink {
+    font-size: 12px;
+  }
+
+  .iconsList {
+    gap: 8px;
+    width: 136px;
+  }
+
+  .iconsLink {
+    transform: scale(0.8);
+  }
+}

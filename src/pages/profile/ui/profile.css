@@ -1,0 +1,53 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 562px;
+  margin: 0 auto;
+  padding: 30px 45px;
+  border: 1px solid var(--color-secondary-bg);
+  border-radius: 8px;
+
+  box-shadow: 0 0 56px 0 rgb(0 38 3 / 8%);
+}
+
+@media (width <= 500px) {
+  .profile-page {
+    padding: 30px 20px;
+  }
+}
+
+.account-addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.default-buttons-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.default-address-button {
+  padding: 5px 10px;
+}
+
+@media (width <= 500px) {
+  .default-buttons-container {
+    gap: 8px;
+  }
+
+  .default-address-button {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,15 @@
+.errorPage {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorPageTitle {
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 600;
+  line-height: 120%;
+  color: var(--color-gray-9);
+  text-align: center;
+}

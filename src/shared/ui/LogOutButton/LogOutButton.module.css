@@ -1,0 +1,18 @@
+.logoutButton {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logoutButton svg:hover {
+    fill: var(--color-hard-primary);
+    transition: all ease 0.7s;
+  }
+}

@@ -1,0 +1,22 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 562px;
+  margin: auto;
+  padding: 30px 45px;
+  border: 1px solid var(--color-secondary-bg);
+  border-radius: 8px;
+
+  box-shadow: 0 0 56px 0 rgb(0 38 3 / 8%);
+}
+
+@media (width <= 500px) {
+  .login {
+    padding: 30px 20px;
+  }
+}

@@ -1,0 +1,17 @@
+.products-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.products-list.no-products {
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+@media (width <= 600px) {
+  .products-list {
+    align-items: center;
+    justify-content: center;
+  }
+}

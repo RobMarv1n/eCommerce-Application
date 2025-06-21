@@ -1,0 +1,96 @@
+.catalog {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  width: 100%;
+  min-width: 180px;
+  max-width: 312px;
+}
+
+.products-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sort-search-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.filters-button {
+  display: none;
+}
+
+.close-filters-button {
+  display: none;
+}
+
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@media (width <= 600px) {
+  .filters {
+    position: fixed;
+    z-index: 100;
+    top: 126px;
+    left: -100%;
+
+    overflow-y: auto;
+
+    width: 100%;
+    max-width: 100%;
+    height: calc(100vh - 126px);
+    padding: 50px 10px 20px;
+
+    background-color: var(--color-main);
+
+    transition: all 0.6s;
+  }
+
+  .filters-active {
+    left: 0;
+  }
+
+  .close-filters-button {
+    cursor: pointer;
+
+    position: absolute;
+    z-index: 101;
+    top: 10px;
+    right: 10px;
+
+    display: block;
+
+    width: 30px;
+    height: 30px;
+    border: none;
+
+    font-size: 24px;
+    color: var(--color-primary);
+
+    background: none;
+  }
+
+  .sort-search-panel {
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filters-button {
+    display: flex;
+  }
+}
