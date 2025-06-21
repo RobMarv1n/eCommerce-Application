@@ -11,9 +11,11 @@ import { FormPasswordInput } from '../../widgets/ui/inputs/FormPasswordInput';
 import { RegistrationFormDefaultValues } from '../registration/lib/RegistrationFormDefaultValues';
 import './login.css';
 import { LoginFormData } from './model/types';
+import { useCartCount } from '../cart/ui/CartContexts/CartContexts';
 
 export function Login() {
   const navigate = useNavigate();
+  const { setCartCount } = useCartCount();
 
   useEffect(() => {
     if (client.isLogin) navigate(ROUTES.HOME);
@@ -31,11 +33,12 @@ export function Login() {
     defaultValues: RegistrationFormDefaultValues,
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    client
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    await client
       .login(data)
       .then(() => {
         client.isLogin = true;
+        setCartCount(client.cartApi.cartCount);
         navigate(ROUTES.HOME);
       })
       .catch(() => {

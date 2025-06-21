@@ -17,7 +17,7 @@ export function SortSelect({ onChange }: Properties) {
         id="product-sort"
         name="product-sort"
         onChange={(event) => {
-          client.sortingType = event.target.value;
+          client.productApi.sortingType = event.target.value;
           onChange();
         }}
       >

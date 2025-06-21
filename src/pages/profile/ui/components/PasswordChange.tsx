@@ -17,7 +17,7 @@ export function PasswordChange() {
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onSubmit: SubmitHandler<PasswordChangeData> = (data) => {
-    client
+    client.profileApi
       .updatePassword(data)
       .then(() => console.log('password changed successfully'))
       .catch(() => console.log('current password entered is incorrect'));

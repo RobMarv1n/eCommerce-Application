@@ -11,12 +11,13 @@ export function Product() {
   const [product, setProduct] = useState<ProductData>(emptyProduct);
 
   async function getProduct() {
-    const product = await client.getProduct(id);
+    const product = await client.productApi.getProduct(id);
     setProduct(product);
   }
 
   useEffect(() => {
     getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

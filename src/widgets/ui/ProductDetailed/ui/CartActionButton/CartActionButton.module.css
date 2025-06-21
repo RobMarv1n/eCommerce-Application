@@ -1,0 +1,6 @@
+.cartActionButton {
+  flex-grow: 1;
+  gap: 16px;
+  min-width: 229px;
+  height: 52px;
+}

@@ -22,6 +22,9 @@ import { CatalogPriceFilter } from './CatalogPriceFilter/CatalogPriceFilter';
 import { Button } from '../../../shared/ui/Button';
 import { RatingList } from './RatingList/RatingList';
 import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
+import { Pagination } from './Pagination/Pagination';
+import { SpinnerCircularFixed } from 'spinners-react';
+import { useCartCount } from '../../cart/ui/CartContexts/CartContexts';
 
 export function Catalog() {
   const [categories, setCategories] = useState<MainCategory[]>([]);
@@ -33,31 +36,54 @@ export function Catalog() {
     useState<MainCategory>(emptyCategory);
   const [currentSubcategory, setCurrentSubcategory] =
     useState<Subcategory>(emptySubcategory);
+  const [pageCount, setPageCount] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const { setCartCount } = useCartCount();
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
-  async function updateProducts(): Promise<void> {
-    const products = await client.getProducts();
+  async function updateProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
+    await client.cartApi.getCartData();
+    const products = await client.productApi.getProducts(pageIndex);
     setProducts(products);
+    if (pageIndex === undefined) {
+      setPageCount(client.productApi.pageCount);
+      setPageIndex(1);
+    }
+    setLoading(false);
   }
 
-  async function searchProducts(): Promise<void> {
-    const products = await client.searchProducts();
+  async function searchProducts(pageIndex?: number): Promise<void> {
+    setLoading(true);
+    await client.cartApi.getCartData();
+    const products = await client.productApi.searchProducts(pageIndex);
     setProducts(products);
+    if (pageIndex === undefined) {
+      setPageCount(client.productApi.pageCount);
+      setPageIndex(1);
+    }
+    setLoading(false);
   }
 
   async function initial(): Promise<void> {
-    await client.getMainCategories();
-    await client.getMinMaxPrice();
-    const products = await client.getProducts();
-    setCategories(client.categories);
-    setCurrentCategory(client.categories[0]);
-    setSubcategories(client.categories[0].subCategory);
+    await client.productApi.getMainCategories();
+    await client.productApi.getMinMaxPrice();
+    await client.cartApi.getCartData();
+    const products = await client.productApi.getProducts();
+    setCategories(client.productApi.categories);
+    setCurrentCategory(client.productApi.categories[0]);
+    setSubcategories(client.productApi.categories[0].subCategory);
     setProducts(products);
+    setPageCount(client.productApi.pageCount);
+    setCartCount(client.cartApi.cartCount);
+    setLoading(false);
   }
 
   useEffect(() => {
     initial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleFilters() {
@@ -114,7 +140,8 @@ export function Catalog() {
           </Button>
           <SortSelect
             onChange={() => {
-              if (client.queryMode === QueryMode.FILTER) updateProducts();
+              if (client.productApi.queryMode === QueryMode.FILTER)
+                updateProducts();
               else searchProducts();
             }}
           />
@@ -128,7 +155,28 @@ export function Catalog() {
             updateProducts();
           }}
         />
-        <ProductsList products={products} />
+        <Pagination
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+          onPageChange={(page) => {
+            if (client.productApi.queryMode === QueryMode.FILTER)
+              updateProducts(page);
+            else searchProducts(page);
+            setPageIndex(page);
+          }}
+        />
+        {loading && (
+          <div className="loader-container">
+            <SpinnerCircularFixed
+              size={75}
+              thickness={150}
+              speed={100}
+              color="var(--color-primary)"
+              secondaryColor="rgba(0, 178, 7, 0.3)"
+            />
+          </div>
+        )}
+        {!loading && <ProductsList products={products} />}
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import type { Category } from '@commercetools/platform-sdk';
-import type { MainCategory } from './types';
+import type { MainCategory } from '../types';
 
 export function parseCategories(categories: Category[]): MainCategory[] {
   const mainCategories: Category[] = categories.filter(

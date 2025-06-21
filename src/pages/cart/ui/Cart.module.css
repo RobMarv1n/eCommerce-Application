@@ -1,0 +1,15 @@
+.cart {
+  width: 100%;
+}
+
+.cartWrapper {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 1fr;
+  gap: 24px;
+  justify-content: center;
+}
+
+.cartTitle {
+  margin-bottom: 32px;
+}

@@ -26,6 +26,11 @@ export type ProductData = {
   rating: string;
 };
 
+export type ProductList = {
+  pageCount: number;
+  products: ProductData[];
+};
+
 export type AttributesData = {
   [index: string]: string;
   title: string;
@@ -82,3 +87,22 @@ export enum QueryMode {
   FILTER = 'filter',
   SEARCH = 'search',
 }
+
+export type CartProductData = {
+  id: string;
+  lineItemId: string;
+  title: string;
+  image: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+};
+
+export type CartData = {
+  id: string;
+  version: number;
+  totalPrice: number;
+  discount: number;
+  fullPrice?: number;
+  products: CartProductData[];
+};

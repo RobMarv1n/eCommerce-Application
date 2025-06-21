@@ -15,13 +15,13 @@ export function AccountSettings() {
     formState: { errors },
   } = useForm<AccountSettingsData>({
     mode: 'onChange',
-    defaultValues: client.profileData.accountSettingData,
+    defaultValues: client.profileApi.profileData.accountSettingData,
   });
 
   const [isEditable, setIsEditable] = useState(false);
 
   const onSubmit: SubmitHandler<AccountSettingsData> = (data) => {
-    client
+    client.profileApi
       .updateAccountSettingData(data)
       .then(() => console.log('data updated successfully'))
       .catch(() => console.log('data modification operation failed'));

@@ -1,0 +1,31 @@
+.counter {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 124px;
+  padding: 5px;
+  border: 1px solid var(--color-gray-1);
+  border-radius: 170px;
+
+  font-size: 16px;
+  line-height: 150%;
+  color: var(--color-gray-9);
+  text-align: center;
+}
+
+.counterBtn {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+
+  line-height: 0;
+}

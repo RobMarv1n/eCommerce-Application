@@ -1,8 +1,8 @@
 import { Customer } from '@commercetools/platform-sdk';
-import { AccountAddress, ProfileData } from './types';
-import { AccountSettingsData } from '../../../pages/profile/types/types';
-import { DefaultAccountSettingData } from './constants';
-import { getCountry } from './getCountry';
+import { AccountAddress, ProfileData } from '../types';
+import { AccountSettingsData } from '../../../../pages/profile/types/types';
+import { DefaultAccountSettingData } from '../constants';
+import { getCountry } from '../utils/getCountry';
 
 export function parseProfileData(customer: Customer): ProfileData {
   const accountSettingData: AccountSettingsData = {
