@@ -1,10 +1,15 @@
-.category-name:hover {
+.category-name {
   cursor: pointer;
+  text-transform: capitalize;
+}
+
+.category-name:hover {
   text-decoration: underline;
 }
 
 .category-name-no-active {
   pointer-events: none;
+  text-decoration: none;
 }
 
 @media (width <= 600px) {

@@ -2,19 +2,10 @@ import { useEffect, useState, useRef } from 'react';
 import { CategoriesList } from './CategoriesList/CategoriesList';
 import { FilterItem } from './FilterItem/FilterItem';
 import { client } from '../../../shared/api/clientApi/ClientApi';
-import {
-  MainCategory,
-  ProductData,
-  QueryMode,
-  Subcategory,
-} from '../../../shared/api/clientApi/types';
+import { ProductData, QueryMode } from '../../../shared/api/clientApi/types';
 import { ProductsList } from './ProductsList/ProductsList';
 import './catalog.css';
-import { SubcategoriesList } from './SubcategoriesList/SubcategoriesList';
-import {
-  emptyCategory,
-  emptySubcategory,
-} from '../../../shared/api/clientApi/constants';
+import { rootCategoryId } from '../../../shared/api/clientApi/constants';
 import { CatalogNavigation } from './CatalogNavigation/CatalogNavigation';
 import { SortSelect } from './SortSelect/SortSelect';
 import { SearchInput } from './SearchInput/SearchInput';
@@ -27,19 +18,12 @@ import { SpinnerCircularFixed } from 'spinners-react';
 import { useCartCount } from '../../cart/ui/CartContexts/CartContexts';
 
 export function Catalog() {
-  const [categories, setCategories] = useState<MainCategory[]>([]);
   const [products, setProducts] = useState<ProductData[]>([]);
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([
-    emptySubcategory,
-  ]);
-  const [currentCategory, setCurrentCategory] =
-    useState<MainCategory>(emptyCategory);
-  const [currentSubcategory, setCurrentSubcategory] =
-    useState<Subcategory>(emptySubcategory);
   const [pageCount, setPageCount] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   const [loading, setLoading] = useState(true);
   const { setCartCount } = useCartCount();
+  const [categoryId, setCategoryId] = useState(rootCategoryId);
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
@@ -68,13 +52,10 @@ export function Catalog() {
   }
 
   async function initial(): Promise<void> {
-    await client.productApi.getMainCategories();
+    await client.productApi.getRootCategory();
     await client.productApi.getMinMaxPrice();
     await client.cartApi.getCartData();
     const products = await client.productApi.getProducts();
-    setCategories(client.productApi.categories);
-    setCurrentCategory(client.productApi.categories[0]);
-    setSubcategories(client.productApi.categories[0].subCategory);
     setProducts(products);
     setPageCount(client.productApi.pageCount);
     setCartCount(client.cartApi.cartCount);
@@ -99,20 +80,9 @@ export function Catalog() {
         </button>
         <FilterItem title="Categories">
           <CategoriesList
-            categories={categories}
-            onClick={(category) => {
-              setCurrentCategory(category);
-              setSubcategories(category.subCategory);
-              setCurrentSubcategory(emptySubcategory);
-              updateProducts();
-            }}
-          />
-        </FilterItem>
-        <FilterItem title="Subcategories">
-          <SubcategoriesList
-            subcategories={subcategories}
-            onClick={(subcategory) => {
-              setCurrentSubcategory(subcategory);
+            categoryId={categoryId}
+            onClick={(id) => {
+              setCategoryId(id);
               updateProducts();
             }}
           />
@@ -148,10 +118,8 @@ export function Catalog() {
           <SearchInput onKeyDown={() => searchProducts()} />
         </div>
         <CatalogNavigation
-          category={currentCategory}
-          subcategory={currentSubcategory}
-          onClick={() => {
-            setCurrentSubcategory(emptySubcategory);
+          onClick={(id) => {
+            setCategoryId(id);
             updateProducts();
           }}
         />

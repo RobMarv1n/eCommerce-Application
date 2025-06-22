@@ -39,15 +39,10 @@ export type AttributesData = {
   rating: string;
 };
 
-export type Subcategory = {
+export type MyCategory = {
   id: string;
   name: string;
-};
-
-export type MainCategory = {
-  id: string;
-  name: string;
-  subCategory: Subcategory[];
+  subCategories: MyCategory[];
 };
 
 export type AccountAddress = {
