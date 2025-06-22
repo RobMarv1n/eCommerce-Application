@@ -1,37 +1,31 @@
 import { client } from '../../../../shared/api/clientApi/ClientApi';
-import {
-  MainCategory,
-  Subcategory,
-} from '../../../../shared/api/clientApi/types';
 import './CatalogNavigation.css';
 
 type Properties = {
-  category: MainCategory;
-  subcategory: Subcategory;
-  onClick: () => void;
+  onClick: (id: string) => void;
 };
 
-export function CatalogNavigation({
-  category,
-  subcategory,
-  onClick,
-}: Properties) {
-  const style =
-    'category-name' + (subcategory.id ? '' : 'category-name-active');
+export function CatalogNavigation({ onClick }: Properties) {
+  const style = 'category-name';
+  const styleNoActive = style + ' category-name-no-active';
+  const categoryPath = client.productApi.getCategoryPath();
 
   return (
     <div className="catalog-navigation">
-      <span>Main &gt; </span>
-      <span
-        className={style}
-        onClick={() => {
-          client.productApi.currentCategoryId = category.id;
-          onClick();
-        }}
-      >
-        {category.name}
-      </span>
-      {subcategory.id && <span> &gt; {subcategory.name}</span>}
+      {categoryPath.map((item, index) => (
+        <span key={'path' + item.id}>
+          <span
+            className={index < categoryPath.length - 1 ? style : styleNoActive}
+            onClick={() => {
+              client.productApi.currentCategoryId = item.id;
+              onClick(item.id);
+            }}
+          >
+            {item.name}
+          </span>
+          <span> &gt; </span>
+        </span>
+      ))}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import {
-  MainCategory,
+  MyCategory,
   PriceRange,
   ProductData,
   QueryMode,
@@ -8,11 +8,16 @@ import {
   SortingTypes,
 } from '../types';
 import { parseCategories } from '../parsers/parseCategories';
-import { emptyProduct, productPerPage } from '../constants';
+import {
+  emptyRootCategory,
+  emptyProduct,
+  productPerPage,
+  rootCategoryId,
+} from '../constants';
 import { parseProduct } from '../parsers/parseProduct';
 
 export class ProductApi {
-  public categories: MainCategory[];
+  public rootCategory: MyCategory;
   public currentCategoryId: string;
   public queryMode: string;
   public priceRange: PriceRange;
@@ -24,8 +29,8 @@ export class ProductApi {
 
   constructor(apiRoot: ByProjectKeyRequestBuilder) {
     this.apiRoot = apiRoot;
-    this.categories = [];
-    this.currentCategoryId = '';
+    this.rootCategory = emptyRootCategory;
+    this.currentCategoryId = 'all';
     this.queryMode = QueryMode.FILTER;
     this.priceRange = { min: 0, max: 100 };
     this.minRating = '1';
@@ -35,35 +40,67 @@ export class ProductApi {
   }
 
   public getCategoryName(id: string): string {
-    const category = this.categories.find((item) => item.id === id);
+    if (id === '') return 'all';
+    const category = this.rootCategory.subCategories.find(
+      (item) => item.id === id
+    );
     if (category) return category.name;
+    for (const subCategory of this.rootCategory.subCategories) {
+      const category = subCategory.subCategories.find((item) => item.id === id);
+      if (category) return category.name;
+    }
     return '';
   }
 
-  public async getMainCategories(): Promise<void> {
+  public async getRootCategory(): Promise<void> {
     try {
       const response = await this.apiRoot.categories().get().execute();
-      this.categories = parseCategories(response.body.results);
-      this.currentCategoryId = this.categories[0].id;
+      this.rootCategory = parseCategories(response.body.results);
+      this.currentCategoryId = this.rootCategory.id;
     } catch {
-      this.categories = [];
+      this.rootCategory = emptyRootCategory;
     }
+  }
+
+  public getCategoryPath(): MyCategory[] {
+    const path = [this.rootCategory];
+
+    const subCategory = this.rootCategory.subCategories.find(
+      (item) => item.id === this.currentCategoryId
+    );
+    if (subCategory) {
+      path.push(subCategory);
+    }
+
+    for (const subCategory of this.rootCategory.subCategories) {
+      const subSubCategory = subCategory.subCategories.find(
+        (item) => item.id === this.currentCategoryId
+      );
+      if (subSubCategory) {
+        path.push(subCategory, subSubCategory);
+      }
+    }
+
+    return path;
   }
 
   public async getProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.FILTER;
 
+      const filter = [
+        `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
+        `variants.attributes.rating: range (${this.minRating} to 6)`,
+      ];
+      if (this.currentCategoryId !== rootCategoryId)
+        filter.push(`categories.id:"${this.currentCategoryId}"`);
+
       const response = await this.apiRoot
         .productProjections()
         .search()
         .get({
           queryArgs: {
-            filter: [
-              `categories.id:"${this.currentCategoryId}"`,
-              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
-              `variants.attributes.rating: range (${this.minRating} to 6)`,
-            ],
+            filter,
             limit: productPerPage,
             offset: pageIndex ? (pageIndex - 1) * productPerPage : 0,
           },
