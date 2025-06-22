@@ -8,6 +8,7 @@ import { CartActionButton } from './CartActionButton/CartActionButton';
 
 import styles from './ProductDetailed.module.css';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
 
 interface ProductDetailedProperties {
   product: ProductData;
@@ -75,6 +76,10 @@ export function ProductDetailed({ product }: ProductDetailedProperties) {
               </span>
             ))}
           </span>
+        </div>
+        <div className={styles.productRating}>
+          <span className={styles.productRatingTitle}>Rating:</span>
+          <RatingStars rating={product.rating} />
         </div>
       </div>
     </div>
