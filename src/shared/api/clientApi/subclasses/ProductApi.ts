@@ -42,19 +42,6 @@ export class ProductApi {
     this.searchText = '';
   }
 
-  public getCategoryName(id: string): string {
-    if (id === '') return 'all';
-    const category = this.rootCategory.subCategories.find(
-      (item) => item.id === id
-    );
-    if (category) return category.name;
-    for (const subCategory of this.rootCategory.subCategories) {
-      const category = subCategory.subCategories.find((item) => item.id === id);
-      if (category) return category.name;
-    }
-    return '';
-  }
-
   public async getRootCategory(): Promise<void> {
     try {
       const response = await this.apiRoot.categories().get().execute();
