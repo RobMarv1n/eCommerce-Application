@@ -1,4 +1,7 @@
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
+import {
+  ByProjectKeyRequestBuilder,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import {
   MyCategory,
   PriceRange,
@@ -39,19 +42,6 @@ export class ProductApi {
     this.searchText = '';
   }
 
-  public getCategoryName(id: string): string {
-    if (id === '') return 'all';
-    const category = this.rootCategory.subCategories.find(
-      (item) => item.id === id
-    );
-    if (category) return category.name;
-    for (const subCategory of this.rootCategory.subCategories) {
-      const category = subCategory.subCategories.find((item) => item.id === id);
-      if (category) return category.name;
-    }
-    return '';
-  }
-
   public async getRootCategory(): Promise<void> {
     try {
       const response = await this.apiRoot.categories().get().execute();
@@ -62,11 +52,13 @@ export class ProductApi {
     }
   }
 
-  public getCategoryPath(): MyCategory[] {
+  public getCategoryPath(categoryId: string = ''): MyCategory[] {
+    const id = categoryId || this.currentCategoryId;
+
     const path = [this.rootCategory];
 
     const subCategory = this.rootCategory.subCategories.find(
-      (item) => item.id === this.currentCategoryId
+      (item) => item.id === id
     );
     if (subCategory) {
       path.push(subCategory);
@@ -74,7 +66,7 @@ export class ProductApi {
 
     for (const subCategory of this.rootCategory.subCategories) {
       const subSubCategory = subCategory.subCategories.find(
-        (item) => item.id === this.currentCategoryId
+        (item) => item.id === id
       );
       if (subSubCategory) {
         path.push(subCategory, subSubCategory);
@@ -82,6 +74,19 @@ export class ProductApi {
     }
 
     return path;
+  }
+
+  public getCategoryId(result: ProductProjection): string {
+    const categories = result.categories;
+    for (const subCategory of this.rootCategory.subCategories) {
+      for (const subSubCategory of subCategory.subCategories) {
+        const category = categories.find(
+          (item) => item.id === subSubCategory.id
+        );
+        if (category) return category.id;
+      }
+    }
+    return '';
   }
 
   public async getProducts(pageIndex?: number): Promise<ProductData[]> {

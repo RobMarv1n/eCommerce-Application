@@ -9,7 +9,7 @@ export const emptyProduct: ProductData = {
   descriptionFull: '',
   price: 0,
   discountedPrice: 0,
-  categoryName: '',
+  categoryId: '',
   rating: '5',
 };
 

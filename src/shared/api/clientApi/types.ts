@@ -22,7 +22,7 @@ export type ProductData = {
   descriptionFull: string;
   price: number;
   discountedPrice: number;
-  categoryName: string;
+  categoryId: string;
   rating: string;
 };
 

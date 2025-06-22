@@ -10,13 +10,16 @@ export function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState<ProductData>(emptyProduct);
 
-  async function getProduct() {
+  async function initial() {
+    if (client.productApi.rootCategory.subCategories.length === 0) {
+      await client.productApi.getRootCategory();
+    }
     const product = await client.productApi.getProduct(id);
     setProduct(product);
   }
 
   useEffect(() => {
-    getProduct();
+    initial();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
