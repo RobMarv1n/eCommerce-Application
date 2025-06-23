@@ -5,7 +5,6 @@ import { client } from '../../../shared/api/clientApi/ClientApi';
 import { ProductData, QueryMode } from '../../../shared/api/clientApi/types';
 import { ProductsList } from './ProductsList/ProductsList';
 import './catalog.css';
-import { rootCategoryId } from '../../../shared/api/clientApi/constants';
 import { CatalogNavigation } from './CatalogNavigation/CatalogNavigation';
 import { SortSelect } from './SortSelect/SortSelect';
 import { SearchInput } from './SearchInput/SearchInput';
@@ -16,6 +15,7 @@ import { FiltersIcon } from '../../../shared/ui/Icon/FiltersIcon';
 import { Pagination } from './Pagination/Pagination';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { useCartCount } from '../../cart/ui/CartContexts/CartContexts';
+import { useCatalogContext } from './CatalogContext/CatalogContext';
 
 export function Catalog() {
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -23,7 +23,7 @@ export function Catalog() {
   const [pageIndex, setPageIndex] = useState(1);
   const [loading, setLoading] = useState(true);
   const { setCartCount } = useCartCount();
-  const [categoryId, setCategoryId] = useState(rootCategoryId);
+  const { categoryId, setCategoryId } = useCatalogContext();
 
   const filtersReference = useRef<HTMLDivElement>(null);
 

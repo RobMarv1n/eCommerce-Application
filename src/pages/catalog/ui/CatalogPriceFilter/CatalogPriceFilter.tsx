@@ -1,22 +1,20 @@
 import { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 import './CatalogPriceFilter.css';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
+import { useCatalogContext } from '../CatalogContext/CatalogContext';
 
 type Properties = {
   updateRange: () => void;
 };
 
 export function CatalogPriceFilter({ updateRange }: Properties) {
-  const initialMinPrice = 0;
-  const initialMaxPrice = 100;
+  const { sliderMinValue, setSliderMinValue } = useCatalogContext();
+  const { sliderMaxValue, setSliderMaxValue } = useCatalogContext();
 
-  const [sliderMinValue, setSliderMinValue] = useState(initialMinPrice);
-  const [sliderMaxValue, setSliderMaxValue] = useState(initialMaxPrice);
-
-  const [minValue, setMinValue] = useState(initialMinPrice);
-  const [maxValue, setMaxValue] = useState(initialMaxPrice);
-  const [minInput, setMinInput] = useState(initialMinPrice);
-  const [maxInput, setMaxInput] = useState(initialMaxPrice);
+  const { minValue, setMinValue } = useCatalogContext();
+  const { maxValue, setMaxValue } = useCatalogContext();
+  const { minInput, setMinInput } = useCatalogContext();
+  const { maxInput, setMaxInput } = useCatalogContext();
 
   const [isDragging, setIsDragging] = useState(false);
 
