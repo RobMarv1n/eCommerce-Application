@@ -106,6 +106,10 @@ export class ProductApi {
         .get({
           queryArgs: {
             filter,
+            sort:
+              this.sortingType === SortingTypes.DEFAULT
+                ? undefined
+                : this.sortingType,
             limit: productPerPage,
             offset: pageIndex ? (pageIndex - 1) * productPerPage : 0,
           },
