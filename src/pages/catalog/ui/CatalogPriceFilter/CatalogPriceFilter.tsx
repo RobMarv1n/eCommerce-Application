@@ -8,8 +8,8 @@ type Properties = {
 };
 
 export function CatalogPriceFilter({ updateRange }: Properties) {
-  const { sliderMinValue, setSliderMinValue } = useCatalogContext();
-  const { sliderMaxValue, setSliderMaxValue } = useCatalogContext();
+  const { sliderMinValue } = useCatalogContext();
+  const { sliderMaxValue } = useCatalogContext();
 
   const { minValue, setMinValue } = useCatalogContext();
   const { maxValue, setMaxValue } = useCatalogContext();
@@ -50,23 +50,10 @@ export function CatalogPriceFilter({ updateRange }: Properties) {
     }
   }
 
-  async function getMinMaxPrice() {
-    const results = await client.productApi.getMinMaxPrice();
-    setSliderMaxValue(results.max);
-    setMaxInput(results.max);
-    setMaxValue(results.max);
-    setSliderMinValue(results.min);
-    setMinValue(results.min);
-    setMinInput(results.min);
-  }
-
-  useEffect(() => {
-    getMinMaxPrice();
-  }, []);
-
   useEffect(() => {
     setSliderTrack();
-  }, [minValue, maxValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleMinInput(event: ChangeEvent<HTMLInputElement>) {
     const value =

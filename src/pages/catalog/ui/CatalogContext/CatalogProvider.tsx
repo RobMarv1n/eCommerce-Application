@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CatalogContext } from './CatalogContext';
 import { CatalogContextValue, CatalogDefaultValue } from './types';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 
 type Properties = {
   children: React.ReactNode;
@@ -26,6 +27,39 @@ export function CatalogProvider({ children }: Properties) {
   const [minInput, setMinInput] = useState(initialMinPrice);
   const [maxInput, setMaxInput] = useState(initialMaxPrice);
 
+  async function getMinMaxPrice() {
+    await client.productApi.getMinMaxPrice();
+    const min = Math.floor(client.productApi.priceRange.min / 100);
+    const max = Math.ceil(client.productApi.priceRange.max / 100);
+    setSliderMaxValue(max);
+    setMaxInput(max);
+    setMaxValue(max);
+    setSliderMinValue(min);
+    setMinValue(min);
+    setMinInput(min);
+  }
+
+  async function resetFilters() {
+    setCategoryId(CatalogDefaultValue.CATEGORY_ID);
+    client.productApi.currentCategoryId = CatalogDefaultValue.CATEGORY_ID;
+
+    setMinValue(sliderMinValue);
+    setMaxValue(sliderMaxValue);
+    setMinInput(sliderMinValue);
+    setMaxInput(sliderMaxValue);
+    client.productApi.priceRange = {
+      min: sliderMinValue * 100,
+      max: sliderMaxValue * 100,
+    };
+
+    setRatingValue('1');
+    client.productApi.minRating = '1';
+  }
+
+  useEffect(() => {
+    getMinMaxPrice();
+  }, []);
+
   const value: CatalogContextValue = {
     categoryId,
     setCategoryId: (id) => setCategoryId(id),
@@ -43,6 +77,7 @@ export function CatalogProvider({ children }: Properties) {
     setMinInput: (value) => setMinInput(value),
     maxInput,
     setMaxInput: (value) => setMaxInput(value),
+    resetFilters,
   };
 
   return (

@@ -24,6 +24,7 @@ export function Catalog() {
   const [loading, setLoading] = useState(true);
   const { setCartCount } = useCartCount();
   const { categoryId, setCategoryId } = useCatalogContext();
+  const { resetFilters } = useCatalogContext();
 
   const filtersReference = useRef<HTMLDivElement>(null);
 
@@ -53,7 +54,7 @@ export function Catalog() {
 
   async function initial(): Promise<void> {
     await client.productApi.getRootCategory();
-    await client.productApi.getMinMaxPrice();
+    // await client.productApi.getMinMaxPrice();
     await client.cartApi.getCartData();
     const products = await client.productApi.getProducts();
     setProducts(products);
@@ -101,7 +102,14 @@ export function Catalog() {
             }}
           />
         </FilterItem>
-        <Button>Reset</Button>
+        <Button
+          onClick={() => {
+            resetFilters();
+            updateProducts();
+          }}
+        >
+          Reset
+        </Button>
       </div>
       <div className="products-panel">
         <div className="sort-search-panel">

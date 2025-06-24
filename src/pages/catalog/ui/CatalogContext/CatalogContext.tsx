@@ -18,6 +18,7 @@ const defaultCatalogContext: CatalogContextValue = {
   setMinInput: () => {},
   maxInput: Number(CatalogDefaultValue.MAX_PRICE),
   setMaxInput: () => {},
+  resetFilters: () => {},
 };
 
 export const CatalogContext = createContext(defaultCatalogContext);

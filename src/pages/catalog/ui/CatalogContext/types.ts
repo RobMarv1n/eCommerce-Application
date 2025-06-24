@@ -15,6 +15,7 @@ export type CatalogContextValue = {
   setMinInput: (value: number) => void;
   maxInput: number;
   setMaxInput: (value: number) => void;
+  resetFilters: () => void;
 };
 
 export enum CatalogDefaultValue {
