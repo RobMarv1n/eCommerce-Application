@@ -54,7 +54,7 @@ export function Catalog() {
 
   async function initial(): Promise<void> {
     await client.productApi.getRootCategory();
-    // await client.productApi.getMinMaxPrice();
+    await client.productApi.getMinMaxPrice();
     await client.cartApi.getCartData();
     const products = await client.productApi.getProducts();
     setProducts(products);
