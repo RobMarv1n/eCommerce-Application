@@ -1,11 +1,5 @@
 import { AccountSettingsData } from '../../../pages/profile/types/types';
-import {
-  CartData,
-  MainCategory,
-  ProductData,
-  ProfileData,
-  Subcategory,
-} from './types';
+import { CartData, MyCategory, ProductData, ProfileData } from './types';
 
 export const emptyProduct: ProductData = {
   id: '',
@@ -15,19 +9,16 @@ export const emptyProduct: ProductData = {
   descriptionFull: '',
   price: 0,
   discountedPrice: 0,
-  categoryName: '',
+  categoryId: '',
   rating: '5',
 };
 
-export const emptySubcategory: Subcategory = {
-  id: '',
-  name: '',
-};
+export const rootCategoryId = 'all';
 
-export const emptyCategory: MainCategory = {
-  id: '',
-  name: '',
-  subCategory: [],
+export const emptyRootCategory: MyCategory = {
+  id: rootCategoryId,
+  name: rootCategoryId,
+  subCategories: [],
 };
 
 export const DefaultAccountSettingData: AccountSettingsData = {
