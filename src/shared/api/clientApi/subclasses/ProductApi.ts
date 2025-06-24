@@ -1,9 +1,6 @@
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import {
-  ByProjectKeyRequestBuilder,
-  ProductProjection,
-} from '@commercetools/platform-sdk';
-import {
-  MyCategory,
+  MainCategory,
   PriceRange,
   ProductData,
   QueryMode,
@@ -11,16 +8,11 @@ import {
   SortingTypes,
 } from '../types';
 import { parseCategories } from '../parsers/parseCategories';
-import {
-  emptyRootCategory,
-  emptyProduct,
-  productPerPage,
-  rootCategoryId,
-} from '../constants';
+import { emptyProduct, productPerPage } from '../constants';
 import { parseProduct } from '../parsers/parseProduct';
 
 export class ProductApi {
-  public rootCategory: MyCategory;
+  public categories: MainCategory[];
   public currentCategoryId: string;
   public queryMode: string;
   public priceRange: PriceRange;
@@ -32,8 +24,8 @@ export class ProductApi {
 
   constructor(apiRoot: ByProjectKeyRequestBuilder) {
     this.apiRoot = apiRoot;
-    this.rootCategory = emptyRootCategory;
-    this.currentCategoryId = 'all';
+    this.categories = [];
+    this.currentCategoryId = '';
     this.queryMode = QueryMode.FILTER;
     this.priceRange = { min: 0, max: 100 };
     this.minRating = '1';
@@ -42,74 +34,36 @@ export class ProductApi {
     this.searchText = '';
   }
 
-  public async getRootCategory(): Promise<void> {
+  public getCategoryName(id: string): string {
+    const category = this.categories.find((item) => item.id === id);
+    if (category) return category.name;
+    return '';
+  }
+
+  public async getMainCategories(): Promise<void> {
     try {
       const response = await this.apiRoot.categories().get().execute();
-      this.rootCategory = parseCategories(response.body.results);
-      this.currentCategoryId = this.rootCategory.id;
+      this.categories = parseCategories(response.body.results);
+      this.currentCategoryId = this.categories[0].id;
     } catch {
-      this.rootCategory = emptyRootCategory;
+      this.categories = [];
     }
-  }
-
-  public getCategoryPath(categoryId: string = ''): MyCategory[] {
-    const id = categoryId || this.currentCategoryId;
-
-    const path = [this.rootCategory];
-
-    const subCategory = this.rootCategory.subCategories.find(
-      (item) => item.id === id
-    );
-    if (subCategory) {
-      path.push(subCategory);
-    }
-
-    for (const subCategory of this.rootCategory.subCategories) {
-      const subSubCategory = subCategory.subCategories.find(
-        (item) => item.id === id
-      );
-      if (subSubCategory) {
-        path.push(subCategory, subSubCategory);
-      }
-    }
-
-    return path;
-  }
-
-  public getCategoryId(result: ProductProjection): string {
-    const categories = result.categories;
-    for (const subCategory of this.rootCategory.subCategories) {
-      for (const subSubCategory of subCategory.subCategories) {
-        const category = categories.find(
-          (item) => item.id === subSubCategory.id
-        );
-        if (category) return category.id;
-      }
-    }
-    return '';
   }
 
   public async getProducts(pageIndex?: number): Promise<ProductData[]> {
     try {
       this.queryMode = QueryMode.FILTER;
 
-      const filter = [
-        `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
-        `variants.attributes.rating: range (${this.minRating} to 6)`,
-      ];
-      if (this.currentCategoryId !== rootCategoryId)
-        filter.push(`categories.id:"${this.currentCategoryId}"`);
-
       const response = await this.apiRoot
         .productProjections()
         .search()
         .get({
           queryArgs: {
-            filter,
-            sort:
-              this.sortingType === SortingTypes.DEFAULT
-                ? undefined
-                : this.sortingType,
+            filter: [
+              `categories.id:"${this.currentCategoryId}"`,
+              `variants.price.centAmount: range (${this.priceRange.min} to ${this.priceRange.max + 1})`,
+              `variants.attributes.rating: range (${this.minRating} to 6)`,
+            ],
             limit: productPerPage,
             offset: pageIndex ? (pageIndex - 1) * productPerPage : 0,
           },
@@ -184,7 +138,7 @@ export class ProductApi {
     }
   }
 
-  public async getMinMaxPrice(): Promise<void> {
+  public async getMinMaxPrice(): Promise<PriceRange> {
     const response = await this.apiRoot
       .productProjections()
       .search()
@@ -194,22 +148,19 @@ export class ProductApi {
         },
       })
       .execute();
-    if (!response.body.facets) {
-      this.priceRange = { min: 0, max: 100 };
-      return;
-    }
+    if (!response.body.facets) return { min: 0, max: 100 };
     const range = response.body.facets['variants.price.centAmount'] as unknown;
     if (range && typeof range === 'object') {
       const rangeObject: Partial<RangeObject> = range;
       if (rangeObject.ranges !== undefined) {
         const range = rangeObject.ranges[0];
-        this.priceRange = {
-          min: range.min,
-          max: range.max,
+        this.priceRange = { min: range.min, max: range.max };
+        return {
+          min: Math.floor(range.min / 100),
+          max: Math.ceil(range.max / 100),
         };
-        return;
       }
     }
-    this.priceRange = { min: 0, max: 100 };
+    return { min: 0, max: 100 };
   }
 }

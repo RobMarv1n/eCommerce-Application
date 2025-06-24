@@ -1,26 +1,21 @@
 import type { Category } from '@commercetools/platform-sdk';
-import type { MyCategory } from '../types';
-import { emptyRootCategory } from '../constants';
+import type { MainCategory } from '../types';
 
-export function parseCategories(categories: Category[]): MyCategory {
-  const mainCategory: MyCategory = emptyRootCategory;
-  mainCategory.subCategories = categories
-    .filter((category) => !category.parent)
-    .map((category) => ({
-      id: category.id,
-      name: category.name['en-US'],
-      subCategories: [],
-    }));
-  for (const subCategory of mainCategory.subCategories) {
-    subCategory.subCategories = categories
+export function parseCategories(categories: Category[]): MainCategory[] {
+  const mainCategories: Category[] = categories.filter(
+    (category) => !category.parent
+  );
+  return mainCategories.map((category) => ({
+    id: category.id,
+    name: category.name['en-US'],
+    subCategory: categories
       .filter(
-        (category) => category.parent && category.parent.id === subCategory.id
+        (subcategory) =>
+          subcategory.parent && subcategory.parent.id === category.id
       )
-      .map((category) => ({
-        id: category.id,
-        name: category.name['en-US'],
-        subCategories: [],
-      }));
-  }
-  return mainCategory;
+      .map((subcategory) => ({
+        id: subcategory.id,
+        name: subcategory.name['en-US'],
+      })),
+  }));
 }

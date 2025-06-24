@@ -11,7 +11,7 @@ export function parseProduct(result: ProductProjection): ProductData {
   const { title, descriptionShort, descriptionFull, rating } = parseAttributes(
     variant.attributes
   );
-  const categoryId = client.productApi.getCategoryId(result);
+  const categoryId = result.categories[0].id;
 
   return {
     id: result.id,
@@ -21,7 +21,7 @@ export function parseProduct(result: ProductProjection): ProductData {
     descriptionFull,
     price: parsePrice(variant.prices),
     discountedPrice: parseDiscountedPrice(variant.prices),
-    categoryId,
+    categoryName: client.productApi.getCategoryName(categoryId),
     rating,
   };
 }

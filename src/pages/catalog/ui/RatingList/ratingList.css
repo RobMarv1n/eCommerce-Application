@@ -5,17 +5,11 @@
 }
 
 .rating-item {
-  cursor: pointer;
   display: flex;
   gap: 0.5rem;
 }
 
 .rating-label {
-  cursor: pointer;
   display: flex;
   gap: 0.5rem;
-}
-
-.rating-item input {
-  cursor: pointer;
 }

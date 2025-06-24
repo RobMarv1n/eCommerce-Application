@@ -11,7 +11,7 @@ const mockProductData: ProductData = {
   descriptionFull: 'Full description',
   price: 19.99,
   discountedPrice: 14.99,
-  categoryId: '',
+  categoryName: 'Category 1',
   rating: '4.5',
 };
 
@@ -32,5 +32,7 @@ describe('Header component', () => {
     expect(
       screen.getByText(`$${mockProductData.discountedPrice}`)
     ).toBeInTheDocument();
+
+    expect(screen.getByText(mockProductData.categoryName));
   });
 });

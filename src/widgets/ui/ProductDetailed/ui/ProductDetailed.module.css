@@ -78,17 +78,6 @@
   color: var(--color-gray-5);
 }
 
-.productRating {
-  display: flex;
-  gap: 8px;
-}
-
-.productRatingTitle {
-  font-weight: 500;
-  line-height: 150%;
-  color: var(--color-gray-9);
-}
-
 .CTA {
   display: flex;
   flex-wrap: wrap;

@@ -7,8 +7,6 @@ import { SwiperSlider } from '../../../../shared/ui/SwiperSlider/SwiperSlider';
 import { CartActionButton } from './CartActionButton/CartActionButton';
 
 import styles from './ProductDetailed.module.css';
-import { client } from '../../../../shared/api/clientApi/ClientApi';
-import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
 
 interface ProductDetailedProperties {
   product: ProductData;
@@ -17,7 +15,6 @@ interface ProductDetailedProperties {
 export function ProductDetailed({ product }: ProductDetailedProperties) {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const categoryPath = client.productApi.getCategoryPath(product.categoryId);
 
   return (
     <div className={styles.wrapper}>
@@ -68,18 +65,7 @@ export function ProductDetailed({ product }: ProductDetailedProperties) {
         </div>
         <div className={styles.category}>
           Category:{' '}
-          <span className={styles.categoryName}>
-            {categoryPath.map((item) => (
-              <span key={'path' + item.id}>
-                <span>{item.name}</span>
-                <span> &gt; </span>
-              </span>
-            ))}
-          </span>
-        </div>
-        <div className={styles.productRating}>
-          <span className={styles.productRatingTitle}>Rating:</span>
-          <RatingStars rating={product.rating} />
+          <span className={styles.categoryName}>{product.categoryName}</span>
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ export type ProductData = {
   descriptionFull: string;
   price: number;
   discountedPrice: number;
-  categoryId: string;
+  categoryName: string;
   rating: string;
 };
 
@@ -39,10 +39,15 @@ export type AttributesData = {
   rating: string;
 };
 
-export type MyCategory = {
+export type Subcategory = {
   id: string;
   name: string;
-  subCategories: MyCategory[];
+};
+
+export type MainCategory = {
+  id: string;
+  name: string;
+  subCategory: Subcategory[];
 };
 
 export type AccountAddress = {

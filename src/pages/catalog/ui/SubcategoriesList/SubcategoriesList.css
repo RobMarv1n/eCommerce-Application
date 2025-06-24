@@ -4,11 +4,11 @@
   gap: 0.5rem;
 }
 
-.category-item {
+.subcategory-item {
   display: flex;
   gap: 0.5rem;
 }
 
-.category-item label {
+.subcategory-item label {
   width: 100%;
 }

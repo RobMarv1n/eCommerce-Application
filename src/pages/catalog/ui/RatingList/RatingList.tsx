@@ -1,7 +1,7 @@
+import { useState } from 'react';
 import { RatingStars } from '../../../../shared/ui/RatingStars/RatingStars';
 import './ratingList.css';
 import { client } from '../../../../shared/api/clientApi/ClientApi';
-import { useCatalogContext } from '../CatalogContext/CatalogContext';
 
 const ratingTitle = [
   { title: '1 & up', value: '1' },
@@ -16,8 +16,7 @@ type Properties = {
 };
 
 export function RatingList({ onClick }: Properties) {
-  // const [selectValue, setSelectValue] = useState('1');
-  const { ratingValue, setRatingValue } = useCatalogContext();
+  const [selectValue, setSelectValue] = useState('1');
 
   return (
     <div className="rating-list">
@@ -28,9 +27,9 @@ export function RatingList({ onClick }: Properties) {
             name="rating"
             id={`rating-item${rating.value}`}
             value={rating.value}
-            checked={ratingValue === rating.value}
+            checked={selectValue === rating.value}
             onChange={(event) => {
-              setRatingValue(event.target.value);
+              setSelectValue(event.target.value);
               client.productApi.minRating = event.target.value;
               onClick();
             }}

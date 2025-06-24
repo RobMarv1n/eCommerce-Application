@@ -12,7 +12,6 @@ import { Cart } from '../pages/cart';
 import { AboutUs } from '../pages/about-us';
 import { CartCountProvider } from '../pages/cart/ui/CartContexts/CartCountProvider';
 import { CartDataProvider } from '../pages/cart/ui/CartContexts/CartDataProvider';
-import { CatalogProvider } from '../pages/catalog/ui/CatalogContext/CatalogProvider';
 
 export function Router() {
   return (
@@ -25,14 +24,7 @@ export function Router() {
             <Route path={ROUTES.REGISTRATION} element={<Registration />} />
             <Route path={ROUTES.PROFILE} element={<Profile />} />
             <Route path={ROUTES.ABOUT} element={<AboutUs />} />
-            <Route
-              path={ROUTES.CATALOG}
-              element={
-                <CatalogProvider>
-                  <Catalog />
-                </CatalogProvider>
-              }
-            />
+            <Route path={ROUTES.CATALOG} element={<Catalog />} />
             <Route path={ROUTES.PRODUCT} element={<Product />} />
             <Route
               path={ROUTES.CART}
