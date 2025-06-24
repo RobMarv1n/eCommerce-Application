@@ -184,7 +184,7 @@ export class ProductApi {
     }
   }
 
-  public async getMinMaxPrice(): Promise<PriceRange> {
+  public async getMinMaxPrice(): Promise<void> {
     const response = await this.apiRoot
       .productProjections()
       .search()
@@ -194,19 +194,22 @@ export class ProductApi {
         },
       })
       .execute();
-    if (!response.body.facets) return { min: 0, max: 100 };
+    if (!response.body.facets) {
+      this.priceRange = { min: 0, max: 100 };
+      return;
+    }
     const range = response.body.facets['variants.price.centAmount'] as unknown;
     if (range && typeof range === 'object') {
       const rangeObject: Partial<RangeObject> = range;
       if (rangeObject.ranges !== undefined) {
         const range = rangeObject.ranges[0];
-        this.priceRange = { min: range.min, max: range.max };
-        return {
-          min: Math.floor(range.min / 100),
-          max: Math.ceil(range.max / 100),
+        this.priceRange = {
+          min: range.min,
+          max: range.max,
         };
+        return;
       }
     }
-    return { min: 0, max: 100 };
+    this.priceRange = { min: 0, max: 100 };
   }
 }
