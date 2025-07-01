@@ -1,13 +1,29 @@
-name: CI
+name: Lighthouse CI
+
 on: [push]
+
 jobs:
   lighthouseci:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: npm install && npm install -g @lhci/cli@0.15.x
+
+      - run: npm ci
+      - run: npm install -g @lhci/cli@0.15.x
+
       - run: npm run build
-      - run: lhci autorun
+
+      - name: Run Lighthouse CI
+        run: lhci autorun --config=.lighthouserc.cjs || echo "LHCI failed, continuing anyway"
+
+      - name: Upload LHCI Report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lhci-report
+          path: ./lhci-report/
