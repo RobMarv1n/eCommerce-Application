@@ -1,17 +1,17 @@
-import { Country } from 'postal-code-validator';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { client } from '../../../../shared/api/clientApi/ClientApi';
 import { Button } from '../../../../shared/ui/Button';
 import { cityValidationRules } from '../../../../shared/validation/cityValidation';
 import { streetValidationRules } from '../../../../shared/validation/streetValidation';
 import { zipCodeValidationRules } from '../../../../shared/validation/zipCodeValidation';
+import { FormCountrySelect } from '../../../../widgets/ui/inputs/FormCountrySelect';
 import { FormInput } from '../../../../widgets/ui/inputs/FormInput';
 import { MOCK_DEFAULT_ADDRESS } from '../../model/DefaultAddresses';
 import {
   AccountAddressFormData,
   AccountAddressFormProperties,
 } from '../../types/types';
-import { client } from '../../../../shared/api/clientApi/ClientApi';
 import './../../../../shared/styles/forms.css';
 
 export function AccountAddressForm(properties: AccountAddressFormProperties) {
@@ -158,21 +158,14 @@ export function AccountAddressForm(properties: AccountAddressFormProperties) {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="country-input">
-            Country
-          </label>
-          <select
+          <FormCountrySelect
+            name="country"
+            label="Country"
             id="country-input"
-            className="form-input"
+            register={register}
+            errors={errors}
             disabled={!isShowInModal && !isEditable}
-            {...register('country', { required: false })}
-          >
-            {Object.values(Country).map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
+          />
         </div>
 
         <div className="form-group">

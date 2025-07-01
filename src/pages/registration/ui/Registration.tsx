@@ -1,4 +1,3 @@
-import { Country } from 'postal-code-validator';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,6 +14,7 @@ import { passwordValidationRules } from '../../../shared/validation/passwordVali
 import { streetValidationRules } from '../../../shared/validation/streetValidation';
 import { zipCodeValidation } from '../../../shared/validation/zipCodeValidation';
 import { ROUTES } from '../../../types';
+import { FormCountrySelect } from '../../../widgets/ui/inputs/FormCountrySelect';
 import { FormInput } from '../../../widgets/ui/inputs/FormInput';
 import { FormPasswordInput } from '../../../widgets/ui/inputs/FormPasswordInput';
 import { RegistrationFormDefaultValues } from '../lib/RegistrationFormDefaultValues';
@@ -154,20 +154,13 @@ export function Registration() {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="country-input">
-              Country
-            </label>
-            <select
+            <FormCountrySelect
+              name="shippingAddress.country"
+              label="Country"
               id="country-input"
-              className="form-input"
-              {...register('shippingAddress.country', { required: false })}
-            >
-              {Object.values(Country).map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
+              register={register}
+              errors={errors}
+            />
           </div>
 
           <div className="form-group">
@@ -246,20 +239,13 @@ export function Registration() {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="country-billing-input">
-              Country
-            </label>
-            <select
-              className="form-input"
+            <FormCountrySelect
+              name="billingAddress.country"
+              label="Country"
               id="country-billing-input"
-              {...register('billingAddress.country', { required: false })}
-            >
-              {Object.values(Country).map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
+              register={register}
+              errors={errors}
+            />
           </div>
 
           <div className="form-group">
