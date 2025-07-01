@@ -16,6 +16,9 @@ module.exports = {
       settings: {
         chromeFlags:
           '--no-sandbox --headless --disable-gpu --disable-dev-shm-usage',
+        disableStorageReset: true,
+        chromePath:
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       },
     },
     assert: {
@@ -29,7 +32,7 @@ module.exports = {
     upload: {
       target: 'filesystem',
       outputDir: './lhci-report',
-      reportFilenamePattern: 'report-<DATE>.html',
+      reportFilenamePattern: 'report-[datetime].html',
     },
   },
 };
