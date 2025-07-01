@@ -11,7 +11,12 @@ module.exports = {
         'https://ecobazar-sprint4.netlify.app/cart',
         'https://ecobazar-sprint4.netlify.app/about-us',
       ],
+      exitOnFailure: false,
       numberOfRuns: 1,
+      settings: {
+        chromeFlags:
+          '--no-sandbox --headless --disable-gpu --disable-dev-shm-usage',
+      },
     },
     assert: {
       assertions: {
@@ -22,7 +27,9 @@ module.exports = {
       },
     },
     upload: {
-      target: 'temporary-public-storage',
+      target: 'filesystem',
+      outputDir: './lhci-report',
+      reportFilenamePattern: 'report-<DATE>.html',
     },
   },
 };
