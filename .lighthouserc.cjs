@@ -32,7 +32,7 @@ module.exports = {
     upload: {
       target: 'filesystem',
       outputDir: './public/lhci-report',
-      reportFilenamePattern: 'report-{{urlHash}}.html',
+      reportFilenamePattern: 'report.html',
       output: ['html'],
     },
   },

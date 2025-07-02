@@ -15,8 +15,8 @@ jobs:
           node-version: 18
 
       - run: npm ci
+      - run: npm install lighthouse
       - run: npm install -g @lhci/cli@0.15.x
-
       - run: npm run build
 
       - name: Run Lighthouse CI
