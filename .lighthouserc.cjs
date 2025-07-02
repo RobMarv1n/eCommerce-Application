@@ -30,7 +30,7 @@ module.exports = {
       },
     },
     upload: {
-      target: 'filesystem',
+      target: 'temporary-public-storage',
     },
   },
 };

@@ -4,57 +4,76 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-permissions:
-  pull-requests: write
-  contents: read
-
 jobs:
-  lighthouse:
+  lhci:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm ci
+      - run: npm install -g @lhci/cli@0.15.x
 
-      - name: Install Lighthouse CI CLI
-        run: npm install -g @lhci/cli
+      - run: npm run build
 
-      - name: Run Lighthouse CI (URLs from .lighthouserc.js)
-        run: lhci autorun --upload.target=filesystem
-
-      - name: Extract Lighthouse scores
-        id: lighthouse-scores
+      - name: Run Lighthouse CI
+        id: lhci
         run: |
-          echo "scores<<EOF" >> $GITHUB_OUTPUT
-          echo "| Страница | Performance | Accessibility | Best Practices | SEO |" >> $GITHUB_OUTPUT
-          echo "|----------|-------------|---------------|----------------|-----|" >> $GITHUB_OUTPUT
+          lhci autorun --upload.target=temporary-public-storage > lhci-output.txt || true
+          echo "STDOUT:"
+          cat lhci-output.txt
 
-          for file in $(find .lighthouseci -name "*.report.json"); do
-            url=$(jq -r '.finalUrl' "$file")
-            perf=$(jq -r '.categories.performance.score // 0' "$file")
-            acc=$(jq -r '.categories.accessibility.score // 0' "$file")
-            bp=$(jq -r '.categories["best-practices"].score // 0' "$file")
-            seo=$(jq -r '.categories.seo.score // 0' "$file")
+      - name: Extract Lighthouse Report URLs
+        id: extract_urls
+        run: |
+          echo "LHR_LINKS<<EOF" >> $GITHUB_ENV
+          grep -Eo 'https://storage.googleapis.com[^ ]+' lhci-output.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-            echo "| $url | $perf | $acc | $bp | $seo |" >> $GITHUB_OUTPUT
-          done
-
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Comment PR with Lighthouse Report
-        uses: marocchino/sticky-pull-request-comment@v2
+      - name: Comment PR with Lighthouse Reports
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
         with:
-          message: |
-            🧭 **Lighthouse Audit Report:**
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const urls = process.env.LHR_LINKS
+              .split('\n')
+              .filter(Boolean);
 
-            ${{ steps.lighthouse-scores.outputs.scores }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            const pageNames = [
+              '/',
+              '/catalog',
+              '/product',
+              '/login',
+              '/registration',
+              '/profile',
+              '/cart',
+              '/about',
+            ];
+
+            if (urls.length !== pageNames.length) {
+              core.warning(`Mismatch: ${urls.length} reports but ${pageNames.length} pages`);
+            }
+
+            const commentBody = [
+              '📊 **Lighthouse CI reports by page:**',
+              '',
+              ...urls.map((url, i) => {
+                const page = pageNames[i] || 'Unknown';
+                return `- [${page}](${url})`;
+              })
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
