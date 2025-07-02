@@ -12,7 +12,8 @@
     "format": "prettier --write --ignore-unknown .",
     "stylelint": "npx stylelint ./src/**/*.{css,scss}",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lhci": "lhci autorun --config=.lighthouserc.cjs --verbose"
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^8.9.0",

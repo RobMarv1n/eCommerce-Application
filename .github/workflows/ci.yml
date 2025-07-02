@@ -1,0 +1,79 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lhci:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm ci
+      - run: npm install -g @lhci/cli@0.15.x
+
+      - run: npm run build
+
+      - name: Run Lighthouse CI
+        id: lhci
+        run: |
+          lhci autorun --upload.target=temporary-public-storage > lhci-output.txt || true
+          echo "STDOUT:"
+          cat lhci-output.txt
+
+      - name: Extract Lighthouse Report URLs
+        id: extract_urls
+        run: |
+          echo "LHR_LINKS<<EOF" >> $GITHUB_ENV
+          grep -Eo 'https://storage.googleapis.com[^ ]+' lhci-output.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Comment PR with Lighthouse Reports
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const urls = process.env.LHR_LINKS
+              .split('\n')
+              .filter(Boolean);
+
+            const pageNames = [
+              '/',
+              '/catalog',
+              '/product',
+              '/login',
+              '/registration',
+              '/profile',
+              '/cart',
+              '/about',
+            ];
+
+            if (urls.length !== pageNames.length) {
+              core.warning(`Mismatch: ${urls.length} reports but ${pageNames.length} pages`);
+            }
+
+            const commentBody = [
+              '📊 **Lighthouse CI reports by page:**',
+              '',
+              ...urls.map((url, i) => {
+                const page = pageNames[i] || 'Unknown';
+                return `- [${page}](${url})`;
+              })
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
