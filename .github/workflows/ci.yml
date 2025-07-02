@@ -2,11 +2,9 @@ name: Lighthouse CI
 
 on:
   pull_request:
-    branches:
-      - '**'
 
 jobs:
-  lighthouse:
+  lhci:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,12 +24,14 @@ jobs:
         run: lhci autorun
 
       - name: Extract Lighthouse links and scores
-        id: scores
+        id: lighthouse_scores
         run: |
-          echo "scores=🕵️ Lighthouse Audit Report:" >> $GITHUB_OUTPUT
-          echo "" >> scores.txt
+          echo "scores=📊 **Lighthouse Audit Report:**" >> $GITHUB_OUTPUT
+          echo "" > scores.txt
+          echo "| Страница | Performance | Accessibility | Best Practices | SEO |" >> scores.txt
+          echo "|----------|-------------|----------------|----------------|-----|" >> scores.txt
 
-          for json_file in lighthouseci/*.json; do
+          find .lighthouseci -name "*.report.json" | while read json_file; do
             url=$(jq -r '.finalUrl' "$json_file")
             perf=$(jq -r '.categories.performance.score' "$json_file")
             acc=$(jq -r '.categories.accessibility.score' "$json_file")
@@ -41,19 +41,14 @@ jobs:
             path=$(echo "$url" | cut -d '/' -f4-)
             [ -z "$path" ] && path="/" || path="/$path"
 
-            echo "| [$path]($url) | ${perf} | ${acc} | ${bp} | ${seo} |" >> scores.txt
+            echo "| [$path]($url) | $perf | $acc | $bp | $seo |" >> scores.txt
           done
 
-          echo "" >> scores.txt
-          echo "| Page | Perf | Access | BestPractices | SEO |" > table.txt
-          echo "|------|------|--------|---------------|-----|" >> table.txt
-          cat scores.txt >> table.txt
-
-          echo "scores<<EOF" >> $GITHUB_OUTPUT
-          cat table.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          cat scores.txt >> $GITHUB_OUTPUT
 
       - name: Comment PR with Lighthouse Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          message: '${{ steps.scores.outputs.scores }}'
+          header: lighthouse-report
+          message: |
+            ${{ steps.lighthouse_scores.outputs.scores }}
