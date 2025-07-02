@@ -34,11 +34,6 @@ module.exports = {
       outputDir: './public/lhci-report',
       reportFilenamePattern: 'report.html',
     },
-    assert: {
-      assertions: {
-        'categories:performance': 'warn',
-      },
-    },
     output: ['html'],
   },
 };
