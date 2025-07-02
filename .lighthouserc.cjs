@@ -33,7 +33,7 @@ module.exports = {
       target: 'filesystem',
       outputDir: './public/lhci-report',
       reportFilenamePattern: 'report-{{urlHash}}.html',
+      output: ['html'],
     },
-    output: ['html'],
   },
 };
