@@ -9,7 +9,7 @@ module.exports = {
         'https://ecobazar-sprint4.netlify.app/registration',
         'https://ecobazar-sprint4.netlify.app/profile',
         'https://ecobazar-sprint4.netlify.app/cart',
-        'https://ecobazar-sprint4.netlify.app/about-us',
+        'https://ecobazar-sprint4.netlify.app/about',
       ],
       exitOnFailure: false,
       numberOfRuns: 1,
@@ -32,5 +32,6 @@ module.exports = {
     upload: {
       target: 'temporary-public-storage',
     },
+    output: ['html', 'json'],
   },
 };
