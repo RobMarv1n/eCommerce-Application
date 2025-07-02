@@ -47,15 +47,28 @@ jobs:
               .split('\n')
               .filter(Boolean);
 
-            if (urls.length === 0) {
-              core.warning('No Lighthouse report URLs found.');
-              return;
+            const pageNames = [
+              '/',
+              '/catalog',
+              '/product',
+              '/login',
+              '/registration',
+              '/profile',
+              '/cart',
+              '/about-us',
+            ];
+
+            if (urls.length !== pageNames.length) {
+              core.warning(`Mismatch: ${urls.length} reports but ${pageNames.length} pages`);
             }
 
             const commentBody = [
-              '📊 **Lighthouse CI reports:**',
+              '📊 **Lighthouse CI reports by page:**',
               '',
-              ...urls.map((url, i) => `- [Report ${i + 1}](${url})`)
+              ...urls.map((url, i) => {
+                const page = pageNames[i] || 'Unknown';
+                return `- [${page}](${url})`;
+              })
             ].join('\n');
 
             await github.rest.issues.createComment({
