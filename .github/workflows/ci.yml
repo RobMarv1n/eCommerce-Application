@@ -1,9 +1,12 @@
 name: Lighthouse CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-  lhci:
+  lighthouse:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -19,23 +22,17 @@ jobs:
       - run: npm ci
       - run: npm install -g @lhci/cli@0.15.x
 
-      - run: npm run build
-
       - name: Run Lighthouse CI
         run: lhci autorun
 
       - name: Extract Lighthouse links and scores
-        id: extract
+        id: scores
         run: |
-          echo "scores=" >> $GITHUB_OUTPUT
+          echo "scores=🕵️ Lighthouse Audit Report:" >> $GITHUB_OUTPUT
+          echo "" >> scores.txt
 
-          REPORT_DIR=./.lighthouseci
-
-          printf "| Page | ⚡ Perf | ♿ Access | 🛡️ BP | 🔍 SEO |\n" > scores.txt
-          printf "|------|--------|----------|--------|--------|\n" >> scores.txt
-
-          for json_file in $REPORT_DIR/*.report.json; do
-            url=$(jq -r '.finalDisplayedUrl' "$json_file")
+          for json_file in lighthouseci/*.json; do
+            url=$(jq -r '.finalUrl' "$json_file")
             perf=$(jq -r '.categories.performance.score' "$json_file")
             acc=$(jq -r '.categories.accessibility.score' "$json_file")
             bp=$(jq -r '.categories["best-practices"].score' "$json_file")
@@ -44,49 +41,19 @@ jobs:
             path=$(echo "$url" | cut -d '/' -f4-)
             [ -z "$path" ] && path="/" || path="/$path"
 
-            echo "| [$path]($url) | $perf | $acc | $bp | $seo |" >> scores.txt
+            echo "| [$path]($url) | ${perf} | ${acc} | ${bp} | ${seo} |" >> scores.txt
           done
 
+          echo "" >> scores.txt
+          echo "| Page | Perf | Access | BestPractices | SEO |" > table.txt
+          echo "|------|------|--------|---------------|-----|" >> table.txt
+          cat scores.txt >> table.txt
+
           echo "scores<<EOF" >> $GITHUB_OUTPUT
-          cat scores.txt >> $GITHUB_OUTPUT
+          cat table.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment PR with Lighthouse Report
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const body = [
-              '📊 **Lighthouse CI Report**',
-              '',
-              `${process.env.SCORES}`
-            ].join('\n');
-
-            const comments = await github.rest.issues.listComments({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-
-            const existing = comments.data.find(comment =>
-              comment.body.includes('📊 **Lighthouse CI Report**')
-            );
-
-            if (existing) {
-              await github.rest.issues.updateComment({
-                comment_id: existing.id,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body,
-              });
-            }
-        env:
-          SCORES: ${{ steps.extract.outputs.scores }}
+          message: '${{ steps.scores.outputs.scores }}'
