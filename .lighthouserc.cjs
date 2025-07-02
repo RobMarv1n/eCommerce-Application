@@ -30,10 +30,7 @@ module.exports = {
       },
     },
     upload: {
-      target: 'filesystem',
-      outputDir: './lighthouseci',
-      reportFilenamePattern: 'report-{{urlHash}}.{{output}}',
+      target: 'temporary-public-storage',
     },
-    output: ['html', 'json'],
   },
 };

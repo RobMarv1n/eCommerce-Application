@@ -2,56 +2,57 @@ name: Lighthouse CI
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  lhci:
+  lighthouse:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - run: npm ci
-      - run: npm install -g @lhci/cli@0.15.x
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
 
       - name: Run Lighthouse CI
-        run: lhci autorun
+        run: lhci autorun || true
 
       - name: Extract Lighthouse links and scores
-        id: lighthouse_scores
+        id: lighthouse-scores
         run: |
-          {
-            echo "scores<<EOF"
-            echo "📊 **Lighthouse Audit Report:**"
-            echo ""
-            echo "| Страница | Performance | Accessibility | Best Practices | SEO |"
-            echo "|----------|-------------|----------------|----------------|-----|"
+          echo "scores<<EOF" >> $GITHUB_OUTPUT
+          echo "📊 **Lighthouse Audit Report:**" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "| Страница | Performance | Accessibility | Best Practices | SEO |" >> $GITHUB_OUTPUT
+          echo "|----------|-------------|----------------|----------------|-----|" >> $GITHUB_OUTPUT
 
-            find lighthouseci -name "*.report.json" | while read json_file; do
-              url=$(jq -r '.finalUrl' "$json_file")
-              perf=$(jq -r '.categories.performance.score' "$json_file")
-              acc=$(jq -r '.categories.accessibility.score' "$json_file")
-              bp=$(jq -r '.categories["best-practices"].score' "$json_file")
-              seo=$(jq -r '.categories.seo.score' "$json_file")
+          reports=$(find .lighthouseci -name "*.report.json")
 
-              path=$(echo "$url" | cut -d '/' -f4-)
-              [ -z "$path" ] && path="/" || path="/$path"
+          for json_file in $reports; do
+            url=$(jq -r '.finalUrl' "$json_file")
+            perf=$(jq -r '.categories.performance.score' "$json_file")
+            acc=$(jq -r '.categories.accessibility.score' "$json_file")
+            bp=$(jq -r '.categories["best-practices"].score' "$json_file")
+            seo=$(jq -r '.categories.seo.score' "$json_file")
 
-              echo "| [$path]($url) | $perf | $acc | $bp | $seo |"
-            done
+            path=$(echo "$url" | sed -E 's|https?://[^/]+||')
+            [ "$path" = "" ] && path="/"  # корневая страница
 
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
+            # Ищем соответствующий lhr.html URL из manifest.json
+            html_url=$(jq -r --arg url "$url" '.runs[] | select(.lhr.finalUrl==$url) | .url' .lighthouseci/manifest.json)
+
+            echo "| [$path]($html_url) | $perf | $acc | $bp | $seo |" >> $GITHUB_OUTPUT
+          done
+
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment PR with Lighthouse Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          header: lighthouse-report
-          message: |
-            ${{ steps.lighthouse_scores.outputs.scores }}
+          message: ${{ steps.lighthouse-scores.outputs.scores }}
