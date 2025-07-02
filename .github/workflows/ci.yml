@@ -1,10 +1,11 @@
 name: Lighthouse CI
-
 on: [push]
 
 jobs:
-  lighthouseci:
+  lhci:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -19,11 +20,10 @@ jobs:
       - run: npm run build
 
       - name: Run Lighthouse CI
-        run: lhci autorun --config=.lighthouserc.cjs || echo "LHCI failed, continuing anyway"
+        run: lhci autorun
 
-      - name: Upload LHCI Report as artifact
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: lhci-report
-          path: ./lhci-report/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
