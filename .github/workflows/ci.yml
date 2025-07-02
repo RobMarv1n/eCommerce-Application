@@ -33,7 +33,7 @@ jobs:
             echo "| Страница | Performance | Accessibility | Best Practices | SEO |"
             echo "|----------|-------------|----------------|----------------|-----|"
 
-            find .lighthouseci -name "*.report.json" | while read json_file; do
+            find lighthouseci -name "*.report.json" | while read json_file; do
               url=$(jq -r '.finalUrl' "$json_file")
               perf=$(jq -r '.categories.performance.score' "$json_file")
               acc=$(jq -r '.categories.accessibility.score' "$json_file")
