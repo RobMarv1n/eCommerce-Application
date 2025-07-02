@@ -30,10 +30,7 @@ module.exports = {
       },
     },
     upload: {
-      target: 'filesystem',
-      outputDir: './public/lhci-report',
-      reportFilenamePattern: 'report.html',
-      output: ['html'],
+      temporaryPublicStorage: true,
     },
   },
 };
